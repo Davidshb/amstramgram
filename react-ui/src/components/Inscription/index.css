@@ -1,0 +1,11 @@
+.form-header {
+    text-align: center;
+    font-size: 25px;
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+.form-group {
+    color: black;
+    background-color: white;
+}

@@ -1,0 +1,57 @@
+{
+  "name": "amstramgram",
+  "version": "1.0.0",
+  "description": "Super site pour partager tes photos !",
+  "engines": {
+    "node": "8.9.x"
+  },
+  "scripts": {
+    "start": "node server",
+    "start-dev": "concurrently \"nodemon --ignore 'react-ui/*' server\" \"cd react-ui/ && npm run start\"",
+    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules"
+  ],
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "cloudinary": "^1.11.0",
+    "connect-multiparty": "^2.2.0",
+    "cors": "^2.8.4",
+    "eslint": "^5.7.0",
+    "express": "^4.16.3",
+    "helmet": "^3.14.0",
+    "mongoose": "^5.3.4",
+    "npm": "^6.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Davidshb/amstramgram.git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react",
+    "instagram"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    }
+  }
+}
