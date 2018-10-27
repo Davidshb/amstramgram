@@ -14,7 +14,7 @@ class App extends Component {
 
 function MapStateToProps (state) {
     return {
-        authUser: state.authUser
+        ...state.authUser
     }
 }
 

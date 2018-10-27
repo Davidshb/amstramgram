@@ -2,12 +2,12 @@ import axios from 'axios'
 
 const url = process.env.NODE_ENV === 'production' ? "/api/" : "http://localhost:5000/api/"
 
-export function loadPost (_id) {
+export function loadPosts (_id) {
     return (dispatch) => {
         axios.get(url + 'posts/' + _id)
             .then((res) => {
                 let posts = res.data
-                dispatch({type:'LOAD_ARTICLES', posts})
+                dispatch({type:'LOAD_POSTS', posts})
             }).catch(err => console.log(err))
     }
 }
@@ -73,11 +73,34 @@ export function follow (id, user_id) {
 
 export function SignInUser (user_data) {
     return (dispatch) => {
-        axios.post(url + 'connexion',user_data).then((res)=> {
+        axios.post(url + 'connexion',user_data).then((res,err)=> {
+            console.log(res)
+            if(err) {
+                console.log(err)
+                throw err
+            }
+
             let user = res.data
             sessionStorage.setItem('Auth', JSON.stringify(user))
             dispatch({type: 'SET_USER', user})
-        }).catch((err)=>console.log(err))
+        })
+    }
+}
+
+export function SignUpUser (user_data,next) {
+    return (dispatch) => {
+        axios.post(url + 'inscription',user_data).then((res,err)=> {
+            console.log(res)
+            if(err) {
+                console.log(err)
+                throw err
+            }
+            console.log(res.data)
+            let user = res.data
+            sessionStorage.setItem('Auth', JSON.stringify(user))
+            dispatch({type: 'SET_USER', user})
+            next()
+        })
     }
 }
 
@@ -90,5 +113,11 @@ export function toggleClose() {
 export function toggleOpen() {
     return (dispatch) => {
         dispatch({type: 'TOGGLE_MODAL', modalMode: true})
+    }
+}
+
+export function changeResearch(newResearch) {
+    return (dispatch) => {
+        dispatch({type: 'CHANGE_RESEARCH', research: newResearch})
     }
 }

@@ -5,7 +5,15 @@ const bcrypt = require('bcryptjs')
 module.exports = {
 
     addUser: (req, res, next) => {
-        let obj = req.body
+        if(req.body.pwd !== req.body.pwd2)
+            return res.status(500).end("pwd!=pwd2")
+        let pwd = bcrypt.hashSync(req.body.pwd,10)
+        let obj = {
+            username: req.body.username,
+            name: req.body.fName + " " + req.body.lName,
+            private: false,
+            password: pwd
+        }
         obj.password = bcrypt.hashSync(obj.password,8)
         User.create(obj,(err, newUser) => {
             if (err) throw err

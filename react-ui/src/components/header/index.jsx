@@ -1,17 +1,26 @@
 import React, {Component} from 'react'
 import './index.css'
 import { connect } from 'react-redux'
+import {changeResearch} from '../../redux/actions'
 import account from './img_account.png'
 import { Link } from 'react-router-dom'
+import {history} from '../../redux/store'
 
 class Header extends Component{
     constructor (props) {
         super(props)
+        const unlisten = history.listen((location) => {
+            this.setState({
+                todo: location.pathname === '/inscription' ? 'Se connecter' : "S'inscrire",
+                to : location.pathname === '/inscription' ?  "/connexion" : '/inscription'
+            })
+        })
+
         this.state = {
-            inputClass: 'form-control border'
+            inputClass: 'form-control border',
+            unlisten
         }
 
-        this.changeTodo = this.changeTodo.bind(this)
         this.key = this.key.bind(this)
     }
 
@@ -37,28 +46,27 @@ class Header extends Component{
     }
 
     componentWillMount() {
-        this.changeTodo()
-    }
-
-    changeTodo() {
         this.setState({
-            todo: window.location.pathname === '/inscription' ? 'Se connecter' : "S'inscrire"
+            todo: window.location.pathname === '/inscription' ? 'Se connecter' : "S'inscrire",
+            to: window.location.pathname === '/inscription' ? '/connexion' : '/inscription'
         })
     }
 
     render () {
         return (
             <nav className="navbar navbar-dark bg-dark my__header">
-                <Link className="navbar-brand" to="/" onClick={this.changeTodo}>Amstramgram</Link>
+                <Link className="navbar-brand" to='/'>Amstramgram</Link>
                 <div className="ml-auto row centered">
                     <form className="navbar-form md-1 col" onSubmit={this.search} autoComplete="off">
                         <div className="form-group">
                             <input type="text" name="search" className={this.state.inputClass} aria-label="search"
-                                   placeholder="Recherche..." onKeyUp={this.key}/>
+                                   placeholder="Recherche..." onKeyUp={this.key} value={this.props.searchValue}
+                                   onChange={(e) => this.props.changeResearch(e.target.value)}/>
                         </div>
                     </form>
 
-                    <Link to="/inscription" className="img_acc col-auto" onClick={this.changeTodo}>
+                    <Link to={this.state.to}
+                          className="img_acc col-auto">
                         <img src={account} alt="login"/><br/>
                         <span className="span">
                             {this.state.todo}
@@ -72,8 +80,10 @@ class Header extends Component{
 
 function mapStateToProps(state) {
     return {
-        authUser: state.authUser
+        authUser: state.authUser,
+        modal: state.common.modalMode,
+        searchValue: state.common.research
     }
 }
 
-export default connect(mapStateToProps)(Header)
+export default connect(mapStateToProps, {changeResearch} )(Header)

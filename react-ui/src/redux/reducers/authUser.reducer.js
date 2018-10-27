@@ -1,7 +1,5 @@
 const initialState = {
-    user: {
-        name: 'Login'
-    },
+    user: {},
     isAuth: false,
     profile: {}
 }

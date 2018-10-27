@@ -9,5 +9,5 @@ export default combineReducers({
     post,
     common,
     authUser,
-    router: routerReducer
+    routing: routerReducer
 });

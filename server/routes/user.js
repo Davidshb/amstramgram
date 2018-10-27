@@ -14,7 +14,7 @@ module.exports = (router) => {
 
     //créer un nouveau utilisateur
     router
-        .route('/user')
+        .route('/inscription')
         .post(usercontroller.addUser)
 
     // follow un utilisateur

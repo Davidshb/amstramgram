@@ -8,10 +8,16 @@
 }
 
 .img_acc {
+    color: #FFF;
     width: 100px;
     text-align: center;
     text-decoration: none;
     max-width: 100px;
+    box-sizing: unset;
+}
+
+.img_acc:hover {
+    color: #FFF;
 }
 
 .img_acc img {

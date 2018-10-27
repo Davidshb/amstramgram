@@ -1,6 +1,6 @@
 const defaultState = {
-    appName: '',
-    modalMode: false
+    modalMode: false,
+    research: ''
 };
 export default (state = defaultState, action) => {
     switch (action.type) {
@@ -8,6 +8,12 @@ export default (state = defaultState, action) => {
             return {
                 ...defaultState,
                 modalMode: action.modalMode
+            }
+        case 'CHANGE_RESEARCH':
+            console.log(action)
+            return {
+                ...defaultState,
+                research: action.research
             }
         default:
             return state;
