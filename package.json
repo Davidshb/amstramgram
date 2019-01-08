@@ -1,9 +1,9 @@
 {
-  "name": "amstramgram",
+  "name": "amstramgram-api",
   "version": "1.0.0",
   "description": "Super site pour partager tes photos !",
   "engines": {
-    "node": "8.9.x"
+    "node": "10.x"
   },
   "scripts": {
     "start": "node server",
@@ -18,12 +18,14 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.11.0",
+    "compression": "^1.7.3",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.4",
-    "eslint": "^5.7.0",
     "express": "^4.16.3",
     "helmet": "^3.14.0",
     "mongoose": "^5.3.4",
+    "morgan": "^1.9.1",
+    "normalize-port": "^1.0.0",
     "npm": "^6.4.1"
   },
   "repository": {
@@ -47,11 +49,15 @@
       "node": true
     },
     "parserOptions": {
-      "ecmaVersion": 6,
+      "ecmaVersion": 2018,
       "sourceType": "module",
       "ecmaFeatures": {
-        "jsx": true
+        "jsx": true,
+        "experimentalObjectRestSpread": true
       }
-    }
+    },
+    "plugins": [
+      "react"
+    ]
   }
 }

@@ -7,11 +7,15 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const helmet = require('helmet')
+const morgan = require('morgan')
+const compression = require('compression')
 const cloudinary = require('cloudinary')
+const normalizePort = require('normalize-port')
 
+const isDev = process.env.NODE_ENV !== 'production';
 // /(([0-2]?[0-9]|3[0-1])\/(0?[13578]|1[02])|([0-2]?[0-9]|30)\/(0?[2469]|11))\/(19[0-9][0-9]|20(0[0-9]|1[0-8]))/gm
 // Multi-process to utilize all CPU cores.
-if (cluster.isMaster) {
+if (!isDev && cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`)
 
   // Fork workers.
@@ -23,17 +27,30 @@ if (cluster.isMaster) {
     console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`)
   })
 
+    cluster.on('exit', (worker, code, signal) => {
+        console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`);
+    });
+
 } else {
     const app = express()
+    const PORT = normalizePort(process.env.PORT)
+    const router = express.Router()
+    const URL = process.env.MONGODB_URI
 
     //middleware chacal
     app.use(cors())
     app.use(bodyParser.json())
     app.use(helmet())
+    app.use(compression())
 
-    const PORT = process.env.PORT
-    const router = express.Router()
-    const URL = process.env.MONGODB_URI
+    if(isDev)
+        app.use(morgan('dev'))
+    else {
+        app.use(express.static(path.resolve(__dirname, '../react-ui/build')))
+        app.use(morgan('common'))
+    }
+
+    // Priorité les fichiers statics
 
     routes(router)
     app.use('/api', router)
@@ -52,18 +69,14 @@ if (cluster.isMaster) {
         })
     } catch (error) {
         console.error("can't connect to mongodb")
-        debugger
     }
 
-  // Priorité les fichiers statics
-  app.use(express.static(path.resolve(__dirname, '../react-ui/build')))
-
-  // retourne un 404 si la route n'est pas défini
-  app.get('*', function(request, response) {
-    response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'))
+  // retourne la page de base si on essaie d'accéder à une page qui n'existe pas
+  app.get('*', function(req, res) {
+    res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'))
   })
 
   app.listen(PORT, function () {
-    console.error(`Node cluster worker ${process.pid}: listening on port ${PORT}`)
+    console.error(`Node ${isDev ? 'dev server' : 'cluster worker '+process.pid}: listening on port ${PORT}`)
   })
 }

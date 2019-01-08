@@ -1,24 +1,22 @@
 import React, {Component} from 'react'
-import './index.css'
 import { connect } from 'react-redux'
-import {changeResearch} from '../../redux/actions'
+import actions from '../../redux/actions/'
 import account from './img_account.png'
 import { Link } from 'react-router-dom'
-import {history} from '../../redux/store'
+import './style.css'
 
 class Header extends Component{
     constructor (props) {
         super(props)
-        const unlisten = history.listen((location) => {
-            this.setState({
-                todo: location.pathname === '/inscription' ? 'Se connecter' : "S'inscrire",
-                to : location.pathname === '/inscription' ?  "/connexion" : '/inscription'
-            })
-        })
 
         this.state = {
             inputClass: 'form-control border',
-            unlisten
+            unListen: props.history.listen(location => {
+                this.setState({
+                    todo: location.pathname === '/inscription' ? 'Se connecter' : "S'inscrire",
+                    to: location.pathname === '/inscription' ? "/connexion" : '/inscription'
+                })
+            })
         }
 
         this.key = this.key.bind(this)
@@ -80,10 +78,11 @@ class Header extends Component{
 
 function mapStateToProps(state) {
     return {
-        authUser: state.authUser,
         modal: state.common.modalMode,
         searchValue: state.common.research
     }
 }
+
+let {changeResearch} = actions
 
 export default connect(mapStateToProps, {changeResearch} )(Header)

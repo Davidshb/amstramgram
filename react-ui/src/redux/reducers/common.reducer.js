@@ -1,18 +1,21 @@
+import {Common} from '../actions/types'
+
 const defaultState = {
     modalMode: false,
-    research: ''
-};
+    research: '',
+    inscriptionButton: true
+}
+
 export default (state = defaultState, action) => {
     switch (action.type) {
-        case 'TOGGLE_MODAL':
+        case Common.TOGGLE_MODAL:
             return {
-                ...defaultState,
+                ...state,
                 modalMode: action.modalMode
             }
-        case 'CHANGE_RESEARCH':
-            console.log(action)
+        case Common.CHANGE_RESEARCH:
             return {
-                ...defaultState,
+                ...state,
                 research: action.research
             }
         default:

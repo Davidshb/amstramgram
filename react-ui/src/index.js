@@ -1,11 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Connexion from './components/connexion'
-import registerServiceWorker from './registerServiceWorker'
+import Connexion from './Components/Connexion'
 import App from './App/index'
 import {Router, Switch, Route, Redirect } from 'react-router-dom'
-import Header from './components/header'
-import Inscription from './components/Inscription'
+import Header from './Components/Header'
+import Inscription from './Components/Inscription'
 import {store, history} from './redux/store'
 import {Provider} from 'react-redux'
 
@@ -14,7 +13,7 @@ ReactDOM.render(
         <Provider store={store}>
             <Router history={history}>
                 <div>
-                    <Header/>
+                    <Header history={history}/>
                     <Switch >
                         <Route exact path="/" component={App} />
                         <Route path="/inscription" component={Inscription} />
@@ -27,5 +26,3 @@ ReactDOM.render(
     </div>,
   document.getElementById('root')
 )
-
-registerServiceWorker()

@@ -2,6 +2,11 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
 class App extends Component {
+    constructor (props) {
+        super (props)
+        if(props.modal === false)
+            props.history.replace("/connexion")
+    }
 
     render () {
         return (
@@ -14,7 +19,8 @@ class App extends Component {
 
 function MapStateToProps (state) {
     return {
-        ...state.authUser
+        ...state.authUser,
+        modal: state.common.modalMode
     }
 }
 

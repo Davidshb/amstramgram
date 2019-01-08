@@ -25,4 +25,8 @@ module.exports = (router) => {
     router
         .route('/connexion')
         .post(usercontroller.login)
+
+    router
+        .route('/verifyUsername')
+        .post(usercontroller.verifyUsername)
 }

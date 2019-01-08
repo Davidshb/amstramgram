@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 
 module.exports = {
 
-    addUser: (req, res, next) => {
+    addUser: (req, res, next = _ => {}) => {
         if(req.body.pwd !== req.body.pwd2)
             return res.status(500).end("pwd!=pwd2")
         let pwd = bcrypt.hashSync(req.body.pwd,10)
@@ -80,10 +80,20 @@ module.exports = {
                 const token = bcrypt.compareSync(password,user.password) ? user.token : null
                 if(!token)
                     res.send("bad pwd")
-
-
             })
         res.status(500).send("wtf c'est quel type")
         next()
+    },
+
+    verifyUsername: (req,res,next) => {
+        if(req.body.param.length < 3 || req.body.param.length > 15 )
+            res.status(500).end("Don't touch the pages")
+        User.findOne({'username': req.body.param},'username',(user) => {
+            if( user === null)
+                res.send(true)
+            else
+                res.send(false)
+            next()
+        })
     }
 }

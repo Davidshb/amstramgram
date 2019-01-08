@@ -9,3 +9,8 @@
     color: black;
     background-color: white;
 }
+
+.form-group input:not(:focus):valid {
+    border-color: #51ff4f;
+}
+

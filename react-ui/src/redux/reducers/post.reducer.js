@@ -10,7 +10,7 @@ export default (state=initialState, action) => {
                 ...state,
                 posts: action.posts
             }
-        case 'VIEW POST':
+        case 'VIEW_POST':
             return {
                 ...state,
                 post: action.post
@@ -23,6 +23,7 @@ export default (state=initialState, action) => {
                 post: post
             }
         case 'ADD_COMMENT':
+            console.log("blabla")
             post = Object.assign({},state.post)
             post.comments.push(action.comment)
             return {
