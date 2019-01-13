@@ -1,9 +1,10 @@
 {
-  "name": "heroku-cra-node",
-  "description": "web app made of create-react-app UI + Node API",
+  "name": "amstragram",
+  "description": "Superbe application pour partager tes photos !",
   "scripts": {
   },
-  "env": {},
+  "env": {
+  },
   "formation": {
     "web": {
       "quantity": 1
