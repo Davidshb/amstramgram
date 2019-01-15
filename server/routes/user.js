@@ -9,7 +9,7 @@ module.exports = (router) => {
 
     //récupérer le profil d'un utilisateur
     router
-        .route('profile/:id')
+        .route('/profile/:id')
         .get(usercontroller.getUserProfile)
 
     //créer un nouveau utilisateur

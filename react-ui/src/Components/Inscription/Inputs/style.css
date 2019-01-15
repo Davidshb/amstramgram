@@ -1,6 +1,6 @@
 .form-header {
     text-align: center;
-    font-size: 25px;
+    font-size: 35px;
     background-color: #e9ecef;
     font-weight: bold;
 }
@@ -10,7 +10,7 @@
     background-color: white;
 }
 
-.form-group input:not(:focus):valid {
-    border-color: #51ff4f;
+.form-group input:not(:focus):not([type="password"]):valid {
+    border-color: #227d41;
 }
 

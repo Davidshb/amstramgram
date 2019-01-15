@@ -2,7 +2,9 @@ import {Inscription} from '../actions/types'
 
 const defaultState = {
     button: true,
-    usernameValid: true
+    usernameValid: true,
+    inscriptionData: {},
+    usernameValidation: false
 }
 
 export default (state = defaultState, action) => {
@@ -16,6 +18,11 @@ export default (state = defaultState, action) => {
             return {
                 ...state,
                 usernameValid: action.usernameValid
+            }
+        case Inscription.TOGGLE_USERNAME_PROCESSING:
+            return {
+                ...state,
+                usernameValidation: action.usernameValidation
             }
         default:
             return state

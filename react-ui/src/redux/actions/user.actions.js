@@ -1,10 +1,10 @@
 import axios from 'axios'
 import {User} from './types'
 
-const url = process.env.NODE_ENV === 'production' ? "/api/" : "http://localhost:5000/api/"
+const url = process.env.NODE_ENV === 'production' ? "/api" : "http://localhost:5000/api/"
 
 export function getUser (_id) {
-    return axios.get(url + 'user/'+ _id)
+    return axios.get(url + '/user/'+ _id)
         .then((res) => {
             return res.data
         }).catch(err => console.log(err))
@@ -12,7 +12,7 @@ export function getUser (_id) {
 
 export function getUserProfile (_id) {
     return (dispatch) => {
-        axios.get(url + 'profile/' + _id)
+        axios.get(url + '/profile/' + _id)
             .then((res) => {
                 let profile = res.data
                 dispatch({type: User.SET_PROFILE, profile})
@@ -22,7 +22,7 @@ export function getUserProfile (_id) {
 
 export function signInUser (user_data) {
     return (dispatch) => {
-        axios.post(url + 'connexion',user_data).then((res,err)=> {
+        axios.post(url + '/connexion',user_data).then((res,err)=> {
             console.log(res)
             if(err) {
                 console.log(err)
@@ -38,7 +38,7 @@ export function signInUser (user_data) {
 
 export function signUpUser (user_data,next = _ => {}) {
     return (dispatch) => {
-        axios.post(url + 'inscription',user_data).then((res,err)=> {
+        axios.post(url + '/inscription',user_data).then((res,err)=> {
             console.log(res)
             if(err) {
                 console.log(err)
@@ -55,7 +55,7 @@ export function signUpUser (user_data,next = _ => {}) {
 
 export function follow (id, user_id) {
     return (dispatch) => {
-        axios.post(url + 'user/follow',{ id, user_id }).then((res,err) => {
+        axios.post(url + '/user/follow',{ id, user_id }).then((res,err) => {
             if(err)
                 throw err
             else
