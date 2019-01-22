@@ -1,32 +1,32 @@
-const usercontroller = require('../controllers/User.ctrl')
+const userController = require('../controllers/User.ctrl')
 
-module.exports = (router) => {
+module.exports =  (router) => {
 
     // avoir un user
     router
         .route('/user/:id')
-        .get(usercontroller.getUser)
+        .get(userController.getUser)
 
     //récupérer le profil d'un utilisateur
     router
         .route('/profile/:id')
-        .get(usercontroller.getUserProfile)
+        .get(userController.getUserProfile)
 
     //créer un nouveau utilisateur
     router
         .route('/inscription')
-        .post(usercontroller.addUser)
+        .post(userController.addUser)
 
     // follow un utilisateur
     router
         .route('/user/follow')
-        .post(usercontroller.followUser)
+        .post(userController.followUser)
 
     router
         .route('/connexion')
-        .post(usercontroller.login)
+        .post(userController.login)
 
     router
         .route('/verifyUsername')
-        .post(usercontroller.verifyUsername)
+        .post(userController.verifyUsername)
 }

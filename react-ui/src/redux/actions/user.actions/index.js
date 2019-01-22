@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {User} from './types'
+import {User} from '../types'
 
 const url = process.env.NODE_ENV === 'production' ? "/api" : "http://localhost:5000/api/"
 
@@ -32,23 +32,6 @@ export function signInUser (user_data) {
             let user = res.data
             sessionStorage.setItem('Auth', JSON.stringify(user))
             dispatch({type: User.SET_USER, user})
-        })
-    }
-}
-
-export function signUpUser (user_data,next = _ => {}) {
-    return (dispatch) => {
-        axios.post(url + '/inscription',user_data).then((res,err)=> {
-            console.log(res)
-            if(err) {
-                console.log(err)
-                throw err
-            }
-            console.log(res.data)
-            let user = res.data
-            sessionStorage.setItem('Auth', JSON.stringify(user))
-            dispatch({type: User.SET_USER, user})
-            next()
         })
     }
 }

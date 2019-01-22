@@ -1,4 +1,4 @@
-import {Common} from '../actions/types'
+import {Common} from '../../actions/types'
 
 const defaultState = {
     modalMode: false,

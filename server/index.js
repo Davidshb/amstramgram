@@ -13,14 +13,6 @@ const normalizePort = require('normalize-port')
 const routes = require('./routes/')
 
 const isDev = process.env.NODE_ENV !== 'production'
-const PORT = process.env.PORT || 5000
-
- ignoreFavicon = (req, res, next) => {
-    if (req.originalUrl === '/favicon.ico')
-        res.status(204).json({nope: true}).end()
-    else
-        next()
-}
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -50,8 +42,6 @@ if (!isDev && cluster.isMaster) {
 
     app.use(morgan(isDev ? 'dev' : 'common'))
 
-    app.use(ignoreFavicon)
-
     // Answer client requests.
     routes(router)
     app.use('/api', router)
@@ -66,9 +56,9 @@ if (!isDev && cluster.isMaster) {
         mongoose.connect(URL, {
             useNewUrlParser: true,
             useCreateIndex: true
-        }).then(() => console.log("mongodb connected"))
+        }).then(() => console.log("mongodb connected"));
     } catch (error) {
-        console.error("can't connect to mongodb")
+        console.error("can't connect to mongodb",error);
     }
 
     // All remaining requests return the React app, so it can handle routing.
