@@ -14,3 +14,6 @@ Dockerfile
 docker-compose.yml
 
 .idea
+.sass-cache/
+*.iml
+*.map

@@ -1,16 +1,35 @@
 .form-header {
-    text-align: center;
-    font-size: 35px;
-    background-color: #e9ecef;
-    font-weight: bold;
-}
+  background-color: #e9ecef;
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center; }
 
 .form-group {
-    color: black;
-    background-color: white;
-}
-
-.form-group input:not(:focus):not([type="password"]):valid {
+  background-color: #fff !important;
+  color: #000 !important; }
+  .form-group input:not(:focus):not([type="password"]):valid {
     border-color: #227d41;
-}
+    transition: border-color 4s; }
 
+.form-control {
+  border-width: 2px; }
+
+.username-correct {
+  border-color: #227d41; }
+
+.username-incorrect {
+  border-color: #ff3c5c; }
+
+.username-normal {
+  border-color: #ced4da; }
+
+.pwd-correct {
+  border-color: #227d41; }
+
+.pwd-incorrect {
+  border-color: #ff3c5c; }
+
+.pwd-normal {
+  border-color: #ced4da; }
+
+/*# sourceMappingURL=style.css.map */

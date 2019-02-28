@@ -1,0 +1,102 @@
+@import '../../lib/scss/responsive';
+@import '../../lib/scss/mixins';
+
+.my--header {
+  display: flex;
+  margin-bottom: 50px;
+
+  @media only screen and (max-width: $header-max-width) {
+    height: 100px;
+    overflow: hidden;
+    padding: 10px;
+  }
+}
+
+.navbar-brand {
+  box-shadow: $button-shadow;
+  display: block;
+  font-size: 200%;
+  overflow: hidden;
+  text-align: center;
+  width: 33%;
+
+  &:active {
+    box-shadow: none;
+  }
+}
+
+.div-recherche {
+  box-shadow: none;
+  display: block;
+  overflow: hidden;
+  text-align: center;
+  width: 34%;
+
+  input {
+    width: 100%;
+  }
+
+  @media only screen and (max-width: $header-max-width) {
+    input {
+      display: none;
+    }
+  }
+}
+
+.img-search {
+  @include background-img('./baseline_search_white_48dp_X1.png', $header-search-img-size);
+
+  display: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media only screen and (max-width: $header-max-width) {
+    box-shadow: $button-shadow;
+    display: flex;
+
+    &:active {
+      box-shadow: none;
+    }
+  }
+}
+
+.searching {
+  @media only screen {
+    box-shadow: none;
+
+    .img-search {
+      display: none;
+    }
+
+    input {
+      display: flex;
+    }
+  }
+}
+
+.img-acc {
+  box-shadow: $button-shadow;
+  box-sizing: unset;
+  color: $white-color;
+  max-width: 100px;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  width: 33%;
+
+  &:active {
+    box-shadow: none;
+  }
+}
+
+.account-img {
+  @include background-img('./img_account.png', $header-account-img);
+
+  @media only screen and (max-width: $header-max-width) {
+    background-size: $header-account-img-small;
+    height: $header-account-img-small;
+    width: $header-account-img-small;
+  }
+}

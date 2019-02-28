@@ -1,8 +1,7 @@
-import {Common} from '../../actions/types'
+import {Common} from '../../types'
 
 const defaultState = {
     modalMode: false,
-    research: '',
     inscriptionButton: true
 }
 
@@ -12,11 +11,6 @@ export default (state = defaultState, action) => {
             return {
                 ...state,
                 modalMode: action.modalMode
-            }
-        case Common.CHANGE_RESEARCH:
-            return {
-                ...state,
-                research: action.research
             }
         default:
             return state;

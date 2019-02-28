@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {Post} from '../types'
+import {Post} from '../../types'
 
 const url = process.env.NODE_ENV === 'production' ? "/api" : "http://localhost:5000/api"
 

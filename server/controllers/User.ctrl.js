@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 module.exports = {
 
     addUser: (req, res, next = _ => {}) => {
+        console.log("received")
         if(req.body.pwd !== req.body.pwd2)
             return res.status(500).end("pwd!=pwd2")
         let pwd = bcrypt.hashSync(req.body.pwd,10)

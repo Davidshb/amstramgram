@@ -1,14 +1,16 @@
 import React, {Component} from 'react'
 import connect from 'react-redux/es/connect/connect'
-import actions from '../../../redux/actions'
+import {changeData, verifyUsername, signUpUser, deleteData} from '../../../redux/actions'
+import Names from './Names'
 import './style.css'
+import Username from "./Username";
+import Passwords from "./Passwords";
 
 class Inputs extends Component {
     constructor (props) {
         super(props)
 
         this.state = {
-            username: "",
             usernameProcessing: null
         }
 
@@ -25,7 +27,6 @@ class Inputs extends Component {
         let pwd = document.querySelectorAll('input[type="password"]')
         let reset = document.querySelector('button[type="reset"]')
         let button = document.querySelector("button[type='submit']")
-
         if (pwd.length !== 2)
             throw Error("touche pas à mon code")
 
@@ -40,15 +41,7 @@ class Inputs extends Component {
             changeValue(inputs,"value", "defaultValue")
             changeValue(sex,"checked", "defaultChecked")
             changeValue(pwd,"value", "defaultValue")
-            this.setState({
-                username: ""
-            })
             this.props.deleteData()
-        })
-
-        Array.prototype.filter.call(inputs, _input => {
-            _input.value = this.props.data[_input.id]
-            _input.onChange = (e) => changeData(_input.id,e.target.value)
         })
 
         Array.prototype.filter.call(sex, _sex => {
@@ -57,7 +50,7 @@ class Inputs extends Component {
             })
         })
 
-        Array.prototype.filter.call(pwd, (_pwd) => _pwd.addEventListener('keypress', () => {
+        /*Array.prototype.filter.call(pwd, (_pwd) => _pwd.addEventListener('keypress', () => {
             const changeColor = (color) => {
                 pwd[0].style.borderColor = color
                 pwd[1].style.borderColor = color
@@ -69,7 +62,7 @@ class Inputs extends Component {
                 changeColor("#ced4da")
             else
                 changeColor("#FF3C5C")
-        }))
+        }))*/
 
         button.addEventListener('click',() => {
             if (this.props.disableButton)
@@ -106,63 +99,15 @@ class Inputs extends Component {
         })
     }
 
-    static usernameClickHandler (e) {
-        if (e.target.selectionStart === 0)
-            e.target.setSelectionRange(e.target.value.length, e.target.value.length)
-    }
-
     render () {
         return (
             <div className="container">
                 <div className="form-group border p-2 needs-validation">
                     <div className="form-header border col">Inscription</div>
                     <hr/>
-
-                    <div className="input-group mb-3 form-row">
-                        <div className="input-group-prepend col-sm-3">
-                            <span className="input-group-text w-100 text-center d-block">Noms</span>
-                        </div>
-                        <div className="col">
-                            <input type="text" className="form-control" aria-describedby="Tilt" name="name" id="fname"
-                                   required placeholder="Prado" minLength="3"/>
-                            <span className="invalid-feedback">doesn't look good !</span>
-                        </div>
-                        <div className="col">
-                            <input type="text" className="form-control" aria-describedby="Tilt" name="name" required
-                                   placeholder="RASOA..." id="lname" minLength="3"/>
-                            <span className="invalid-feedback">doesn't look good !</span>
-                        </div>
-                    </div>
-
-                    <div className="input-group mb-3 form-row">
-                        <div className="input-group-prepend col-sm-3">
-                            <span className="input-group-text w-100 d-block text-center">@Username</span>
-                        </div>
-                        <div className="input-group col">
-                            <input id="username" className="form-control" aria-describedby="Tilt" type="text"
-                                   value={'@' + this.state.username} maxLength="16" required
-                                   pattern="^@[a-zA-Z0-9_]([a-zA-Z0-9](_{0,2}|[-.]?)){2,15}$"
-                                   onChange={this.usernameChangeHandler} onClick={Inputs.usernameClickHandler}
-                                   onSelect={Inputs.usernameClickHandler} readOnly={this.props.usernameValidation}
-                            />
-                            <span className="invalid-feedback">doesn't look good !</span>
-                        </div>
-                    </div>
-                    <div className="mb-2">
-                        <div className="input-group form-row">
-                            <div className="input-group-prepend col-sm-3">
-                                <span className="input-group-text w-100 d-block text-center">Mot de passe</span>
-                            </div>
-                            <input type="password" className="form-control col" min="8" max="20" id="pwd" required
-                                   aria-describedby="psdHelp" placeholder="mot de passe"/>
-                            <input type="password" className="form-control col" min="8" max="20" id="pwd2" required
-                                   aria-describedby="psdHelp" placeholder="mot de passe"/>
-                        </div>
-
-                        <small id="psdHelp" className="form-text text-muted">
-                            Doit être entre 8 et 20 caractères.
-                        </small>
-                    </div>
+                    <Names/>
+                    <Username/>
+                    <Passwords/>
 
                     <div className="input-group mb-3 form-row">
                         <div className="input-group-prepend col-sm-3">
@@ -216,7 +161,7 @@ class Inputs extends Component {
     }
 }
 
-const {changeData, verifyUsername, signUpUser, deleteData} = actions.inscriptionActions
+
 const mapDispatchToProps = {changeData, verifyUsername, signUpUser, deleteData}
 
-export default connect((state) => {return {...state.inscription}}, mapDispatchToProps)(Inputs)
+export default connect((state) => {return state.inscription}, mapDispatchToProps)(Inputs)

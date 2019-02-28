@@ -3,24 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "ajv": "^6.5.4",
     "axios": "^0.18.0",
+    "braces": "^2.3.2",
     "history": "^4.7.2",
-    "moment": "^2.22.2",
-    "react": "^16.6.3",
-    "react-dom": "^16.7.0",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
     "react-redux": "^5.1.0",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
-    "react-scripts": "^2.1.3",
+    "react-scripts": "^2.1.5",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "typescript": "^3.3.3333"
   },
   "scripts": {
     "start": "PORT=3000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "addClass": "node ./bin/addClass.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -31,5 +32,8 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "fs-extra": "^7.0.1"
+  }
 }

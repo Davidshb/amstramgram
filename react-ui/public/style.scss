@@ -1,0 +1,9 @@
+@import '../src/lib/scss/responsive';
+
+body {
+  background-color: $body-color;
+  color: $white-color;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  height: 100%;
+}

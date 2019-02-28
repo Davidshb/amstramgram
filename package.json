@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node server",
     "start-dev": "concurrently \"nodemon --ignore 'react-ui/*' server\" \"cd react-ui/ && npm run start\"",
+    "front-end-only": "cd react-ui/ && npm run start",
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
@@ -22,8 +23,8 @@
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "helmet": "^3.15.0",
-    "mongoose": "^5.4.3",
+    "helmet": "^3.15.1",
+    "mongoose": "^5.4.14",
     "morgan": "^1.9.1",
     "normalize-port": "^1.0.0"
   },

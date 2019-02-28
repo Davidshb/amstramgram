@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from "react-redux"
-import actions from "../../redux/actions/"
+import {signUpUser} from "../../redux/actions/"
 import Inputs from './Inputs/'
 
 class Inscription extends Component {
@@ -23,7 +23,5 @@ function mapStateToProps (state) {
         user: state.authUser.user
     }
 }
-
-const {signUpUser} = actions
 
 export default connect(mapStateToProps, {signUpUser})(Inscription)

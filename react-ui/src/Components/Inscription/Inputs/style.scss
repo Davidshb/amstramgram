@@ -1,0 +1,26 @@
+@import '../../../lib/scss/responsive';
+@import '../../../lib/scss/mixins';
+
+.form-header {
+  background-color: $inscription-form-header-background;
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form-group {
+  background-color: $white-color;
+  color: $black-color;
+
+  input:not(:focus):not([type="password"]):valid {
+    border-color: $inscription-input-valid;
+    transition: border-color 4s;
+  }
+}
+
+.form-control {
+  border-width: 2px;
+}
+
+@include generate-input-validation(username);
+@include generate-input-validation(pwd);

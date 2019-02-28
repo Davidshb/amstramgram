@@ -11,8 +11,7 @@ export const Post = {
 }
 
 export const Common = {
-    TOGGLE_MODAL: 'TOGGLE_MODAL',
-    CHANGE_RESEARCH: 'CHANGE_RESEARCH'
+    TOGGLE_MODAL: 'TOGGLE_MODAL'
 }
 
 export const Inscription = {
@@ -22,4 +21,9 @@ export const Inscription = {
     TOGGLE_USERNAME_PROCESSING: 'TOGGLE_USERNAME_PROCESSING',
     CHANGE_INSCRIPTION_DATA: 'CHANGE_INSCRIPTION_DATA',
     DELETE_INSCRIPTION_DATA: "DELETE_INSCRIPTION_DATA"
+}
+
+export const Header = {
+    CHANGE_RESEARCH: 'CHANGE_RESEARCH',
+    SEARCHING: 'SEARCHING'
 }
