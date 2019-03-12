@@ -1,6 +1,6 @@
-const readline = require('readline')
-const path = require('path')
-const fs = require('fs-extra')
+import fs from "fs-extra"
+import readline from "readline"
+import path from "path"
 
 const DIR = path.resolve(__dirname,'../src/lib/js/classes')
 const INDEX = DIR + '/' + 'index.js'

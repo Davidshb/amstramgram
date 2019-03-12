@@ -1,27 +1,25 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
 
-class App extends Component {
-    constructor (props) {
-        super (props)
-        if(props.modal === false)
-            props.history.replace("/connexion")
-    }
+class App extends React.Component {
+	constructor(props) {
+		super(props)
+		if (!props.isAuth) {
+			props.history.replace('/connexion')
+		}
+	}
 
-    render () {
-        return (
-            <div>
+	render() {
+		return (
+			<div>
 
-            </div>
-        )
-    }
+			</div>
+		)
+	}
 }
 
-function MapStateToProps (state) {
-    return {
-        ...state.authUser,
-        modal: state.common.modalMode
-    }
+function MapStateToProps(state) {
+	return {}
 }
 
-export default connect(MapStateToProps)(App)
+export default connect(MapStateToProps, {})(App)

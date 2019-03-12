@@ -15,6 +15,9 @@ class Names extends Component {
 	}
 
 	render() {
+		let fname = this.props.fname
+		let lname = this.props.lname
+
 		return (
 			<div className="input-group mb-3 form-row">
 				<div className="input-group-prepend col-sm-3">
@@ -22,13 +25,11 @@ class Names extends Component {
 				</div>
 				<div className="col">
 					<input type="text" className="form-control" aria-describedby="Tilt" name="name" id="fname" required
-								 placeholder="Prado" value={this.props.fname} onChange={this.onDataChange} pattern={REGEXP_NAMES}/>
-					<span className="invalid-feedback">doesn't look good !</span>
+								 placeholder="Prado" value={fname} onChange={this.onDataChange} pattern={REGEXP_NAMES}/>
 				</div>
 				<div className="col">
 					<input type="text" className="form-control" aria-describedby="Tilt" name="name" id="lname" required
-								 placeholder="RASOA..." value={this.props.lname} onChange={this.onDataChange} pattern={REGEXP_NAMES}/>
-					<span className="invalid-feedback">doesn't look good !</span>
+								 placeholder="RASOA..." value={lname} onChange={this.onDataChange} pattern={REGEXP_NAMES}/>
 				</div>
 			</div>
 		)

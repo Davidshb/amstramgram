@@ -27,15 +27,7 @@ module.exports = {
     },
 
     getUser: (req, res, next) => {
-        User.findById(req.params.id,'username name email followers following',(err, user)=> {
-            if (err)
-                res.error(err)
-            else if (!user)
-                res.status(500).send("erreur getUser")
-            else
-                res.send(user)
-            next()
-        })
+        User.findOne()
     },
 
     // follow un user
@@ -87,9 +79,8 @@ module.exports = {
     },
 
     verifyUsername: (req,res,next) => {
-        if(req.body.param.length < 3 || req.body.param.length > 15 )
-            res.status(500).end("Don't touch the pages")
         User.findOne({'username': req.body.param},'username',(user) => {
+            console.warn(user)
             if( user === null)
                 res.send(true)
             else

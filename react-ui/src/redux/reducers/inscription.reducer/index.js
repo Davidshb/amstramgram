@@ -6,8 +6,10 @@ const defaultState = {
     data: {
         lname: "",
         fname: "",
-        pwd: "",
-        pwd2: "",
+        pwd: [
+            "",
+            ""
+        ],
         email: "",
         sexe: "",
         date: "",
@@ -23,8 +25,8 @@ export default (state = defaultState, action) => {
             return {
                 ...state,
                 disableButton: !(data.lname.length > 2 && data.fname.length > 2 && data.email.length > 0 &&
-                                    data.pwd.length + data.pwd2.length >= 16 && data.sexe.length > 0 && state.usernameValid &&
-                                    data.pwd === data.pwd2 && (new Date(data.date)).getTime() < Date.now())
+                                    data.pwd[0].length + data.pwd[1].length >= 16 && data.sexe.length > 0 && state.usernameValid &&
+                                    data.pwd[0] === data.pwd[1] && (new Date(data.date)).getTime() < Date.now())
             }
         case Inscription.TOGGLE_USERNAME_VALID:
             return {

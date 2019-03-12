@@ -78,9 +78,9 @@ class Header extends Component{
 
 function mapStateToProps(state) {
 	return {
-		modal: state.common.modalMode,
 		searchValue: state.header.research,
-		searching: state.header.searching
+		searching: state.header.searching,
+		isAuth: state.user.isAuth
 	}
 }
 

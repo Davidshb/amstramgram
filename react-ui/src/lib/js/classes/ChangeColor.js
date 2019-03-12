@@ -15,26 +15,27 @@ class ChangeColor {
 	static #_normal = 2
 
 	#name = ""
-	#elem = null
 
-	constructor(name, elem) {
-		this.#name = name;
-		this.#elem = elem;
+	constructor(name) {
+		this.#name = name
 	}
 
-	#toggleColor = (_elem,i) => {
-		_elem.classList.toggle(this.#name+"-correct",i === ChangeColor._correct)
-		_elem.classList.toggle(this.#name+"-incorrect",i === ChangeColor._incorrect)
-		_elem.classList.toggle(this.#name+"-normal",i === ChangeColor._normal)
-	}
+	toggleColor = (i) => {
+		const name = " " + this.#name
 
-	change(i) {
-		if(this.#elem.isPrototypeOf(HTMLCollection))
-			this.#elem.forEach((_elem) => this.#toggleColor(_elem,i))
-		else if(this.#elem.isPrototypeOf(HTMLElement))
-			this.#toggleColor(this.#elem,i)
-	}
+		switch (i) {
+			case ChangeColor.correct:
+				return name + "-correct"
+			case ChangeColor.incorrect:
+				return name + "-incorrect"
+			case ChangeColor.normal:
+				return name + "-normal"
+			default:
+				break
+		}
 
+		throw Error("Je n'ai pas trouvé de couleur enfoiré")
+	}
 }
 
 export default ChangeColor

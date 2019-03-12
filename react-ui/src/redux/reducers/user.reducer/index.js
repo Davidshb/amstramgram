@@ -1,25 +1,34 @@
+import {User} from '../../types'
+
 const initialState = {
-    user: {},
+    user: {
+        following: {}
+    },
     isAuth: false,
     profile: {}
 }
 
 export default (state=initialState,action) => {
     switch (action.type) {
-        case 'SET_USER':
+        case User.AUTH:
+            return {
+                ...state,
+                isAuth: action.isAuth
+            }
+        case User.SET_USER:
             return {
                 ...state,
                 isAuth: Object.keys(action.user).length > 0,
                 user: action.user
             }
-        case 'FOLLOW_USER':
+        case User.FOLLOW_USER:
             let user = Object.assign({},state.user)
             user.following.push(action.user_id)
             return {
                 ...state,
                 user
             }
-        case 'SET_PROFILE':
+        case User.SET_PROFILE:
             return {
                 ...state,
                 profile: action.profile

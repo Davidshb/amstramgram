@@ -4,8 +4,9 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "braces": "^2.3.2",
+    "cleave.js": "^1.4.9",
     "history": "^4.7.2",
+    "moment": "^2.24.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-redux": "^5.1.0",

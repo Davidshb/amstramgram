@@ -5,53 +5,60 @@ import {ChangeColor, PASSWORD_MAX_VALUE, PASSWORD_MIN_VALUE} from "../../../lib/
 
 class Passwords extends Component {
 	#cc = null
-	#pwd = null
+	pwd = null
+	state = {
+		class: ""
+	}
 
 	constructor(props) {
 		super(props)
 
+		this.#cc = new ChangeColor("pwd", this.pwd)
+
 		this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
-		this.verification = this.verification.bind(this)
-		this.reset = this.reset.bind(this)
 	}
 
-	verification() {
-		if(this.#pwd[0].validity.valid && this.#pwd[1].validity.valid && this.props.pwd1 === this.props.pwd2)
-			this.#cc.change(ChangeColor.correct)
-		else
-			this.#cc.change(ChangeColor.incorrect)
+	changeClass(color) {
+		this.setState({class: this.#cc.toggleColor(color)})
 	}
 
-	reset() {
-		this.#cc.change(ChangeColor.normal)
+	verification(fromFirstInput=false) {
+		let pwd = this.pwd
+		let pwd_value = this.props.pwd
+
+		if (pwd[0].validity.valid && pwd[1].validity.valid && pwd_value[0] === pwd_value[1])
+			this.changeClass(ChangeColor.correct)
+		else if(!fromFirstInput)
+			this.changeClass(ChangeColor.incorrect)
 	}
 
-	passwordChangeHandler(e) {
-		this.props.changeData(e.target.id,e.target.value)
+	passwordChangeHandler() {
+		this.props.changeData('pwd', [this.pwd[0].value, this.pwd[1].value])
 	}
 
-componentDidMount() {
-	this.#pwd = document.getElementsByName("pwd")
-	this.#cc = new ChangeColor("pwd",this.#pwd)
-
-	if(this.#pwd.length !== 2)
-		throw Error("Don't touch my code")
+	componentDidMount() {
+		this.pwd = document.getElementsByName("pwd")
 	}
 
 	render() {
+		let pwd = this.props.pwd
+
 		return (
 			<div className="mb-2">
 				<div className="input-group form-row">
 					<div className="input-group-prepend col-sm-3">
 						<span className="input-group-text w-100 d-block text-center">Mot de passe</span>
 					</div>
-					<input type="password" className="form-control col" min={PASSWORD_MIN_VALUE} max={PASSWORD_MAX_VALUE} id="pwd"
-								 required aria-describedby="psdHelp" placeholder="mot de passe" name ="pwd" value={this.props.pwd1}
-								 onChange={this.passwordChangeHandler} onFocus={this.reset}
+					<input type="password" className={"form-control col" + this.state.class} min={PASSWORD_MIN_VALUE}
+								 max={PASSWORD_MAX_VALUE} onBlur={() => this.verification(true)}
+								 required aria-describedby="psdHelp" placeholder="mot de passe" name="pwd"
+								 onChange={this.passwordChangeHandler} value={pwd[0]}
+								 onFocus={() => this.changeClass(ChangeColor.normal)}
 					/>
-					<input type="password" className="form-control col" min={PASSWORD_MIN_VALUE} max={PASSWORD_MAX_VALUE} id="pwd2"
-								 required aria-describedby="psdHelp" placeholder="mot de passe" name ="pwd" value={this.props.pwd2}
-								 onChange={this.passwordChangeHandler} onBlur={this.verification} onFocus={this.reset}
+					<input type="password" className={"form-control col" + this.state.class} min={PASSWORD_MIN_VALUE}
+								 max={PASSWORD_MAX_VALUE}
+								 required aria-describedby="psdHelp" placeholder="mot de passe" name="pwd"
+								 onChange={this.passwordChangeHandler} value={pwd[1]} onBlur={() => this.verification()}
 					/>
 				</div>
 
@@ -65,9 +72,8 @@ componentDidMount() {
 
 function mapStateToProps(state) {
 	return {
-		pwd1: state.inscription.data.pwd1,
-		pwd2: state.inscription.data.pwd2
+		pwd: state.inscription.data.pwd
 	}
 }
 
-export default connect(mapStateToProps,{changeData})(Passwords)
+export default connect(mapStateToProps, {changeData})(Passwords)

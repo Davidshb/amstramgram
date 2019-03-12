@@ -12,7 +12,7 @@
   background-color: $white-color;
   color: $black-color;
 
-  input:not(:focus):not([type="password"]):valid {
+  input:not(:focus):not([id="date"]):not([type="password"]):valid {
     border-color: $inscription-input-valid;
     transition: border-color 4s;
   }
@@ -24,3 +24,4 @@
 
 @include generate-input-validation(username);
 @include generate-input-validation(pwd);
+@include generate-input-validation(date);
