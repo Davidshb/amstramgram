@@ -16,3 +16,4 @@ docker-compose.yml
 .sass-cache
 *.iml
 *.css.map
+.build

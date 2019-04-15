@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { deleteData, signUp } from '../../redux/actions'
-import { Names, Username, DateDeNaissance, Sexe, Email, Passwords } from './Inputs'
+import { DateDeNaissance, Email, Names, Passwords, Sexe, Username } from './Inputs'
 import './Inputs/style.css'
-import { SettingsBackupRestore, Send } from '@material-ui/icons'
-import { Container } from 'react-bootstrap'
+import { Send, SettingsBackupRestore } from '@material-ui/icons'
 
 class Inscription extends Component {
   constructor (props) {
@@ -47,7 +46,7 @@ class Inscription extends Component {
     }
 
     return (
-      <Container>
+      <div className="container">
         <div className="form-group border p-2 needs-validation">
           <div className="form-header border col">Inscription</div>
           <hr/>
@@ -73,7 +72,7 @@ class Inscription extends Component {
             </button>
           </div>
         </div>
-      </Container>
+      </div>
     )
   }
 }
