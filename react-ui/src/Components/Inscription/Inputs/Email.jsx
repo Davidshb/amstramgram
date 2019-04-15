@@ -4,11 +4,6 @@ import {changeData} from "../../../redux/actions";
 
 class Email extends React.Component {
 
-	constructor(props) {
-		super(props)
-		console.log(this.email)
-	}
-
 	emailChangeHandler() {
 		this.props.changeData('email', this.email.value)
 	}
@@ -23,7 +18,7 @@ class Email extends React.Component {
 				<div className="input-group-prepend col-sm-3">
 					<span className="input-group-text d-block text-center w-100">Email</span>
 				</div>
-				<input type="email" className="form-control text-center col" aria-describedby="Tilt" id="email"
+				<input type="email" className="to-valid form-control text-center col" aria-describedby="Tilt" id="email"
 							 placeholder="prado-raso@mail.com" value={this.props.email} onChange={this.emailChangeHandler.bind(this)}
 							 required
 				/>

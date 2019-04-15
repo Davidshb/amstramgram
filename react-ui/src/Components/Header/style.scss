@@ -2,13 +2,18 @@
 @import '../../lib/scss/mixins';
 
 .my--header {
+  align-items: center;
+  background-color: $header-color;
+  box-shadow: 0 5px 20px $black-color;
   display: flex;
+  justify-content: space-between;
   margin-bottom: 50px;
 
   @media only screen and (max-width: $header-max-width) {
     height: 100px;
     overflow: hidden;
     padding: 10px;
+
   }
 }
 
@@ -16,21 +21,25 @@
   box-shadow: $button-shadow;
   display: block;
   font-size: 200%;
+  font-weight: 700;
   overflow: hidden;
+  padding: 10px 20px;
   text-align: center;
-  width: 33%;
 
   &:active {
     box-shadow: none;
   }
+
+  @media only screen and (max-width:$header-max-width) {
+    font-size: 150%;
+  }
 }
 
 .div-recherche {
-  box-shadow: none;
   display: block;
   overflow: hidden;
   text-align: center;
-  width: 34%;
+  width: 20%;
 
   input {
     width: 100%;
@@ -64,14 +73,13 @@
 
 .searching {
   @media only screen {
-    box-shadow: none;
-
     .img-search {
       display: none;
     }
 
     input {
       display: flex;
+      flex: 1;
     }
   }
 }
@@ -80,11 +88,12 @@
   box-shadow: $button-shadow;
   box-sizing: unset;
   color: $white-color;
+  font-weight: normal;
   max-width: 100px;
   overflow: hidden;
+  padding: 5px 20px;
   text-align: center;
-  text-decoration: none;
-  width: 33%;
+  width: 10%;
 
   &:active {
     box-shadow: none;

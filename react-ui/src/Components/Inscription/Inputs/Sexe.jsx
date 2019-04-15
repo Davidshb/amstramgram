@@ -5,15 +5,11 @@ import {changeData} from '../../../redux/actions'
 class Sexe extends React.Component {
 	#sexe
 
-	constructor(props) {
-		super(props)
-
+	componentDidMount() {
 		this.#sexe = document.getElementsByName("sexe")
-
-		this.sexeHandler = this.sexeHandler.bind(this)
 	}
 
-	sexeHandler(e) {
+	sexeHandler = (e) => {
 		if (!e.target.checked)
 			return
 		this.props.changeData("sexe", e.target.value)

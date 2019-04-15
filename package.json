@@ -7,9 +7,9 @@
   },
   "scripts": {
     "start": "node server",
-    "start-dev": "concurrently \"cd server && nodemon index.js\" \"cd react-ui/ && npm run start\"",
+    "start-dev": "concurrently \"nodemon --ignore react-ui/ server\" \"cd react-ui/ && npm run start\"",
     "front-end-only": "cd react-ui/ && npm run start",
-    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "cd react-ui/ && npm install --only=dev --no-shrinkwrap && npm run build && rm build/static/*/*.map"
   },
   "cacheDirectories": [
     "node_modules",

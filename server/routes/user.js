@@ -5,7 +5,7 @@ module.exports =  (router) => {
     // avoir un user
     router
         .route('/user/:id')
-        .get(userController.getUser)
+        .get(userController.getUserData)
 
     //récupérer le profil d'un utilisateur
     router

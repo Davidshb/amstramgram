@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {connect} from "react-redux";
-import {verifyUsername, changeData} from "../../../redux/actions/";
+import {verifyUsername, changeData} from "../../../redux/actions";
 import {REGEXP_USERNAME, TIME_UNTIL_USERNAME_VERIFICATION} from "../../../lib/js";
 
 
@@ -29,7 +29,7 @@ class Username extends Component {
 			clearTimeout(this.usernameProcessing)
 
 		this.props.changeData("username",txt,() => {
-			if (this.props.username.length < 5)
+			if (this.props.username.length < 5 || !e.target.validity.valid)
 				return classList.add("username-normal")
 
 			this.usernameProcessing = setTimeout(() => {

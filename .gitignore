@@ -7,13 +7,12 @@ npm-debug.log
 *.dev
 .DS_Store
 .env.default
-build/
 
 # Docker
 Dockerfile
 docker-compose.yml
 
 .idea
-.sass-cache/
+.sass-cache
 *.iml
-*.map
+*.css.map

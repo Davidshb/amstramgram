@@ -1,8 +1,8 @@
 import React from 'react'
 import {connect} from "react-redux";
 import Cleave from 'cleave.js/react'
-import {changeData} from "../../../redux/actions";
-import {verifyIsAfterToday} from "../../../lib/js";
+import {changeData} from "../../../redux/actions"
+import {dateIsAfterToday} from "../../../lib/js"
 
 class DateDeNaissance extends React.Component {
 	state = {
@@ -12,15 +12,16 @@ class DateDeNaissance extends React.Component {
 	dateChangeHandler(e) {
 		this.props.changeData('date', e.target.value, () => {
 			if (this.props.date.length !== 10) {
-				if(this.state.class !== " date-normal")
+				if (this.state.class !== " date-normal")
 					this.setState({class: " date-normal"})
 				return
 			}
 
-			if (verifyIsAfterToday(this.props.date, "DD/MM/YYYY"))
+			if (dateIsAfterToday(this.props.date, "DD/MM/YYYY")) {
 				this.setState({class: " date-incorrect"})
-			else
+			} else {
 				this.setState({class: " date-correct"})
+			}
 		})
 
 	}

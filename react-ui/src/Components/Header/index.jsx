@@ -1,87 +1,90 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {changeResearch, toggleSearching} from '../../redux/actions/'
+import { changeResearch, toggleSearching } from '../../redux/actions'
 import { Link } from 'react-router-dom'
 import './style.css'
 
-class Header extends Component{
-	constructor (props) {
-		super(props)
+class Header extends Component {
+  constructor (props) {
+    super(props)
 
-		let unListen = props.history.listen(location => {
-			this.setState({
-				account_img_text: location.pathname === '/inscription' ? 'Se connecter' : "S'inscrire",
-				account_img_link: location.pathname === '/inscription' ? "/connexion" : '/inscription'
-			})
-		})
+    props.history.listen(location => this.setState({
+        account_img_text: location.pathname === '/connexion' ? 'S\'inscrire' : 'Se connecter',
+        account_img_link: location.pathname === '/connexion' ? '/inscription' : '/connexion'
+      })
+    )
 
-		this.state = {
-			inputClass: 'form-control border',
-			unListen
-		}
+    this.state = {
+      inputClass: 'form-control border'
+    }
 
-		this.key = this.key.bind(this)
-		this.img_search_blur = this.img_search_blur.bind(this)
-	}
+    this.key = this.key.bind(this)
+    this.img_search_blur = this.img_search_blur.bind(this)
+    this.search = this.search.bind(this)
+  }
 
-	search(event) { // TODO : lancer une recherche
-		event.preventDefault()
-		if (event.target.search.value === "")
-			return;
-		event.target.reset()
-	}
+  search (event) {
+    event.preventDefault()
+    if (this.props.searchValue !== '')
+      this.props.history.push('/search?q=' + this.props.searchValue)
+  }
 
-	key(event) {
-		const txt = event.target.value
+  key (event) {
+    const txt = event.target.value
 
-		if (txt !== "" && this.state.inputClass === 'form-control border')
-			this.setState({
-				inputClass: "form-control border border-primary"
-			})
-		else if(txt === "" && this.state.inputClass !== 'form-control border')
-			this.setState({
-				inputClass: 'form-control border'
-			})
-	}
+    if (txt !== '' && this.state.inputClass === 'form-control border')
+      this.setState({
+        inputClass: 'form-control border border-primary'
+      })
+    else if (txt === '' && this.state.inputClass !== 'form-control border')
+      this.setState({
+        inputClass: 'form-control border'
+      })
+  }
 
-	img_search_blur() {
-		if (this.props.searchValue === "")
-			this.props.toggleSearching(false);
-	}
+  img_search_blur () {
+    if (this.props.searchValue === '')
+      this.props.toggleSearching(false)
+  }
 
-	componentWillMount() {
-		this.setState({
-			account_img_text: window.location.pathname === '/inscription' ? 'Se connecter' : "S'inscrire",
-			account_img_link: window.location.pathname === '/inscription' ? '/connexion' : '/inscription'
-		})
-	}
+  componentWillMount () {
+    this.setState({
+      account_img_text: window.location.pathname === '/inscription' ? 'Se connecter' : 'S\'inscrire',
+      account_img_link: window.location.pathname === '/inscription' ? '/connexion' : '/inscription'
+    })
+  }
 
-	render () {
-		return <nav className="navbar navbar-dark bg-dark my--header">
-			<Link className=" navbar-brand" to='/'>Amstramgram</Link>
-			<div className={" div-recherche "+ this.props.searching}>
-				<input type="text" name="search" className={this.state.inputClass} aria-label="search"
-					placeholder="Recherche..." onKeyUp={this.key} value={this.props.searchValue}
-					onChange={(e) => this.props.changeResearch(e.target.value)} onSubmit={this.search}
-				 	onBlur={this.img_search_blur}/>
-				<svg className="img-search" onClick={this.props.toggleSearching}/>
-			</div>
+  render () {
+    return (
+      <nav className="navbar navbar-dark bg-dark my--header">
+        <Link className=" navbar-brand" to='/'>Amstramgram</Link>
+        <div className={' div-recherche ' + this.props.searching}>
+          <form onSubmit={this.search}>
+          <input type="text" name="search" className={this.state.inputClass} aria-label="search"
+                 placeholder="Recherche..." onKeyUp={this.key} value={this.props.searchValue}
+                 onChange={(e) => this.props.changeResearch(e.target.value)}
+                 onBlur={this.img_search_blur}/>
+          </form>
+          <svg className="img-search"
+               onClick={() => this.props.toggleSearching(true, () => document.querySelector('my__header > input').focus())}/>
+        </div>
 
-			<Link to={this.state.account_img_link} className="img-acc">
-				<svg className="account-img"/>
-				<br/>
-				<span className="span">{this.state.account_img_text}</span>
-			</Link>
-		</nav>
-	}
+        <Link to={this.state.account_img_link} className="img-acc">
+          <svg className="account-img"/>
+          <br/>
+          <span className="span">{this.state.account_img_text}</span>
+        </Link>
+      </nav>
+    )
+  }
 }
 
-function mapStateToProps(state) {
-	return {
-		searchValue: state.header.research,
-		searching: state.header.searching,
-		isAuth: state.user.isAuth
-	}
+function mapStateToProps (state) {
+  return {
+    searchValue: state.header.research,
+    searching: state.header.searching,
+    isAuth: state.user.isAuth
+  }
 }
 
-export default connect(mapStateToProps, {changeResearch, toggleSearching} )(Header)
+export default connect(mapStateToProps, { changeResearch, toggleSearching })(Header)

@@ -1,15 +1,6 @@
-import DateDeNaissance from './DateDeNaissance'
-import Username from './Username'
-import Names from './Names'
-import Passwords from './Passwords'
-import Email from './Email'
-import Sexe from './Sexe'
-
-export {
-	DateDeNaissance,
-	Username,
-	Names,
-	Passwords,
-	Email,
-	Sexe
-}
+export {default as DateDeNaissance} from './DateDeNaissance'
+export {default as Username} from './Username'
+export {default as Names} from './Names'
+export {default as Passwords} from './Passwords'
+export {default as Email} from './Email'
+export {default as Sexe} from './Sexe'

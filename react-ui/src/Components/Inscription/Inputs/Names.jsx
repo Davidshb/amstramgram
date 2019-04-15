@@ -19,17 +19,21 @@ class Names extends Component {
 		let lname = this.props.lname
 
 		return (
-			<div className="input-group mb-3 form-row">
+			<div className="mb-2 input-group form-row">
 				<div className="input-group-prepend col-sm-3">
 					<span className="input-group-text w-100 text-center d-block">Noms</span>
 				</div>
 				<div className="col">
-					<input type="text" className="form-control" aria-describedby="Tilt" name="name" id="fname" required
-								 placeholder="Prado" value={fname} onChange={this.onDataChange} pattern={REGEXP_NAMES}/>
+					<input type="text" className="form-control col to-valid" name="name" id="fname" required
+								 placeholder="Prado" value={fname} onChange={this.onDataChange} pattern={REGEXP_NAMES}
+								 onBlur={(e) => this.props.changeData('fname',e.target.value.trim())}
+					/>
 				</div>
 				<div className="col">
-					<input type="text" className="form-control" aria-describedby="Tilt" name="name" id="lname" required
-								 placeholder="RASOA..." value={lname} onChange={this.onDataChange} pattern={REGEXP_NAMES}/>
+					<input type="text" className="form-control col to-valid" name="name" id="lname" required
+								 placeholder="RASOA..." value={lname} onChange={this.onDataChange} pattern={REGEXP_NAMES}
+								 onBlur={(e) => this.props.changeData('lname',e.target.value.trim())}
+					/>
 				</div>
 			</div>
 		)

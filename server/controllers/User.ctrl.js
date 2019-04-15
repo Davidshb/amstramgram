@@ -1,91 +1,108 @@
-const User = require('./../models/User')
-const Post = require('./../models/Post')
+const functions = require('../lib/functions')
+const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 
 module.exports = {
 
-    addUser: (req, res, next = _ => {}) => {
-        console.log("received")
-        if(req.body.pwd !== req.body.pwd2)
-            return res.status(500).end("pwd!=pwd2")
-        let pwd = bcrypt.hashSync(req.body.pwd,10)
+  addUser: (req, res) => {
+    let data = req.body
+    if (data.pwd[0] !== data.pwd[1]) {
+      return res.status(500).end('password different')
+    } else if (data.pwd[0].length < 8)
+      return res.status(500).end('password too short')
+    console.log('--------------------------------')
+    console.log('création d\'un compte')
+    console.log(data.lname + " " + data.fname)
+
+    return User
+      .findOne({ username: data.username })
+      .then(user => {
+        if (user) {
+          res.status(400).end('usernameUsed')
+          throw new Error('username utilisé')
+        }
+        console.log('username OK')
+      })
+      .then(() => {
+        return User.findOne({ email: data.email }).then(user => {
+          if (user) {
+            res.status(400).end('emailUsed')
+            throw new Error('mail déjà utilisé')
+          }
+          console.log('email OK')
+        })
+      })
+      .then(() => bcrypt.hash(data.pwd[0], 10))
+      .then(hash => {
         let obj = {
-            username: req.body.username,
-            name: req.body.fName + " " + req.body.lName,
-            private: false,
-            password: pwd
+          username: data.username,
+          name: data.fname,
+          familyName: data.lname,
+          password: hash,
+          email: data.email,
+          birth: functions.ParseDate(data.date)
         }
-        obj.password = bcrypt.hashSync(obj.password,8)
-        User.create(obj,(err, newUser) => {
-            if (err) throw err
-            else if (!newUser)
-                res.status(500).send("erreur addUser")
-            else
-                res.send(newUser)
-            next()
-        });
-    },
 
-    getUser: (req, res, next) => {
-        User.findOne()
-    },
+        return new User(obj)
+          .save()
+          .then(user => user.authentification())
+      })
+      .then(user => res.status(200).json(user.data()))
+      .then(() => console.log("--------------------------------\n"))
+      .then(async () => {
+        await setTimeout(({ username }) => {
+          return User
+            .findOneAndDelete({ username, emailVerified: false })
+            .exec()
+            .then(user => {
+              console.log('Utilisateur supprimé \n -------')
+              console.log(user)
+              console.log('-------')
+            })
+        }, 1000 * 60 * 60 * 24, { username: data.username })
+      })
+      .catch(err => console.error(err))
+  },
 
-    // follow un user
-    followUser: (req, res, next) => {
-        if(req.body.id === req.body.user_id) {
-            res.send("tu peux pas te follow")
-            return next()
+  getUserData: (req, res, next) => {
+
+  },
+
+  // follow un user
+  followUser:
+    (req, res) => {
+      if (req.body.id === req.body.user_id)
+        res.status(400).send('tu peux pas te follow')
+      User.findById(req.body.id, (err, user) => {
+          if (err) return console.error(err)
+          user.follow(req.body.user_id)
+              .then(() => res.sendStatus(200))
+              .catch(err => console.error(err))
         }
-        User.findById(req.body.id,(user) => {
-            return user.follow(req.body.user_id).then(() => {
-                return res.json({msg: "followed"})
-            })
-        }).catch(next)
+      )
     },
 
-    getUserProfile: (req, res, next) => {
-        User.findById(req.params.id,(err,user) => {
-            if(err) console.log(err)
-            return User.find({'following': req.params.id},(_users)=>{
-                _users.forEach((user_)=>{
-                    user.addFollower(user_)
-                })
-                Post.find({'author': req.params.id},(_post)=> {
-                    res.json({ user: user, post: _post })
-                    next()
-                })
-            })
-        })
-    },
+  getUserProfile:
+    (req, res) =>
+      User.findById(req.params.id)
+          .exec()
+          .then(user => {
+            if (!user)
+              return res.status(400).end('userUnknow')
+          })
+          .catch(err => res.status(500).end() && console.error(err))
+  ,
 
-    login: (req,res,next) => {
-        let {id, type, password} = req.body
+  login: (req, res, next) => {
+    let { id, type, password } = req.body
 
-        if(type === 1)
-            User.findOne({'username': id},'password token',(err,user) => {
-                if(err) throw err
-                const token = bcrypt.compareSync(password,user.password) ? user.token : null
-                return token ? res.send(token) : res.send("bad pwd")
-            })
-        else if (type === 2)
-            User.findOne({'email': id},'password token username name',(err,user) => {
-                if(err) throw err
-                const token = bcrypt.compareSync(password,user.password) ? user.token : null
-                if(!token)
-                    res.send("bad pwd")
-            })
-        res.status(500).send("wtf c'est quel type")
+  },
+
+  verifyUsername:
+    (req, res, next) => {
+      User.findOne({ username: req.body.param }, 'username', (err, user) => {
+        res.send(user === null)
         next()
-    },
-
-    verifyUsername: (req,res,next) => {
-        User.findOne({'username': req.body.param},'username',(user) => {
-            console.warn(user)
-            if( user === null)
-                res.send(true)
-            else
-                res.send(false)
-            next()
-        })
+      })
     }
 }

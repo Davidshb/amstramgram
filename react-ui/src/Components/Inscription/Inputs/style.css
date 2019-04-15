@@ -1,3 +1,19 @@
+.container {
+  max-width: 50%;
+  padding-top: 30px;
+}
+
+.form-group {
+  background-color: #fff !important;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px #fff !important;
+  color: #000 !important;
+}
+.form-group .to-valid:not(:focus):valid {
+  border-color: #227d41;
+  transition: border-color 4s;
+}
+
 .form-header {
   background-color: #e9ecef;
   font-size: 35px;
@@ -5,17 +21,26 @@
   text-align: center;
 }
 
-.form-group {
-  background-color: #fff !important;
-  color: #000 !important;
-}
-.form-group input:not(:focus):not([id=date]):not([type=password]):valid {
-  border-color: #227d41;
-  transition: border-color 4s;
-}
-
 .form-control {
   border-width: 2px;
+  display: flex;
+}
+
+.btns {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.btn {
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 20%;
+}
+.btn i {
+  margin-right: 5px;
 }
 
 .username-correct {
