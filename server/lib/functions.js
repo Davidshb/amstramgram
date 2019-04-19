@@ -1,5 +1,4 @@
 const User = require('../models/User')
-const jwt = require('jsonwebtoken')
 
 module.exports = {
   ParseDate: date => {
@@ -15,7 +14,7 @@ module.exports = {
     ajouter (user) {
       let t = setTimeout(() =>
           user.deleteUser()
-        , (Date.parse(user.creation) + 24 * 60 * 60 * 1000) - Date.now())
+        , (Math.max(Date.parse(user.creation) + 24 * 60 * 60 * 1000) - Date.now(), 0))
 
       this.timer.push(t)
     }

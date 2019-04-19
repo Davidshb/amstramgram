@@ -9,37 +9,40 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const compression = require('compression')
 const cloudinary = require('cloudinary')
-
-
-const routes = require('./routes/')
-const AccountDeleteTimeout = require('./lib/functions').AccountDeleteTimeout
 const app = express()
-const PORT = require('normalize-port')(process.env.PORT)
 const router = express.Router()
 
+const PORT = require('normalize-port')(process.env.PORT)
+const routes = require('./routes/')
+const { tasks } = require('./lib')
+
 const isDev = process.env.NODE_ENV !== 'production'
+
+//execute differents task on rerun
+
+//newMessage(0,{})
+tasks()
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`)
 
   // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < numCPUs; i++)
     cluster.fork()
-  }
 
-  cluster.on('exit', (worker, code, signal) => {
+  cluster.on('exit', (worker, code, signal) =>
     console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`)
-  })
+  )
 
 } else {
-
   // Priority serve any static files.
-  app.use(express.static(path.resolve(__dirname, '../react-ui/build')))
   app.use(cors())
   app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
   app.use(helmet())
   app.use(compression())
+  app.use(express.static(path.resolve(__dirname, '../react-ui/build')))
 
   app.use(morgan(isDev ? 'dev' : 'common'))
 
@@ -61,12 +64,8 @@ if (!isDev && cluster.isMaster) {
     .then(() => console.log('mongodb connected'))
     .catch(error => console.error('can\'t connect to mongodb', error))
 
-  new AccountDeleteTimeout().build()
-
   // All remaining requests return the React app, so it can handle routing.
-  app.get('*', (request, response) =>
-    response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'))
-  )
+  app.get('*', (request, response) => response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html')))
 
   app.listen(PORT, () =>
     console.error(`Node ${isDev ? 'dev server' : 'cluster worker ' + process.pid}: listening on port ${PORT}`)

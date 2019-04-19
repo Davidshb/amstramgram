@@ -1,21 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { deleteData, signUp } from '../../redux/actions'
+import { deleteData, signUp, changeData } from '../../redux/actions'
 import { DateDeNaissance, Email, Names, Passwords, Sexe, Username } from './Inputs'
 import './Inputs/style.css'
 import { Send, SettingsBackupRestore } from '@material-ui/icons'
 
 class Inscription extends Component {
-  constructor (props) {
-    super(props)
-    if (this.props.isAuth)
-      this.props.history.push('/')
 
-    this.state = {
-      inscriptionLoading: false
-    }
-
-    this.creerUnCompte = this.creerUnCompte.bind(this)
+  state = {
+    inscriptionLoading: false
   }
 
   creerUnCompte () {
@@ -26,45 +19,33 @@ class Inscription extends Component {
       () => this.props.signUp(
         this.props.data,
         () => this.setState({ inscriptionLoading: false },
-          () => this.props.history.push("/")
-          )
+          () => this.props.history.push('/')
+        )
       )
     )
   }
 
   render () {
-    const loading = () => {
-      if (!this.state.inscriptionLoading)
-        return (
-          <>
-            <Send/>
-            Créer un compte
-          </>
-        )
-
-      return "Chargement"
-    }
-
     return (
       <div className="container">
         <div className="form-group border p-2 needs-validation">
           <div className="form-header border col">Inscription</div>
           <hr/>
-          <Names/>
+          <Names changeData={this.props.changeData} value={[this.props.data.fname, this.props.data.lname]}/>
           <Username/>
-          <Passwords/>
-          <Sexe/>
-          <Email/>
-          <DateDeNaissance/>
+          <Passwords changeData={this.props.changeData} value={this.props.data.pwd}/>
+          <Sexe changeData={this.props.changeData} value={this.props.data.sexe}/>
+          <Email changeData={this.props.changeData}/>
+          <DateDeNaissance changeData={this.props.changeData} value={this.props.data.date}/>
           <br/>
           <hr/>
           <div className="btns">
             <button
               type="submit" className="btn btn-primary"
-              onClick={this.creerUnCompte}
+              onClick={this.creerUnCompte.bind(this)}
               disabled={this.props.disableButton}
             >
-              {loading()}
+              {this.state.inscriptionLoading ? 'Chargement' : <><Send/>Créer un compte</>}
             </button>
             <button type="reset" className="btn btn-secondary" onClick={this.props.deleteData}>
               <SettingsBackupRestore/>
@@ -85,4 +66,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, { signUp, deleteData })(Inscription)
+export default connect(mapStateToProps, { signUp, deleteData, changeData })(Inscription)

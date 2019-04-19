@@ -35,12 +35,12 @@ UserSchema.methods.follow = async (user_id) => {
   }
 }
 
-UserSchema.methods.addFollower = async function(fs) {
+UserSchema.methods.addFollower = async function (fs) {
   this.followers.push(fs)
   await this.save()
 }
 
-UserSchema.methods.data = function(needToken = false) {
+UserSchema.methods.data = function (needToken = false) {
   let res = {
     birth: this.birth,
     name: this.name,
@@ -58,19 +58,19 @@ UserSchema.methods.data = function(needToken = false) {
   return res
 }
 
-UserSchema.methods.createToken = function() {
-  this.token = jwt.sign({ data: this._id }, process.env.privateKey, { expiresIn: '24h'})
+UserSchema.methods.createToken = function () {
+  this.token = jwt.sign({ data: this._id }, process.env.privateKey, { expiresIn: '24h' })
   this.save()
   return this
 }
 
-UserSchema.methods.authentification = function(token = null) {
+UserSchema.methods.authentification = function (token = null) {
   if (!token)
     return this.createToken()
   console.log(this)
   let res
   try {
-    res = jwt.verify(token, process.env.privateKey )
+    res = jwt.verify(token, process.env.privateKey)
   } catch (e) {
     if (e.name === 'TokenExpiredError')
       return this.createToken()
@@ -83,8 +83,10 @@ UserSchema.methods.authentification = function(token = null) {
   return this
 }
 
-UserSchema.methods.deleteUser = () => !this.emailVerified &&
-  this.remove()
-      .then(user => console.log('utilisateur supprimé, email non vérifié : ' + user.email))
+UserSchema.methods.deleteUser = function() {
+  if (this.emailVerified)
+    this.remove()
+        .then(user => console.log('utilisateur supprimé, email non vérifié : ' + user.email))
+}
 
 module.exports = mongoose.model('User', UserSchema)

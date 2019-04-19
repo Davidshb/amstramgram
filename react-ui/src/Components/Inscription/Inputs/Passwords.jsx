@@ -1,72 +1,66 @@
-import React, {Component} from 'react'
-import {connect} from "react-redux"
-import {changeData} from "../../../redux/actions";
-import {ChangeColor, PASSWORD_MAX_VALUE, PASSWORD_MIN_VALUE} from "../../../lib/js";
+import React, { Component } from 'react'
+import { ChangeColor, PASSWORD_MAX_VALUE, PASSWORD_MIN_VALUE } from '../../../lib/js'
 
 class Passwords extends Component {
-	#cc = null
-	pwd = null
-	state = {
-		class: ""
-	}
+  #cc = null
+  pwd = null
+  state = {
+    class: ''
+  }
 
-	constructor(props) {
-		super(props)
+  constructor (props) {
+    super(props)
 
-		this.#cc = new ChangeColor("pwd", this.pwd)
+    this.#cc = new ChangeColor('pwd', this.pwd)
 
-		this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
-	}
+    this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
+  }
 
-	changeClass(color) {
-		this.setState({ class: this.#cc.toggleColor(color) })
-	}
+  changeClass (color) {
+    this.setState({ class: this.#cc.toggleColor(color) })
+  }
 
-	verification(fromFirstInput = false) {
-		let pwd = this.pwd
-		let pwd_value = this.props.pwd
+  verification (fromFirstInput = false) {
+    let pwd = this.pwd
+    let pwd_value = this.props.value
 
-		if (pwd[0].validity.valid && pwd[1].validity.valid && pwd_value[0] === pwd_value[1])
-			this.changeClass(ChangeColor.correct)
-		else if (!fromFirstInput)
-			this.changeClass(ChangeColor.incorrect)
-	}
+    if (pwd_value[0] === pwd_value[1] === '')
+      return
 
-	passwordChangeHandler() {
-		this.props.changeData('pwd', [this.pwd[0].value, this.pwd[1].value])
-	}
+    if (pwd[0].validity.valid && pwd[1].validity.valid && pwd_value[0] === pwd_value[1])
+      this.changeClass(ChangeColor.correct)
+    else if (!fromFirstInput)
+      this.changeClass(ChangeColor.incorrect)
+  }
 
-	componentDidMount() {
-		this.pwd = document.getElementsByName("pwd")
-	}
+  passwordChangeHandler () {
+    this.props.changeData('pwd', [this.pwd[0].value, this.pwd[1].value])
+  }
 
-	render() {
-		let pwd = this.props.pwd
+  componentDidMount () {
+    this.pwd = document.getElementsByName('pwd')
+  }
 
-		return (
-			<div className="mb-2 input-group form-row">
-				<div className="input-group-prepend col-sm-3">
-					<span className="input-group-text w-100 text-center d-block">Mot de passe</span>
-				</div>
-				<input type="password" className={"form-control col" + this.state.class} min={PASSWORD_MIN_VALUE}
-							 max={PASSWORD_MAX_VALUE} onBlur={() => this.verification(true)}
-							 required placeholder="mot de passe" name="pwd"
-							 onChange={this.passwordChangeHandler} value={pwd[0]}
-							 onFocus={() => this.changeClass(ChangeColor.normal)}
-				/>
-				<input type="password" className={"form-control col" + this.state.class} min={PASSWORD_MIN_VALUE}
-							 max={PASSWORD_MAX_VALUE} placeholder="mot de passe" name="pwd" required
-							 onChange={this.passwordChangeHandler} value={pwd[1]} onBlur={() => this.verification()}
-				/>
-			</div>
-		)
-	}
+  render () {
+    let pwd = this.props.value
+
+    return (
+      <div className="mb-2 input-group form-row">
+        <div className="input-group-prepend col-sm-3">
+          <span className="input-group-text w-100 text-center d-block">Mot de passe</span>
+        </div>
+        <input type="password" className={'form-control col' + this.state.class} min={PASSWORD_MIN_VALUE}
+               max={PASSWORD_MAX_VALUE} onBlur={() => this.verification(true)} required
+               placeholder="mot de passe" name="pwd" onChange={this.passwordChangeHandler} value={pwd[0]}
+               onFocus={() => this.changeClass(ChangeColor.normal)} autoComplete="new-password"
+        />
+        <input type="password" className={'form-control col' + this.state.class} min={PASSWORD_MIN_VALUE}
+               max={PASSWORD_MAX_VALUE} placeholder="mot de passe" name="pwd" required autoComplete="new-password"
+               onChange={this.passwordChangeHandler} value={pwd[1]} onBlur={() => this.verification()}
+        />
+      </div>
+    )
+  }
 }
 
-function mapStateToProps(state) {
-	return {
-		pwd: state.inscription.data.pwd
-	}
-}
-
-export default connect(mapStateToProps, { changeData })(Passwords)
+export default Passwords

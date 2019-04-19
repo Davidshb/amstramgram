@@ -42,8 +42,8 @@ export const signUp = (data, next = () => {}) => {
   return dispatch =>
     axios.post(url + '/inscription', data)
          .then(res => {
-           setAuthToken(res.data)
-           dispatch({ type: User.SET_USER, token: res.data })
+           setAuthToken(res.data.token)
+           dispatch({ type: User.SET_USER, user: res.data })
          })
          .catch(err => {
            console.log(err)

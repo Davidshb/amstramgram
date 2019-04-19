@@ -53,7 +53,7 @@ class Username extends Component {
 				<div className="input-group col">
 					<input id="username" className="form-control" aria-describedby="Tilt" type="text"
 								 value={'@' + this.props.username} maxLength="16" required pattern={REGEXP_USERNAME}
-								 onChange={this.usernameChangeHandler} onClick={Username.usernameClickHandler}
+								 onChange={this.usernameChangeHandler} onClick={Username.usernameClickHandler} autoComplete="username"
 								 onSelect={Username.usernameClickHandler} readOnly={this.props.usernameValidation}
 					/>
 					<span className="invalid-feedback">doesn't look good !</span>
