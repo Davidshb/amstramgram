@@ -83,10 +83,4 @@ UserSchema.methods.authentification = function (token = null) {
   return this
 }
 
-UserSchema.methods.deleteUser = function() {
-  if (this.emailVerified)
-    this.remove()
-        .then(user => console.log('utilisateur supprimé, email non vérifié : ' + user.email))
-}
-
 module.exports = mongoose.model('User', UserSchema)

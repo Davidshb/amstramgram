@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ChangeColor, PASSWORD_MAX_VALUE, PASSWORD_MIN_VALUE } from '../../../lib/js'
+import { ChangeColor, PASSWORD_MAX_VALUE, PASSWORD_MIN_VALUE } from '../../lib/js'
 
 class Passwords extends Component {
   #cc = null
@@ -10,9 +10,7 @@ class Passwords extends Component {
 
   constructor (props) {
     super(props)
-
-    this.#cc = new ChangeColor('pwd', this.pwd)
-
+    this.#cc = new ChangeColor('pwd')
     this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
   }
 
@@ -31,6 +29,14 @@ class Passwords extends Component {
       this.changeClass(ChangeColor.correct)
     else if (!fromFirstInput)
       this.changeClass(ChangeColor.incorrect)
+  }
+
+  componentWillReceiveProps (nextProps, nextContext) {
+    if (nextProps.handleError === true) {
+      console.log("salut")
+      this.changeClass(ChangeColor.incorrect)
+      this.props.changeData('pwd', ['', ''], () => this.pwd[0].focus())
+    }
   }
 
   passwordChangeHandler () {

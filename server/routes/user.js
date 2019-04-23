@@ -1,32 +1,32 @@
 const userController = require('../controllers/User.ctrl')
 
-module.exports =  (router) => {
+module.exports = router => {
 
-    // avoir un user
-    router
-        .route('/user/:id')
-        .get(userController.getUserData)
+  // avoir un user
+  router
+    .route('/user/:id')
+    .get(userController.getUserData)
 
-    //récupérer le profil d'un utilisateur
-    router
-        .route('/profile/:id')
-        .get(userController.getUserProfile)
+  //récupérer le profil d'un utilisateur
+  router
+    .route('/profile/:id')
+    .get(userController.getUserProfile)
 
-    //créer un nouveau utilisateur
-    router
-        .route('/inscription')
-        .post(userController.addUser)
+  //créer un nouveau utilisateur
+  router
+    .route('/inscription')
+    .post(userController.addUser)
 
-    // follow un utilisateur
-    router
-        .route('/user/follow')
-        .post(userController.followUser)
+  // follow un utilisateur
+  router
+    .route('/user/follow')
+    .post(userController.followUser)
 
-    router
-        .route('/connexion')
-        .post(userController.login)
+  router
+    .route('/connexion')
+    .post(userController.login)
 
-    router
-        .route('/verifyUsername')
-        .post(userController.verifyUsername)
+  router
+    .route('/verifyUsername')
+    .post(userController.verifyUsername)
 }

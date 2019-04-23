@@ -1,19 +1,20 @@
 import { Inscription } from '../types'
 import { checkDateValidity } from '../../lib/js'
+import isEmail from 'validator/lib/isEmail'
 
 const defaultState = {
-  usernameValid: true,
+  usernameValid: false,
   usernameValidation: false,
   data: {
-    lname: '',
-    fname: '',
+    lname: 'David',
+    fname: 'Sehoubo',
     pwd: [
-      '',
-      ''
+      '12345678',
+      '12345678'
     ],
-    email: '',
-    sexe: '',
-    date: '',
+    email: 't@h.fr',
+    sexe: 'homme',
+    date: '27/10/2000',
     username: ''
   },
   disableButton: true,
@@ -26,9 +27,9 @@ export default (state = defaultState, action) => {
       let data = state.data
       return {
         ...state,
-        disableButton: !(data.lname.length > 2 && data.fname.length > 2 && data.email.length > 0 &&
-          data.pwd[0].length >= 8 && data.pwd[1].length >= 8 && data.sexe.length &&
-          state.usernameValid && data.pwd[0] === data.pwd[1] && checkDateValidity(data.date))
+        disableButton: !(data.lname.length > 2 && data.fname.length > 2 && isEmail(data.email) > 0 &&
+          data.pwd[0].length >= 8 && data.pwd[1].length >= 8 && data.sexe.length !== 0 && !state.usernameValidation &&
+          state.usernameValid && data.username !== '' && data.pwd[0] === data.pwd[1] && checkDateValidity(data.date))
       }
     case Inscription.TOGGLE_USERNAME_VALID:
       return {
@@ -43,6 +44,7 @@ export default (state = defaultState, action) => {
         usernameValidation: action.usernameValidation
       }
     case Inscription.CHANGE_INSCRIPTION_DATA:
+      if (state.data.username !== null) state.usernameValid = false
       return {
         ...state,
         data: {

@@ -34,6 +34,7 @@
 
 .div-recherche {
   display: block;
+  margin-left: -7.5%;
   overflow: hidden;
   text-align: center;
   width: 20%;

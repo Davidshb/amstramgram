@@ -1,12 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Connexion from './Components/Connexion'
+import Connexion from './Connexion'
 import App from './App'
 import { Router, Switch, Route, Redirect } from 'react-router-dom'
 import Header from './Components/Header'
-import Inscription from './Components/Inscription'
+import Inscription from './Inscription'
 import { store, history } from './redux/store'
 import { Provider } from 'react-redux'
+import NotificationProvider from './Provider/NotificationProvider'
 
 function PrivateRoute ({ component: Component, ...rest }) {
   return (
@@ -24,15 +25,15 @@ function PrivateRoute ({ component: Component, ...rest }) {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <>
+      <NotificationProvider>
         <Header history={history}/>
         <Switch>
           <Route path="/" component={App} exact/>
-          <Route path="/search" render={() => {
-            let search = new URLSearchParams(window.location.search).get('q')
+          <Route path="/search/:research" render={({match}) => {
+            if (!match.params.research) history.replace('/')
             return (
               <div className="container">
-                {search}
+                {match.params.research}
               </div>
             )
           }} exact/>
@@ -40,7 +41,7 @@ ReactDOM.render(
           <PrivateRoute path="/connexion" component={Connexion} exact/>
           <Route render={() => <Redirect to="/"/>}/>
         </Switch>
-      </>
+      </NotificationProvider>
     </Router>
   </Provider>,
   document.getElementById('root')

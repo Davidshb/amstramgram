@@ -1,41 +1,42 @@
 class ChangeColor {
-	static get incorrect() {
-		return this.#_incorrect;
-	}
 
-	static get normal() {
-		return this.#_normal;
-	}
-	static get correct() {
-		return this.#_correct;
-	}
+  static #_correct = 0
+  static #_incorrect = 1
+  static #_normal = 2
+  #name = ''
 
-	static #_correct = 0
-	static #_incorrect = 1
-	static #_normal = 2
+  static get incorrect () {
+    return this.#_incorrect
+  }
 
-	#name = ""
+  static get normal () {
+    return this.#_normal
+  }
 
-	constructor(name) {
-		this.#name = name
-	}
+  static get correct () {
+    return this.#_correct
+  }
 
-	toggleColor = (i) => {
-		const name = " " + this.#name
+  constructor (name) {
+    this.#name = name
+  }
 
-		switch (i) {
-			case ChangeColor.correct:
-				return name + "-correct"
-			case ChangeColor.incorrect:
-				return name + "-incorrect"
-			case ChangeColor.normal:
-				return name + "-normal"
-			default:
-				break
-		}
+  toggleColor (i) {
+    const name = ' ' + this.#name
 
-		throw Error("Je n'ai pas trouvé de couleur enfoiré")
-	}
+    switch (i) {
+      case ChangeColor.correct:
+        return name + '-correct'
+      case ChangeColor.incorrect:
+        return name + '-incorrect'
+      case ChangeColor.normal:
+        return name + '-normal'
+      default:
+        break
+    }
+
+    throw new Error('Je n\'ai pas trouvé de couleur enfoiré')
+  }
 }
 
 export default ChangeColor

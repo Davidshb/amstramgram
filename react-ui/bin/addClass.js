@@ -56,7 +56,7 @@ async function rw(file) {
 		let res = 0
 		if(ew === 'o' || ew === 'y' || ew === 'oui' || ew === 'yes')
 			res = 1
-		else if(ew === 'n' || ew === 'no' || ew === 'non')
+		else if(ew === 'react-notifications-component.css' || ew === 'no' || ew === 'non')
 			res = 2
 
 		return res;

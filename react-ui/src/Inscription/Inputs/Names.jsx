@@ -1,15 +1,8 @@
 import React, { Component } from 'react'
-import { capitalizeWords, REGEXP_NAMES } from '../../../lib/js'
+import { capitalizeWords, REGEXP_NAMES } from '../../lib/js'
 
 class Names extends Component {
-  constructor (props) {
-    super(props)
-    this.onDataChange = this.onDataChange.bind(this)
-  }
-
-  onDataChange (e) {
-    this.props.changeData(e.target.id, capitalizeWords(e.target.value))
-  }
+  onDataChange = (e) => this.props.changeData(e.target.id, capitalizeWords(e.target.value))
 
   render () {
     return (

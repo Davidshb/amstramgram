@@ -11,17 +11,14 @@ const compression = require('compression')
 const cloudinary = require('cloudinary')
 const app = express()
 const router = express.Router()
+const queryfier = require('querystring')
 
 const PORT = require('normalize-port')(process.env.PORT)
-const routes = require('./routes/')
-const { tasks } = require('./lib')
+const routes = require('./routes')
+const { tasks, verifyEmail, url, isDev } = require('./lib')
 
-const isDev = process.env.NODE_ENV !== 'production'
-
-//execute differents task on rerun
-
-//newMessage(0,{})
-tasks()
+//execute differents task on rerun. Not executed on development (need too much ressources)
+if (!isDev) tasks()
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -63,6 +60,13 @@ if (!isDev && cluster.isMaster) {
     })
     .then(() => console.log('mongodb connected'))
     .catch(error => console.error('can\'t connect to mongodb', error))
+
+  //user account email setting
+  app.get('/email-verification/:payload', async (req, res) => {
+    const p = req.params.payload
+    const query = queryfier.stringify({s: !!(await verifyEmail(p))})
+    res.redirect(`${url}?${query}`)
+  })
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', (request, response) => response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html')))

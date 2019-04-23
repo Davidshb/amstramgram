@@ -13,7 +13,8 @@ module.exports = {
 
     ajouter (user) {
       let t = setTimeout(() =>
-          user.deleteUser()
+        user.emailVerified &&
+        user.remove().then(user => console.log('utilisateur supprimé, email non vérifié : ' + user.email))
         , (Math.max(Date.parse(user.creation) + 24 * 60 * 60 * 1000) - Date.now(), 0))
 
       this.timer.push(t)
@@ -37,5 +38,7 @@ module.exports = {
         })
         .catch(err => console.error(err))
     }
-  }
+  },
+
+  verifyEmail: p => User.findOne({ token: p }).exec()
 }

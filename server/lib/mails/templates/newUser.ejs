@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='fr'>
+<style>
+    a {
+        text-decoration: none;
+    }
+    h1 {
+        font-weight: bold;
+    }
+
+    body {
+        background-color: rgba(93, 159, 225, 0.69);
+        font-size: 15px;
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+        overflow: scroll;
+    }
+
+    .container {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .delete {
+        font-weight: bold;
+        justify-self: end;
+        font-size: 10px;
+    }
+
+    .link {
+        text-align: center;
+    }
+
+    .btn {
+        background-color: darkblue;
+        color: white;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+        box-sizing: unset;
+    }
+</style>
+<body>
+<div class="container">
+    <h1>Merci <%= name %>, vous êtes inscrit</h1>
+
+    <div style="display: flex;align-items: center;flex-direction: column;flex: 1;">
+        <p>Vous venez de créer un compte.</p>
+        <p>Cliquer sur le lien suivant pour vérifier votre compte.</p>
+        <p class="delete">Sans verification votre compte sera supprimer dans 24 heures.</p>
+    </div>
+
+    <div style="display: flex;flex-direction: column;">
+        <a class="btn" href="http://localhost:5000/email-verification/<%= confirmation_link %>">
+            Confirmer mon inscription
+        </a>
+        <a href="http://amstramgram.ml" class="link">amstramgram</a>
+    </div>
+</div>
+</body>
+</html>

@@ -11,6 +11,13 @@ class Email extends React.Component {
     this.#email = document.getElementById('email')
   }
 
+  componentWillReceiveProps (nextProps, nextContext) {
+    if (nextProps.handleError) {
+      this.props.changeData('email', '')
+      this.#email.focus()
+    }
+  }
+
   render () {
     return (
       <div className="input-group mb-3 form-row">
