@@ -1,8 +1,22 @@
-$body-color: #5C81C2;//#606f7b;
+$body-color: #f1f1f1; //#5c81c2;//#606f7b;
+$body-text-color: rgba(0, 0, 0, .6);
 $white-color: #fff !important;
 $black-color: #000 !important;
-$inscription-form-header-background: #e9ecef;
+
+
+$inscription-form-background: #e9ecef;
+$inscription-form-border: #ced4da;
 $inscription-input-valid: #227d41;
 $inscription-input-invalid: #ff3c5c;
 $inscription-input-normal: #ced4da;
-$header-color: #174BA8 !important; //#343a40; valeur précédente
+
+
+$header-background-color: #2c3e50; //#174ba8 !important; //#343a40; valeur précédente
+$header-text-color:  rgba(255, 255, 255, .67);
+
+
+$button-color: #007bff;
+$button-color-hover: #0069d9;
+$button-color-border-hover: #0062cc;
+$button-second-color: #6c757d;
+$button-second-color-hover: #5a6268;

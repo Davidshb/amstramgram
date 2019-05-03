@@ -1,11 +1,11 @@
-//https://teodosii.github.io/react-notifications-component/
 import React from 'react'
+//https://teodosii.github.io/react-notifications-component/
 import Notification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import './react-notifications-component.css'
 import { getNotification } from '../lib/js'
 
-export const notification = React.createContext()
+export const notificationContext = React.createContext()
 
 class NotificationProvider extends React.Component {
   notif = React.createRef()
@@ -23,10 +23,10 @@ class NotificationProvider extends React.Component {
 
   render () {
     return (
-      <notification.Provider value={this.state}>
+      <notificationContext.Provider value={this.state}>
         <Notification ref={this.notif}/>
         {this.props.children}
-      </notification.Provider>
+      </notificationContext.Provider>
     )
   }
 }

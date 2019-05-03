@@ -1,0 +1,79 @@
+@import '../lib/scss/responsive';
+
+.container {
+  background-color: $white-color;
+  border: 1px solid $inscription-form-border;
+  border-radius: .25rem;
+  display: grid;
+  grid-auto-rows: auto;
+  grid-gap: 10px;
+  margin: auto;
+  padding: 0 0 5px;
+
+  header {
+    background-color: $inscription-form-background;
+    font-size: 20px;
+    grid-column-gap: 0;
+    grid-row: 1;
+    text-align: center;
+  }
+}
+
+.btns {
+  align-items: center;
+  border-top: $inscription-form-background 1px solid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-top: 10px;
+
+  [type=submit],
+  [type=reset] {
+    color: $white-color;
+
+    &:hover:not(:disabled) {
+      cursor: pointer;
+    }
+  }
+
+  [type=submit] {
+    background-color: $button-color;
+    border-color: $button-color;
+
+    &:not(:disabled):hover {
+      background-color: $button-color-hover;
+      border-color: $button-color-border-hover;
+    }
+  }
+
+  [type=reset] {
+    background-color: $button-second-color;
+    border-color: $button-second-color;
+
+    &:not(:disabled):hover {
+      background-color: $button-second-color-hover;
+    }
+  }
+
+  button {
+    border-radius: .25rem;
+    line-height: 1.5;
+    padding: .375rem .75rem;
+    text-align: center;
+    transition: color .15s ease-in-out,
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out,
+    box-shadow .15s ease-in-out;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    &:disabled {
+      opacity: .65;
+    }
+  }
+}

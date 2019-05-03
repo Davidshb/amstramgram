@@ -1,6 +1,0 @@
-export {default as DateDeNaissance} from './DateDeNaissance'
-export {default as Username} from './Username'
-export {default as Names} from './Names'
-export {default as Passwords} from './Passwords'
-export {default as Email} from './Email'
-export {default as Sexe} from './Sexe'

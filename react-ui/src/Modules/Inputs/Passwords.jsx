@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { ChangeColor, PASSWORD_MAX_VALUE, PASSWORD_MIN_VALUE } from '../../lib/js'
+import './style.scss'
 
 class Passwords extends Component {
-  #cc = null
-  pwd = null
+  #cc
+
   state = {
     class: ''
   }
@@ -12,6 +13,7 @@ class Passwords extends Component {
     super(props)
     this.#cc = new ChangeColor('pwd')
     this.passwordChangeHandler = this.passwordChangeHandler.bind(this)
+    this.verification = this.verification.bind(this)
   }
 
   changeClass (color) {
@@ -33,10 +35,12 @@ class Passwords extends Component {
 
   componentWillReceiveProps (nextProps, nextContext) {
     if (nextProps.handleError === true) {
-      console.log("salut")
       this.changeClass(ChangeColor.incorrect)
       this.props.changeData('pwd', ['', ''], () => this.pwd[0].focus())
     }
+
+    if (nextProps.value[0] === nextProps.value[1] === '')
+      this.changeClass(ChangeColor.normal)
   }
 
   passwordChangeHandler () {
@@ -48,22 +52,22 @@ class Passwords extends Component {
   }
 
   render () {
-    let pwd = this.props.value
+    const pwd = this.props.value
 
     return (
-      <div className="mb-2 input-group form-row">
-        <div className="input-group-prepend col-sm-3">
-          <span className="input-group-text w-100 text-center d-block">Mot de passe</span>
+      <div className="input-group">
+        <span className="label">Mot de passe</span>
+        <div className="inputs">
+          <input type="password" className={'input' + this.state.class} min={PASSWORD_MIN_VALUE}
+                 max={PASSWORD_MAX_VALUE} onBlur={() => this.verification(true)} required
+                 placeholder="mot de passe" name="pwd" onChange={this.passwordChangeHandler} value={pwd[0]}
+                 onFocus={() => this.changeClass(ChangeColor.normal)} autoComplete="new-password"
+          />
+          <input type="password" className={'input' + this.state.class} min={PASSWORD_MIN_VALUE}
+                 max={PASSWORD_MAX_VALUE} placeholder="mot de passe" name="pwd" required autoComplete="new-password"
+                 onChange={this.passwordChangeHandler} value={pwd[1]} onBlur={this.verification}
+          />
         </div>
-        <input type="password" className={'form-control col' + this.state.class} min={PASSWORD_MIN_VALUE}
-               max={PASSWORD_MAX_VALUE} onBlur={() => this.verification(true)} required
-               placeholder="mot de passe" name="pwd" onChange={this.passwordChangeHandler} value={pwd[0]}
-               onFocus={() => this.changeClass(ChangeColor.normal)} autoComplete="new-password"
-        />
-        <input type="password" className={'form-control col' + this.state.class} min={PASSWORD_MIN_VALUE}
-               max={PASSWORD_MAX_VALUE} placeholder="mot de passe" name="pwd" required autoComplete="new-password"
-               onChange={this.passwordChangeHandler} value={pwd[1]} onBlur={() => this.verification()}
-        />
       </div>
     )
   }

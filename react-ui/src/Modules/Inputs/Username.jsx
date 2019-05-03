@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { NotificationTypes, REGEXP_USERNAME, TIME_UNTIL_USERNAME_VERIFICATION } from '../../lib/js'
-import { notification } from '../../Provider/NotificationProvider'
+import { notificationContext } from '../../Provider/NotificationProvider'
+import './style.scss'
 
 class Username extends Component {
   #username
@@ -44,7 +45,7 @@ class Username extends Component {
           classList.toggle('username-correct', this.props.usernameValid)
           classList.toggle('username-incorrect', !this.props.usernameValid)
           if (!this.props.handleError && !this.props.usernameValid)
-            this.context.addNotification({ type: NotificationTypes.UNVALIDUSERNAME })
+            this.context.addNotification({ type: NotificationTypes.INVALID_USERNAME })
         })
       }, TIME_UNTIL_USERNAME_VERIFICATION)
     })
@@ -58,27 +59,28 @@ class Username extends Component {
       this.props.usernameValid = false
       this.#username.focus()
     }
+
+    if (nextProps.value === '') {
+      this.#username.classList.toggle('username-normal', true)
+      this.#username.classList.remove('username-correct')
+      this.#username.classList.remove('username-incorrect')
+    }
   }
 
   render () {
     return (
-      <div className="input-group mb-3 form-row">
-        <div className="input-group-prepend col-sm-3">
-          <span className="input-group-text w-100 d-block text-center">@Username</span>
-        </div>
-        <div className="input-group col">
-          <input id="username" className="form-control" aria-describedby="Tilt" type="text"
-                 value={'@' + this.props.value} maxLength="16" required pattern={REGEXP_USERNAME}
-                 onChange={this.usernameChangeHandler} onClick={Username.usernameClickHandler} autoComplete="username"
-                 onSelect={Username.usernameClickHandler} readOnly={this.props.usernameValidation}
-          />
-          <span className="invalid-feedback">doesn't look good !</span>
-        </div>
+      <div className="input-group">
+        <span className="label">Username</span>
+        <input id="username" className="input" aria-describedby="Tilt" type="text"
+               value={'@' + this.props.value} maxLength="16" required pattern={REGEXP_USERNAME}
+               onChange={this.usernameChangeHandler} onClick={Username.usernameClickHandler} autoComplete="username"
+               onSelect={Username.usernameClickHandler} readOnly={this.props.usernameValidation}
+        />
       </div>
     )
   }
 }
 
-Username.contextType = notification
+Username.contextType = notificationContext
 
 export default Username

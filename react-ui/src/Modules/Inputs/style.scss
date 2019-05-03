@@ -1,0 +1,102 @@
+@import '../../lib/scss/mixins';
+
+.input-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 8px;
+}
+
+.label {
+  background-color: $inscription-form-background;
+  border: $inscription-form-border 1px solid;
+  border-radius: .25rem 0 0 .25rem;
+  grid-column: 1;
+  grid-row: 1;
+  line-height: 1.5;
+  margin-right: 5px;
+  padding: .375rem 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.input {
+  border: $inscription-form-border 1px solid;
+  border-radius: 0 .25rem .25rem 0;
+  grid-column: 2 / 5;
+  height: calc(2.25rem + 2px);
+  outline: none;
+  padding: 0 5px;
+}
+
+.inputs {
+  display: grid;
+  grid-column: 2 / 5;
+  grid-template-columns: repeat(2, 1fr);
+  height: calc(2.25rem + 2px);
+
+  .input {
+    grid-column: unset;
+  }
+
+  .input:first-child {
+    border-radius: 0;
+  }
+}
+
+.radios {
+  align-items: center;
+  border: $inscription-form-border 1px solid;
+  border-radius: .25rem;
+  display: grid;
+  flex: 4;
+  grid-column: 2 / 5;
+  grid-row: 1;
+  height: calc(2.25rem + 2px);
+}
+
+.radio {
+  grid-row: 1;
+  position: relative;
+  text-align: center;
+
+  label {
+    margin: 0 0 0 5px;
+  }
+}
+
+@media only screen and(max-width: 590px) {
+
+  .input-group {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .label {
+    grid-row: 1;
+    margin: 0;
+  }
+
+  .inputs,
+  .input,
+  .radios {
+    grid-row: 2;
+  }
+
+  .inputs,
+  .label,
+  .input,
+  .radios {
+    border-radius: .25rem;
+    grid-column: 1;
+  }
+
+  .inputs {
+    .input {
+      grid-column: unset;
+      grid-row: unset;
+    }
+  }
+}
+
+@include generate-input-validation(username);
+@include generate-input-validation(pwd);
+@include generate-input-validation(date);

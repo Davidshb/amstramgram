@@ -2,47 +2,42 @@
 @import '../../lib/scss/mixins';
 
 .my--header {
-  align-items: center;
-  background-color: $header-color;
-  box-shadow: 0 5px 20px $black-color;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 50px;
-
-  @media only screen and (max-width: $header-max-width) {
-    height: 100px;
-    overflow: hidden;
-    padding: 10px;
-  }
+  background-color: $header-background-color;
+  box-shadow: 0 5px 10px $black-color;
+  color: $header-text-color;
+  margin-bottom: 40px;
+  position: relative;
+  text-align: center;
 }
 
 .navbar-brand {
   box-shadow: $button-shadow;
-  display: block;
-  font-size: 200%;
-  font-weight: 700;
-  overflow: hidden;
-  padding: 10px 20px;
+  color: $white-color;
+  display: inline-block;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 2;
+  padding: 2px 5px;
   text-align: center;
+  transition: box-shadow .3s ease-out;
 
   &:active {
     box-shadow: none;
   }
 
-  @media only screen and (max-width: $header-max-width) {
-    font-size: 150%;
+  &:hover {
+    cursor: pointer;
   }
 }
 
 .div-recherche {
   display: block;
-  margin-left: -7.5%;
-  overflow: hidden;
   text-align: center;
-  width: 20%;
 
   input {
+    outline: none;
     width: 100%;
+    z-index: 100;
   }
 
   @media only screen and (max-width: $header-max-width) {
@@ -56,6 +51,8 @@
   @include background-img('./baseline_search_white_48dp_X1.png', $header-search-img-size);
 
   display: none;
+  margin: 0 auto;
+  transition: display .3s;
 
   &:hover {
     cursor: pointer;
@@ -63,7 +60,8 @@
 
   @media only screen and (max-width: $header-max-width) {
     box-shadow: $button-shadow;
-    display: flex;
+    display: block;
+    transition: box-shadow .3s;
 
     &:active {
       box-shadow: none;
@@ -72,28 +70,38 @@
 }
 
 .searching {
-  @media only screen {
-    .img-search {
-      display: none;
-    }
+  align-self: center;
+  border: 2px solid $black-color;
+  bottom: 2%;
+  left: 50%;
+  position: absolute;
+  transform: translateY(105%) translateX(-40%);
 
-    input {
-      display: flex;
-      flex: 1;
-    }
+  .img-search {
+    display: none;
+  }
+
+  input {
+    display: block;
   }
 }
 
 .img-acc {
   box-shadow: $button-shadow;
-  box-sizing: unset;
-  color: $white-color;
-  font-weight: normal;
-  max-width: 100px;
-  overflow: hidden;
-  padding: 5px 20px;
+  display: inline-block;
+  margin: 0 5px;
+  min-width: 82px;
+  padding: 5px;
   text-align: center;
-  width: 10%;
+  transition: box-shadow .3s;
+
+  &:hover {
+    color: $white-color;
+  }
+
+  span {
+    transition: color .3s;
+  }
 
   &:active {
     box-shadow: none;
@@ -102,10 +110,14 @@
 
 .account-img {
   @include background-img('./img_account.png', $header-account-img);
+}
 
-  @media only screen and (max-width: $header-max-width) {
-    background-size: $header-account-img-small;
-    height: $header-account-img-small;
-    width: $header-account-img-small;
+@media only screen and(min-width: $header-min-width) {
+  .my--header {
+    align-items: center;
+    display: flex;
+    height: 85px;
+    justify-content: space-between;
+    padding: 0 20px;
   }
 }

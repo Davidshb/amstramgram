@@ -1,86 +1,69 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { changeResearch, toggleSearching } from '../../redux/actions'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import './style.css'
+import './style.scss'
 
-class Header extends Component {
+class Header extends React.Component {
+
+  #header
+
   constructor (props) {
     super(props)
 
     props.history.listen(location => this.setState({
         account_img_text: location.pathname === '/connexion' ? 'S\'inscrire' : 'Se connecter',
-        account_img_link: location.pathname === '/connexion' ? '/inscription' : '/connexion'
+        account_img_link: location.pathname === '/connexion' ? '/inscription' : '/connexion',
       })
     )
 
     this.state = {
-      inputClass: 'form-control border'
+      account_img_text: props.history.location.pathname === '/connexion' ? 'S\'inscrire' : 'Se connecter',
+      account_img_link: props.history.location.pathname === '/connexion' ? '/inscription' : '/connexion',
+      searching: ''
     }
 
-    this.onKeyUp = this.onKeyUp.bind(this)
     this.img_search_blur = this.img_search_blur.bind(this)
-    this.search = this.search.bind(this)
-    this.changeResearchHandler = this.changeResearchHandler.bind(this)
+    this.searchHandler = this.searchHandler.bind(this)
     this.img_search_toggle = this.img_search_toggle.bind(this)
+    this.changeSearch = this.changeSearch.bind(this)
   }
 
-  search (event) {
-    event.preventDefault()
-    if (this.props.searchValue !== '')
-      this.props.history.push('/search/' + this.props.searchValue)
+  changeSearch () {
+    sessionStorage.setItem('research-data', this.search.value)
+  }
+
+  searchHandler (e) {
+    e.preventDefault()
+    if (this.search.value !== '')
+      this.props.history.push('/search/' + this.search.value)
   }
 
   componentDidMount () {
-    let data = sessionStorage.getItem('research-data')
-    if (data) this.props.changeResearch(data)
-  }
-
-  changeResearchHandler (e) {
-    this.props.changeResearch(e.target.value)
-    sessionStorage.setItem('research-data', e.target.value)
-  }
-
-  onKeyUp (event) {
-    const txt = event.target.value
-
-    if (txt !== '' && this.state.inputClass === 'form-control border')
-      this.setState({
-        inputClass: 'form-control border border-primary'
-      })
-    else if (txt === '' && this.state.inputClass !== 'form-control border')
-      this.setState({
-        inputClass: 'form-control border'
-      })
+    const data = sessionStorage.getItem('research-data')
+    this.#header = document.getElementById('search-input')
+    if (data)
+      this.search.value = data
   }
 
   img_search_blur () {
-    if (this.props.searchValue === '')
-      this.props.toggleSearching(false)
+    if (this.search.value === '')
+      this.setState({ searching: '' })
   }
 
   img_search_toggle () {
-    this.props.toggleSearching(true, () => document.querySelector('my__header > input').focus())
-  }
-
-  componentWillMount () {
-    let tmp = window.location.pathname === '/inscription'
-    this.setState({
-      account_img_text: tmp ? 'Se connecter' : 'S\'inscrire',
-      account_img_link: tmp ? '/connexion' : '/inscription'
-    })
+    this.setState({ searching: 'searching' })
+    this.#header.focus()
   }
 
   render () {
     return (
-      <nav className="navbar navbar-dark bg-dark my--header">
-        <Link className=" navbar-brand" to='/'>Amstramgram</Link>
-        <div className={' div-recherche ' + this.props.searching}>
-          <form onSubmit={this.search}>
-            <input type="text" name="search" className={this.state.inputClass} aria-label="search"
-                   placeholder="Recherche..." onKeyUp={this.onKeyUp} value={this.props.searchValue}
-                   onChange={this.changeResearchHandler}
-                   onBlur={this.img_search_blur}/>
+      <header className="my--header">
+        <Link className="navbar-brand" to='/'>Amstramgram</Link>
+        <div className={'div-recherche ' + this.state.searching}>
+          <form onSubmit={this.searchHandler}>
+            <input type="text" name="search" aria-label="search" ref={input => this.search = input}
+                   placeholder="Recherche..." id="search-input"
+                   onBlur={this.img_search_blur} onChange={this.changeSearch}
+            />
           </form>
           <svg className="img-search" onClick={this.img_search_toggle}/>
         </div>
@@ -90,16 +73,9 @@ class Header extends Component {
           <br/>
           <span className="span">{this.state.account_img_text}</span>
         </Link>
-      </nav>
+      </header>
     )
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    searchValue: state.header.research,
-    searching: state.header.searching
-  }
-}
-
-export default connect(mapStateToProps, { changeResearch, toggleSearching })(Header)
+export default Header

@@ -1,0 +1,81 @@
+@import '../lib/scss/responsive';
+
+.container {
+  max-width: 75%;
+}
+
+:root {
+  --accent: #da3317;
+  --border-radius: 55px;
+  --border-width: 6px;
+  --font-size: 10px;
+}
+
+.switch {
+  display: flex;
+}
+
+.toggle {
+  border: solid var(--border-width) var(--accent);
+  border-radius: var(--border-radius);
+  perspective: 800px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform cubic-bezier(0, 0, .30, 2) .4s;
+
+  > input[type="radio"] {
+    display: none;
+  }
+
+  > #choice1:checked ~ #flap {
+    transform: rotateY(-180deg);
+
+    > .content {
+      transform: rotateY(-180deg);
+    }
+  }
+
+  > #choice2:checked ~ #flap {
+    transform: rotateY(0deg);
+  }
+
+  > label {
+    color: var(--accent);
+    cursor: pointer;
+    display: inline-block;
+    font-size: var(--font-size);
+    min-width: 170px;
+    padding: 30px;
+    text-align: center;
+  }
+
+  > label,
+  > #flap {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+
+  > #flap {
+    align-items: center;
+    background-color: var(--accent);
+    border-bottom-right-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    display: flex;
+    font-size: var(--font-size);
+    height: calc(100% + var(--border-width) * 2);
+    justify-content: center;
+    left: 50%;
+    position: absolute;
+    top: calc(0px - var(--border-width));
+    transform-origin: left;
+    transform-style: preserve-3d;
+    transition: transform cubic-bezier(.4, 0, .2, 1) .5s;
+    width: 50%;
+
+    > .content {
+      color: #333;
+      transform-style: preserve-3d;
+      transition: transform 0s linear .25s;
+    }
+  }
+}

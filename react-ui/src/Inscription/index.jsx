@@ -1,24 +1,98 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { deleteData, signUp, changeData, verifyUsername, removeError } from '../redux/actions'
-import { DateDeNaissance, Email, Names, Passwords, Sexe, Username } from './Inputs'
-import './Inputs/style.css'
-import { Send, SettingsBackupRestore } from '@material-ui/icons'
-import { notification } from '../Provider/NotificationProvider'
-import { NotificationTypes } from '../lib/js'
+import { setUser } from '../redux/actions'
+import isEmail from 'validator/lib/isEmail'
+import axios from 'axios'
+import { InputDateDeNaissance, InputEmail, InputNames, InputPasswords, InputSexe, InputUsername } from '../Modules'
+import { SettingsBackupRestore, Lock } from '@material-ui/icons'
+import { notificationContext } from '../Provider/NotificationProvider'
+import { checkDateValidity, NotificationTypes, url } from '../lib/js'
+import './style.scss'
 
 class Inscription extends React.Component {
 
-  state = {
-    inscriptionLoading: false,
-    pwdError: false,
-    emailError: false,
-    usernameError: false
+  constructor (props, context) {
+    super(props, context)
+
+    this.state = {
+      inscriptionLoading: false,
+      pwdError: false,
+      emailError: false,
+      usernameError: false,
+      usernameValidation: false,
+      usernameValid: true,
+      error: null,
+      data: {
+        lname: '',
+        fname: '',
+        pwd: ['', ''],
+        email: '',
+        sexe: '',
+        date: '',
+        username: ''
+      },
+      disableButton: true
+    }
+
+    this.toggleButton = this.toggleButton.bind(this)
+    this.verifyUsername = this.verifyUsername.bind(this)
+    this.changeData = this.changeData.bind(this)
+    this.deleteData = this.deleteData.bind(this)
+    this.signUp = this.signUp.bind(this)
+    this.removeError = this.removeError.bind(this)
+    this.creerUnCompte = this.creerUnCompte.bind(this)
+  }
+
+  toggleButton () {
+    const data = this.state.data
+    this.setState({
+      disableButton: !(data.lname.length > 2 && data.fname.length > 2 && isEmail(data.email) > 0 &&
+        data.pwd[0].length >= 8 && data.pwd[1].length >= 8 && data.sexe.length !== 0 &&
+        !this.state.usernameValidation && this.state.usernameValid && data.username !== '' &&
+        data.pwd[0] === data.pwd[1] && checkDateValidity(data.date))
+    })
+  }
+
+  verifyUsername (param, next = () => null) {
+    let cb = () => axios
+      .post(url + '/verifyUsername', { param })
+      .then(res => this.setState({ usernameValid: res.data, usernameValidation: false }))
+      .catch(err => this.setState({ error: err.message, username: '', usernameValid: false }))
+      .finally(this.toggleButton)
+      .finally(next)
+    this.setState({ usernameValidation: true }, cb)
+  }
+
+  changeData (dataName, dataValue, next = () => null) {
+    let data = this.state.data
+    data[dataName] = dataValue
+    this.setState({ data }, next)
+    this.toggleButton()
+  }
+
+  deleteData () {
+    let data = {}
+    Object.keys(this.state.data).forEach(v => data[v] = '')
+    data.pwd = ['', '']
+    this.setState({ data }, this.toggleButton)
+  }
+
+  signUp (data, next = () => null) {
+    return axios
+      .post(url + '/inscription', data)
+      .then(res => this.props.setUser(res.data))
+      .catch(err => err.response && this.setState({ error: err.response.data }))
+      .finally(next)
+  }
+
+  removeError () {
+    this.setState({ error: null })
   }
 
   componentDidMount () {
     let data = JSON.parse(sessionStorage.getItem('inscription-data'))
-    if (data) this.props.changeData(data)
+    if (data)
+      this.setState({ data })
   }
 
   handleError = error => {
@@ -52,16 +126,15 @@ class Inscription extends React.Component {
       sessionStorage.setItem('inscription-data', data)
 
     if (nextProps.error) {
-      this.context
-          .addNotification({
-            type: NotificationTypes.ERROR,
-            message: nextProps.error
-          }, this.handleError(nextProps.error))
+      this.context.addNotification({
+        type: NotificationTypes.ERROR,
+        message: nextProps.error
+      }, this.handleError(nextProps.error))
     }
   }
 
   componentWillUnmount () {
-    this.props.deleteData()
+    this.deleteData()
     sessionStorage.removeItem('inscription-data')
   }
 
@@ -71,58 +144,43 @@ class Inscription extends React.Component {
 
     this.setState({ inscriptionLoading: true }, () => this.props.signUp(
       this.props.data,
-      () => this.setState({ inscriptionLoading: false }, /*() => this.props.history.push('/')*/)
+      () => this.setState({ inscriptionLoading: false }, /*() => this.props.history.push('/')*/) //TODO
     ))
   }
 
   render () {
     return (
       <div className="container">
-        <div className="form-group border p-2 needs-validation">
-          <div className="form-header border col">Inscription</div>
-          <hr/>
-          <Names changeData={this.props.changeData} value={[this.props.data.fname, this.props.data.lname]}/>
-          <Username {...this.props.usernameProps} verifyUsername={this.props.verifyUsername}
-                    changeData={this.props.changeData} handleError={this.state.usernameError}/>
-          <Passwords changeData={this.props.changeData} value={this.props.data.pwd} handleError={this.state.pwdError}/>
-          <Sexe changeData={this.props.changeData} value={this.props.data.sexe}/>
-          <Email changeData={this.props.changeData} value={this.props.data.email} handleError={this.state.emailError}/>
-          <DateDeNaissance changeData={this.props.changeData} value={this.props.data.date}/>
-          <br/>
-          <hr/>
-          <div className="btns">
-            <button
-              type="submit" className="btn btn-primary"
-              onClick={this.creerUnCompte.bind(this)}
-              disabled={this.props.disableButton}
-            >
-              {this.state.inscriptionLoading ? 'Chargement' : <><Send/>Créer un compte</>}
-            </button>
-            <button type="reset" className="btn btn-secondary" onClick={this.props.deleteData}>
-              <SettingsBackupRestore/>
-              Effacer
-            </button>
-          </div>
+        <header>Inscription</header>
+        <InputNames changeData={this.changeData} value={[this.state.data.fname, this.state.data.lname]}/>
+        <InputUsername verifyUsername={this.verifyUsername} value={this.state.data.username}
+                       usernameValidation={this.state.usernameValidation} changeData={this.changeData}
+                       handleError={this.state.usernameError} usernameValid={this.state.usernameValid}
+        />
+        <InputPasswords changeData={this.changeData} value={this.state.data.pwd}
+                        handleError={this.state.pwdError}
+        />
+        <InputSexe changeData={this.changeData} value={this.state.data.sexe}/>
+        <InputEmail changeData={this.changeData} value={this.state.data.email}
+                    handleError={this.state.emailError}
+        />
+        <InputDateDeNaissance changeData={this.changeData} value={this.state.data.date}/>
+        <div className="btns">
+          <button type="submit" className="btn btn-primary" onClick={this.creerUnCompte.bind(this)}
+                  disabled={this.state.disableButton}
+          >
+            {this.state.inscriptionLoading ? 'Chargement' : <><Lock/>Créer un compte</>}
+          </button>
+          <button type="reset" className="btn" onClick={this.deleteData}>
+            <SettingsBackupRestore/>
+            Effacer
+          </button>
         </div>
       </div>
     )
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    user: state.user.user,
-    data: state.inscription.data,
-    disableButton: state.inscription.disableButton,
-    usernameProps: {
-      value: state.inscription.data.username,
-      usernameValid: state.inscription.usernameValid,
-      usernameValidation: state.inscription.usernameValidation
-    },
-    error: state.inscription.error
-  }
-}
+Inscription.contextType = notificationContext
 
-Inscription.contextType = notification
-
-export default connect(mapStateToProps, { signUp, deleteData, changeData, verifyUsername, removeError })(Inscription)
+export default connect(state => {return { user: state.user.user }}, { setUser })(Inscription)
