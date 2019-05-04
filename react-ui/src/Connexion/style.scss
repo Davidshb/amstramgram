@@ -1,81 +1,106 @@
 @import '../lib/scss/responsive';
 
-.container {
-  max-width: 75%;
-}
+.connexion-container {
+  background-color: $white-color;
+  border: 1px solid $inscription-form-border;
+  border-radius: .25rem;
+  display: grid;
+  grid-auto-rows: auto;
+  grid-gap: 10px;
+  margin: 20vh auto 0;
+  max-width: 55%;
 
-:root {
-  --accent: #da3317;
-  --border-radius: 55px;
-  --border-width: 6px;
-  --font-size: 10px;
-}
-
-.switch {
-  display: flex;
-}
-
-.toggle {
-  border: solid var(--border-width) var(--accent);
-  border-radius: var(--border-radius);
-  perspective: 800px;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform cubic-bezier(0, 0, .30, 2) .4s;
-
-  > input[type="radio"] {
-    display: none;
-  }
-
-  > #choice1:checked ~ #flap {
-    transform: rotateY(-180deg);
-
-    > .content {
-      transform: rotateY(-180deg);
-    }
-  }
-
-  > #choice2:checked ~ #flap {
-    transform: rotateY(0deg);
-  }
-
-  > label {
-    color: var(--accent);
-    cursor: pointer;
-    display: inline-block;
-    font-size: var(--font-size);
-    min-width: 170px;
-    padding: 30px;
+  header {
+    background-color: $inscription-form-background;
+    font-size: 22px;
+    grid-row: 1;
+    padding: 5px 0;
     text-align: center;
   }
 
-  > label,
-  > #flap {
-    font-weight: bold;
-    text-transform: capitalize;
+  .switch {
+    border-radius: 6px;
+    cursor: pointer;
+    height: 36px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    width: 98%;
   }
 
-  > #flap {
-    align-items: center;
-    background-color: var(--accent);
-    border-bottom-right-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
-    display: flex;
-    font-size: var(--font-size);
-    height: calc(100% + var(--border-width) * 2);
-    justify-content: center;
-    left: 50%;
+  .inner-switch {
+    font-size: .6em;
+    height: inherit;
+    left: 0;
+    letter-spacing: .2em;
     position: absolute;
-    top: calc(0px - var(--border-width));
-    transform-origin: left;
-    transform-style: preserve-3d;
-    transition: transform cubic-bezier(.4, 0, .2, 1) .5s;
+    text-transform: uppercase;
+    top: 0;
+    width: inherit;
+
+    &:first-child {
+      background: $switch-button-background-color;
+      color: $switch-button-color;
+    }
+
+    &:nth-child(2) {
+      background: $dodgerblue-color;
+      clip-path: inset(0 50% 0 0);
+      color: $white-color;
+      transition: .3s cubic-bezier(0, 0, 0, 1);
+    }
+  }
+
+  .toggle {
+    box-sizing: border-box;
+    display: flex;
+    height: inherit;
+    position: absolute;
     width: 50%;
 
-    > .content {
-      color: #333;
-      transform-style: preserve-3d;
-      transition: transform 0s linear .25s;
+    p {
+      margin: auto;
+    }
+
+    &:nth-child(1) {
+      right: 0;
+    }
+  }
+
+  .btns {
+    border-top: 1px solid $black-color;
+    margin-top: 15px;
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .btn {
+    background-color: $button-color;
+    border-color: $button-color;
+    border-radius: .25rem;
+    color: $white-color;
+    display: inline-block;
+    margin: 0 auto;
+    transition: color .15s ease-in-out,
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out,
+    box-shadow .15s ease-in-out;
+    user-select: none;
+    white-space: nowrap;
+
+    svg {
+      vertical-align: middle;
+    }
+
+    &:hover {
+      background-color: $button-color-hover;
+      border-color: $button-color-border-hover;
+      cursor: pointer;
+    }
+
+    &:focus {
+      box-shadow: none;
     }
   }
 }

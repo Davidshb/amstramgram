@@ -11,6 +11,8 @@ import './style.scss'
 
 class Inscription extends React.Component {
 
+  static contextType = notificationContext
+
   constructor (props, context) {
     super(props, context)
 
@@ -150,7 +152,7 @@ class Inscription extends React.Component {
 
   render () {
     return (
-      <div className="container">
+      <form className="inscription-container" onSubmit={() => null}>
         <header>Inscription</header>
         <InputNames changeData={this.changeData} value={[this.state.data.fname, this.state.data.lname]}/>
         <InputUsername verifyUsername={this.verifyUsername} value={this.state.data.username}
@@ -176,11 +178,9 @@ class Inscription extends React.Component {
             Effacer
           </button>
         </div>
-      </div>
+      </form>
     )
   }
 }
-
-Inscription.contextType = notificationContext
 
 export default connect(state => {return { user: state.user.user }}, { setUser })(Inscription)

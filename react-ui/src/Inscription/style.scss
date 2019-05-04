@@ -1,6 +1,6 @@
 @import '../lib/scss/responsive';
 
-.container {
+.inscription-container {
   background-color: $white-color;
   border: 1px solid $inscription-form-border;
   border-radius: .25rem;
@@ -8,6 +8,7 @@
   grid-auto-rows: auto;
   grid-gap: 10px;
   margin: auto;
+  max-width: 75%;
   padding: 0 0 5px;
 
   header {
@@ -17,62 +18,67 @@
     grid-row: 1;
     text-align: center;
   }
-}
 
-.btns {
-  align-items: center;
-  border-top: $inscription-form-background 1px solid;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  padding-top: 10px;
+  .btns {
+    align-items: center;
+    border-top: $inscription-form-background 1px solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: 10px;
 
-  [type=submit],
-  [type=reset] {
-    color: $white-color;
+    svg {
+      vertical-align: middle;
+    }
 
-    &:hover:not(:disabled) {
+    [type=submit],
+    [type=reset] {
+      color: $white-color;
+    }
+
+    [type=submit]:hover:not(:disabled),
+    [type=reset]:hover:not(:disabled) {
       cursor: pointer;
     }
-  }
 
-  [type=submit] {
-    background-color: $button-color;
-    border-color: $button-color;
+    [type=submit] {
+      background-color: $button-color;
+      border-color: $button-color;
+    }
 
-    &:not(:disabled):hover {
+    [type=submit]:not(:disabled):hover {
       background-color: $button-color-hover;
       border-color: $button-color-border-hover;
     }
-  }
 
-  [type=reset] {
-    background-color: $button-second-color;
-    border-color: $button-second-color;
+    [type=reset] {
+      background-color: $button-second-color;
+      border-color: $button-second-color;
+    }
 
-    &:not(:disabled):hover {
+    [type=reset]:not(:disabled):hover {
       background-color: $button-second-color-hover;
     }
-  }
 
-  button {
-    border-radius: .25rem;
-    line-height: 1.5;
-    padding: .375rem .75rem;
-    text-align: center;
-    transition: color .15s ease-in-out,
-    background-color .15s ease-in-out,
-    border-color .15s ease-in-out,
-    box-shadow .15s ease-in-out;
-    user-select: none;
-    vertical-align: middle;
-    white-space: nowrap;
+    button {
+      border-radius: .25rem;
+      line-height: 1.5;
+      padding: .375rem .75rem;
+      text-align: center;
+      transition: color .15s ease-in-out,
+      background-color .15s ease-in-out,
+      border-color .15s ease-in-out,
+      box-shadow .15s ease-in-out;
+      user-select: none;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
 
-    &:focus {
+    button:focus {
       box-shadow: none;
     }
 
-    &:disabled {
+    button:disabled {
       opacity: .65;
     }
   }

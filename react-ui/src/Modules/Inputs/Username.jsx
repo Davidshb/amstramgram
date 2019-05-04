@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { NotificationTypes, REGEXP_USERNAME, TIME_UNTIL_USERNAME_VERIFICATION } from '../../lib/js'
 import { notificationContext } from '../../Provider/NotificationProvider'
 import './style.scss'
 
-class Username extends Component {
+export default class Username extends React.Component {
   #username
+
+  static contextType = notificationContext
 
   constructor (props) {
     super(props)
@@ -80,7 +82,3 @@ class Username extends Component {
     )
   }
 }
-
-Username.contextType = notificationContext
-
-export default Username

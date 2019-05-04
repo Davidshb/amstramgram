@@ -5,7 +5,10 @@ import 'react-notifications-component/dist/theme.css'
 import './react-notifications-component.css'
 import { getNotification } from '../lib/js'
 
-export const notificationContext = React.createContext()
+export const notificationContext = React.createContext({
+  notif: null,
+  addNotification: () => null
+})
 
 class NotificationProvider extends React.Component {
   notif = React.createRef()

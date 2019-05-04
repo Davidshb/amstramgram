@@ -40,7 +40,7 @@ class DateDeNaissance extends React.Component {
     return (
       <div className="input-group">
         <span className="label">Date de naissance</span>
-        <input className={'input' + this.state.class} id="date" value={this.props.value}
+        <input className={'input' + this.state.class} id="date" value={this.props.value} autoComplete="bday"
                placeholder="Entrer une date: JJ/MM/AAAA" onChange={this.dateChangeHandler.bind(this)} required
         />
       </div>

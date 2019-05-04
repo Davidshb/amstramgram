@@ -46,7 +46,7 @@
 .radios {
   align-items: center;
   border: $inscription-form-border 1px solid;
-  border-radius: .25rem;
+  border-radius: 0 .25rem .25rem 0;
   display: grid;
   flex: 4;
   grid-column: 2 / 5;

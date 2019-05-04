@@ -30,11 +30,11 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
     case NotificationTypes.ERROR:
       return {
         title: 'Erreur',
-        message,
         type: 'danger',
         insert: 'top',
         container: 'top-right',
         dismiss: { duration: 3000 },
+        message,
         ...options
       }
     case NotificationTypes.MESSAGE:

@@ -1,66 +1,96 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { setUser } from '../redux/actions'
+import { InputPasswords } from '../Modules/'
+import { Lock } from '@material-ui/icons'
 import './style.scss'
 
 class Connexion extends React.Component {
-  componentDidMount () {
-    const st = {}
 
-    st.flap = document.querySelector('#flap')
-    st.toggle = document.querySelector('.toggle')
+  constructor (props) {
+    super(props)
 
-    st.choice1 = document.querySelector('#choice1')
-    st.choice2 = document.querySelector('#choice2')
-
-    st.flap.addEventListener('transitionend', () => {
-
-      if (st.choice1.checked) {
-        st.toggle.style.transform = 'rotateY(-15deg)'
-        setTimeout(() => st.toggle.style.transform = '', 400)
-      } else {
-        st.toggle.style.transform = 'rotateY(15deg)'
-        setTimeout(() => st.toggle.style.transform = '', 400)
-      }
-
-    })
-
-    st.clickHandler = (e) => {
-
-      if (e.target.tagName === 'LABEL') {
-        setTimeout(() => {
-          st.flap.children[0].textContent = e.target.textContent
-        }, 250)
-      }
+    this.state = {
+      disableButton: true,
+      id: '',
+      password: '',
+      placeholder: 'username',
+      inputType: 'text'
     }
 
-    this.flap = document.addEventListener('DOMContentLoaded', () => {
-      st.flap.children[0].textContent = st.choice2.nextElementSibling.textContent
-    })
-
-    this.st = document.addEventListener('click', (e) => st.clickHandler(e))
+    this.changeData = this.changeData.bind(this)
+    this.login = this.login.bind(this)
   }
 
-  componentWillUnmount () {
-    document.removeEventListener('DOMContentLoaded', this.flap)
-    document.removeEventListener('click', this.st)
+  changeData (dataName, dataValue, next = () => null) {
+    this.setState({ [dataName]: dataValue }, next)
+  }
+
+  componentDidMount () {
+    let toggle = document.getElementById('switch')
+    let toggleContainer = document.getElementById('toggle-switch')
+    let toggleNumber
+
+    toggle.addEventListener('click', () => {
+      toggleNumber = !toggleNumber
+      if (toggleNumber) {
+        toggleContainer.style.clipPath = 'inset(0 0 0 50%)'
+        toggleContainer.style.backgroundColor = '#D74046'
+        this.setState({ placeholder: 'prado-raso@mail.com', id: '', inputType: 'email' })
+      } else {
+        toggleContainer.style.clipPath = 'inset(0 50% 0 0)'
+        toggleContainer.style.backgroundColor = '#1e90ff'
+        this.setState({ placeholder: 'username', id: '', inputType: 'text' })
+      }
+    })
+
+    if (localStorage.getItem('firstTime') !== null) {
+      setTimeout(() => toggle.click(), 1000)
+      setTimeout(() => toggle.click(), 2000)
+      localStorage.setItem('firstTime', new Date().toUTCString())
+    }
+  }
+
+  login () {
+
   }
 
   render () {
     return (
-      <div className="container">
+      <form className="connexion-container" onSubmit={this.login}>
         <header>Connexion</header>
-        <div className="switch">
-          <form className="toggle">
-            <input type="radio" id="choice1" name="choice" value="creative"/>
-            <label htmlFor="choice1">email</label>
-            <input type="radio" id="choice2" name="choice" value="productive"/>
-            <label htmlFor="choice2">username</label>
-            <div id="flap"><span className="content">productive</span></div>
-          </form>
+        <div className="input-group">
+          <div className="switch" id="switch">
+            <div className="inner-switch">
+              <div className="toggle">
+                <p>email</p>
+              </div>
+              <div className="toggle">
+                <p>username</p>
+              </div>
+            </div>
+            <div className="inner-switch" id='toggle-switch'>
+              <div className="toggle">
+                <p>email</p>
+              </div>
+              <div className="toggle">
+                <p>username</p>
+              </div>
+            </div>
+          </div>
+          <input value={this.state.id} onChange={e => this.changeData('id', e.target.value)}
+                 className="input" placeholder={this.state.placeholder} type={this.state.inputType}
+                 autoComplete={this.state.inputType === 'text' ? 'username' : 'email'} required
+          />
         </div>
-
-      </div>
+        <InputPasswords changeData={this.changeData} value={this.state.password} one/>
+        <div className="btns">
+          <button className="btn" type="submit">
+            <Lock/>
+            Connexion
+          </button>
+        </div>
+      </form>
     )
   }
 }

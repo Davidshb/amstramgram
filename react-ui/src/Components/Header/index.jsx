@@ -51,7 +51,7 @@ class Header extends React.Component {
 
   img_search_toggle () {
     this.setState({ searching: 'searching' })
-    this.#header.focus()
+    setTimeout(() => this.#header.focus(), 500)
   }
 
   render () {
