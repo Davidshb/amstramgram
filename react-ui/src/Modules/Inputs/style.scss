@@ -68,31 +68,31 @@
 
   .input-group {
     grid-template-columns: repeat(1, 1fr);
-  }
 
-  .label {
-    grid-row: 1;
-    margin: 0;
-  }
+    .label {
+      grid-row: 1;
+      margin: 0;
+    }
 
-  .inputs,
-  .input,
-  .radios {
-    grid-row: 2;
-  }
+    .inputs,
+    .input,
+    .radios {
+      grid-row: 2;
+    }
 
-  .inputs,
-  .label,
-  .input,
-  .radios {
-    border-radius: .25rem;
-    grid-column: 1;
-  }
+    .inputs,
+    .label,
+    .input,
+    .radios {
+      border-radius: .25rem;
+      grid-column: 1;
+    }
 
-  .inputs {
-    .input {
-      grid-column: unset;
-      grid-row: unset;
+    .inputs {
+      .input {
+        grid-column: unset;
+        grid-row: unset;
+      }
     }
   }
 }

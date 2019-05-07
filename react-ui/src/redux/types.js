@@ -1,7 +1,6 @@
 export const User = {
     FOLLOW_USER: 'FOLLOW_USER',
     SET_USER:'SET_USER',
-    ERROR: 'ERROR',
     SET_PROFILE: "SET_PROFILE"
 }
 

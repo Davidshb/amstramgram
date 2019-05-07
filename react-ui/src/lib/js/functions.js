@@ -6,13 +6,10 @@ export const capitalizeWords = str => {
 }
 
 export const setAuthToken = (token = null) => {
-	if (token) {
-		localStorage.setItem('jwtToken', token)
+	if (token)
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-	} else {
+	else
 		delete axios.defaults.headers.common['Authorization']
-		localStorage.removeItem('jwtToken')
-	}
 }
 
 export const dateIsAfterToday = (date, format) => {

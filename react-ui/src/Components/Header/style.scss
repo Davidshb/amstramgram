@@ -2,10 +2,15 @@
 @import '../../lib/scss/mixins';
 
 .my--header {
+  align-items: center;
   background-color: $header-background-color;
   box-shadow: 0 5px 10px $black-color;
+  box-sizing: border-box;
   color: $header-text-color;
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 40px;
+  min-width: 319px;
   position: relative;
   text-align: center;
 }
@@ -17,6 +22,7 @@
   font-size: 24px;
   font-weight: bold;
   line-height: 2;
+  margin-left: 5px;
   padding: 2px 5px;
   text-align: center;
   transition: box-shadow .3s ease-out;
@@ -31,7 +37,7 @@
 }
 
 .div-recherche {
-  display: block;
+  display: inline-block;
   text-align: center;
 
   input {
@@ -71,7 +77,6 @@
 
 .searching {
   align-self: center;
-  border: 2px solid $black-color;
   bottom: 2%;
   left: 50%;
   position: absolute;
@@ -89,7 +94,7 @@
 .img-acc {
   box-shadow: $button-shadow;
   display: inline-block;
-  margin: 0 5px;
+  margin-right: 5px;
   min-width: 82px;
   padding: 5px;
   text-align: center;
@@ -110,14 +115,4 @@
 
 .account-img {
   @include background-img('./img_account.png', $header-account-img);
-}
-
-@media only screen and(min-width: $header-min-width) {
-  .my--header {
-    align-items: center;
-    display: flex;
-    height: 85px;
-    justify-content: space-between;
-    padding: 0 20px;
-  }
 }

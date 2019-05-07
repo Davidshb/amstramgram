@@ -2,24 +2,25 @@ const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const request = require('request-promise')
 const { MailTypes, newMessage, ParseDate } = require('../lib')
-const jwt = require('jsonwebtoken')
 
 module.exports = {
 
   addUser: (req, res) => {
     let data = req.body
-    if (data.pwd[0] !== data.pwd[1])
+    if (data['pwd'][0] !== data['pwd'][1])
       return res.status(400).end('Les mots de passes sont différents')
-    else if (data.pwd[0].length < 8)
+    else if (data['pwd'][0].length < 8)
       return res.status(400).end('Le mot de passe est trop court')
+
     console.log('--------------------------------')
     console.log('création d\'un compte')
-    console.log(data.lname + ' ' + data.fname)
+    console.log(`${data['lname']} ${data['fname']}`)
+
     return User
       .findOne({ username: data.username })
       .then(user => {
         if (user) {
-          res.status(400).end('le username est utilisé')
+          res.status(400).end('Ce nom d\'utilisateur est déjà utilisé')
           throw new Error('username utilisé')
         }
         console.log('username OK')
@@ -43,12 +44,12 @@ module.exports = {
           })
           .catch(err => console.log('impossible de vérifier le mail') && console.error(err))
       )
-      .then(() => bcrypt.hash(data.pwd[0], 10))
+      .then(() => bcrypt.hash(data['pwd'][0], 10))
       .then(hash => {
         let obj = {
           username: data.username,
-          name: data.fname,
-          familyName: data.lname,
+          name: data['fname'],
+          familyName: data['lname'],
           password: hash,
           email: data.email,
           birth: ParseDate(data.date)
@@ -57,7 +58,7 @@ module.exports = {
       })
       .then(user => user.authentification())
       .then(user => {
-        res.status(200).json(user.data())
+        res.status(200).end(true)
         return {
           confirmation_link: user.token,
           name: user.name,
@@ -88,41 +89,69 @@ module.exports = {
   },
 
   // follow un user
-  followUser:
-    (req, res) => {
-      if (req.body.id === req.body.user_id)
-        return res.status(400).end('tu peux pas te follow')
+  followUser: (req, res, next) => {
+    if (req.body.id === req.body['user_id'])
+      return res.status(400).end('tu ne peux pas te follow')
 
-      return User
-        .findById(req.body.id)
-        .exec()
-        .then(user => user.follow(req.body.user_id))
-        .then(() => res.sendStatus(200))
-        .catch(err => console.error(err))
-    },
-
-  getUserProfile:
-    (req, res) =>
-      User.findById(req.params.id)
-          .exec()
-          .then(user => {
-            if (!user)
-              return res.status(400).end('userUnknow')
-            res.json(user.data())
-          })
-          .catch(err => res.status(500).end() && console.error(err))
-  ,
-
-  login: (req, res, next) => {
-    let { id, type, password } = req.body
-
+    return User
+      .findById(req.body.id)
+      .exec()
+      .then(user => user.follow(req.body['user_id']))
+      .then(() => res.sendStatus(200))
+      .catch(err => console.error(err))
+      .finally(next)
   },
 
-  verifyUsername:
-    (req, res, next) => {
-      User.findOne({ username: req.body.param }, 'username', (err, user) => {
-        res.send(user === null)
-        next()
+  //TODO : à terminer dans les cas où un profil est bloqué
+  getUserProfile: (req, res, next) => User
+    .findById(req.params.id)
+    .exec()
+    .then(user => {
+      if (!user)
+        return res.status(400).end('utilisateur inconnu')
+      res.json(user.data())
+    })
+    .catch(err => res.status(500).end() && console.error(err))
+    .finally(next),
+
+  login: (req, res, next) => {
+    console.log(req)
+    let { id, isEmail, password, trust } = req.body
+    let condition = isEmail ? 'email' : 'username'
+
+    return User
+      .findOne({ [condition]: id })
+      .exec()
+      .then(user => {
+        if (!user)
+          return res.status(400).end('utilisateur inconnu')
+
+        if (trust)
+          user.generateTrustKey()
+
+        return bcrypt.compareSync(password, user.password)
+          ? user.authentification()
+                .then(user => user.data())
+          : res.status(400).end('mot de passe incorrecte')
       })
-    }
+      .catch(err => res.status(500).end() && console.error(err))
+      .finally(next)
+  },
+
+  verifyUsername: (req, res, next) => {
+    const { username } = req.body
+    if (username.length < 3 || username.length > 15)
+      return res.status(500).end('Ne touche pas à mon code')
+
+    return User
+      .findOne({ username })
+      .exec()
+      .then(user => res.send(user === null))
+      .catch(err => res.status(500).end() && console.error(err))
+      .finally(next)
+  },
+
+  changeTrustToken: (req, res, next) => {
+    //TODO
+  }
 }

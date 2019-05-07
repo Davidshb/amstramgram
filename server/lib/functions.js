@@ -15,7 +15,7 @@ module.exports = {
       let t = setTimeout(() =>
         user.emailVerified &&
         user.remove().then(user => console.log('utilisateur supprimé, email non vérifié : ' + user.email))
-        , (Math.max(Date.parse(user.creation) + 24 * 60 * 60 * 1000) - Date.now(), 0))
+        , Math.max((Date.parse(user.creation) + 24 * 60 * 60 * 1000) - Date.now(), 0))
 
       this.timer.push(t)
     }

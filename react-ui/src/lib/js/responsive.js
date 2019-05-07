@@ -22,7 +22,9 @@ export const momentJs = moment
 export const NotificationTypes = {
   ERROR: 'ERROR',
   MESSAGE: 'MESSAGE',
-  INVALID_USERNAME: 'INVALID_USERNAME'
+  INVALID_USERNAME: 'INVALID_USERNAME',
+  UNKNOWN_ID: 'UNKNOWN_ID',
+  INVALID_PASSWORD: 'INVALID_PASSWORD'
 }
 
 export const getNotification = ({ type, message = ' ', options = {} }) => {
@@ -56,6 +58,24 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
         insert: 'top',
         container: 'top-center',
         dismiss: { duration: 2000 }
+      }
+    case NotificationTypes.UNKNOWN_ID:
+      return {
+        type: 'warning',
+        container: 'top-center',
+        insert: 'top',
+        dismiss: { duration: 2000 },
+        message,
+        ...options
+      }
+    case NotificationTypes.INVALID_PASSWORD:
+      return {
+        type: 'warning',
+        container: 'top-center',
+        insert: 'top',
+        dismiss: { duration: 2000 },
+        message: 'Mot de passe incorrecte',
+        ...options
       }
     default:
       return null

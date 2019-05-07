@@ -4,8 +4,6 @@ import './style.scss'
 
 class Header extends React.Component {
 
-  #header
-
   constructor (props) {
     super(props)
 
@@ -37,9 +35,8 @@ class Header extends React.Component {
       this.props.history.push('/search/' + this.search.value)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const data = sessionStorage.getItem('research-data')
-    this.#header = document.getElementById('search-input')
     if (data)
       this.search.value = data
   }
@@ -51,7 +48,7 @@ class Header extends React.Component {
 
   img_search_toggle () {
     this.setState({ searching: 'searching' })
-    setTimeout(() => this.#header.focus(), 500)
+    setTimeout(() => this.search.focus(), 500)
   }
 
   render () {

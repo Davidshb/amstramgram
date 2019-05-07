@@ -1,39 +1,57 @@
 import React from 'react'
-import { NotificationTypes, REGEXP_USERNAME, TIME_UNTIL_USERNAME_VERIFICATION } from '../../lib/js'
-import { notificationContext } from '../../Provider/NotificationProvider'
+import { REGEXP_USERNAME, TIME_UNTIL_USERNAME_VERIFICATION } from '../../lib/js'
 import './style.scss'
 
 export default class Username extends React.Component {
   #username
+  static #normal = 1
+  static #correct = 2
+  static #incorrect = 3
 
-  static contextType = notificationContext
-
-  constructor (props) {
+  constructor(props) {
     super(props)
 
-    this.usernameProcessing = null
-
     this.usernameChangeHandler = this.usernameChangeHandler.bind(this)
+    this.verifyUsername = this.verifyUsername.bind(this)
+    this.usernameBlurHandler = this.usernameBlurHandler.bind(this)
+    this.usernameFocusHandler = this.usernameFocusHandler.bind(this)
   }
 
-  componentDidMount () {
-    this.#username = document.querySelector('#username')
-  }
-
-  static usernameClickHandler (e) {
+  static usernameClickHandler(e) {
     e.preventDefault()
     if (e.target.selectionStart === 0)
       e.target.setSelectionRange(e.target.value.length, e.target.value.length)
   }
 
-  usernameChangeHandler (e) {
+  verifyUsername() {
+    this.props.verifyUsername(() => this.toggleClass(this.props.usernameValid ? Username.#correct : Username.#incorrect))
+  }
+
+  usernameFocusHandler() {
+    this.toggleClass(Username.#normal)
+  }
+
+  usernameBlurHandler(e) {
+    if (e.target.value !== '' && !e.target.validity.valid)
+      this.toggleClass(Username.#incorrect)
+  }
+
+  toggleClass(c) {
+    this.#username.classList.toggle('username-normal', c === Username.#normal)
+    this.#username.classList.toggle('username-correct', c === Username.#correct)
+    this.#username.classList.toggle('username-incorrect', c === Username.#incorrect)
+  }
+
+  usernameChangeHandler(e) {
     e.persist()
     let classList = e.target.classList
     classList.remove('username-correct', 'username-incorrect')
     let txt = e.target.value.slice(1)
 
-    if (this.usernameProcessing)
+    if (this.usernameProcessing) {
       clearTimeout(this.usernameProcessing)
+      this.usernameProcessing = null
+    }
 
     this.props.changeData('username', txt, () => {
       if (this.props.value.length < 5 || !e.target.validity.valid)
@@ -42,41 +60,34 @@ export default class Username extends React.Component {
       this.usernameProcessing = setTimeout(() => {
         this.usernameProcessing = null
         e.target.blur()
-        this.props.verifyUsername(this.props.value, () => {
-          classList.remove('username-normal')
-          classList.toggle('username-correct', this.props.usernameValid)
-          classList.toggle('username-incorrect', !this.props.usernameValid)
-          if (!this.props.handleError && !this.props.usernameValid)
-            this.context.addNotification({ type: NotificationTypes.INVALID_USERNAME })
-        })
+        this.verifyUsername()
       }, TIME_UNTIL_USERNAME_VERIFICATION)
     })
   }
 
-  componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.handleError) {
-      this.#username.classList.remove('username-normal')
-      this.#username.classList.remove('username-correct')
-      this.#username.classList.toggle('username-incorrect', true)
+  componentDidMount() {
+    if (this.props.value !== '')
+      this.verifyUsername()
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextProps.errorHandler) {
+      this.toggleClass(Username.#incorrect)
       this.props.usernameValid = false
       this.#username.focus()
-    }
-
-    if (nextProps.value === '') {
-      this.#username.classList.toggle('username-normal', true)
-      this.#username.classList.remove('username-correct')
-      this.#username.classList.remove('username-incorrect')
+      this.#username.select()
     }
   }
 
-  render () {
+  render() {
     return (
       <div className="input-group">
         <span className="label">Username</span>
-        <input id="username" className="input" aria-describedby="Tilt" type="text"
-               value={'@' + this.props.value} maxLength="16" required pattern={REGEXP_USERNAME}
-               onChange={this.usernameChangeHandler} onClick={Username.usernameClickHandler} autoComplete="username"
+        <input id="username" className="input" aria-describedby="Tilt" type="text" ref={input => this.#username = input}
+               value={'@' + this.props.value} maxLength="16" required pattern={REGEXP_USERNAME} autoComplete="username"
+               onChange={this.usernameChangeHandler} onClick={Username.usernameClickHandler}
                onSelect={Username.usernameClickHandler} readOnly={this.props.usernameValidation}
+               onBlur={this.usernameBlurHandler} onFocus={this.usernameFocusHandler}
         />
       </div>
     )

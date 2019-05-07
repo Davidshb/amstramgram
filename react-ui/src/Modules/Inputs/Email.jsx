@@ -12,7 +12,7 @@ class Email extends React.Component {
   }
 
   componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.handleError) {
+    if (nextProps.errorHandler) {
       this.props.changeData('email', '')
       this.#email.focus()
     }

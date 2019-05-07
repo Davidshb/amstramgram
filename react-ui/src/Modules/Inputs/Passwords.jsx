@@ -4,6 +4,7 @@ import './style.scss'
 
 class Passwords extends Component {
   #cc
+  static incorrect = ChangeColor.incorrect
 
   constructor (props) {
     super(props)
@@ -23,16 +24,14 @@ class Passwords extends Component {
     let pwd_value = this.props.value
 
     if (this.props['one']) {
-      console.log(pwd[0].val)
-      if (pwd_value === '') {
+      if (pwd_value === '')
         if (this.state.class !== 'pwd-normal')
           this.changeClass(ChangeColor.normal)
-      } else if (pwd[0].validity.valid)
+      return
+    }else if (pwd[0].validity.valid)
         this.changeClass(ChangeColor.correct)
       else
         this.changeClass(ChangeColor.incorrect)
-      return
-    }
 
     if (pwd_value[0] === pwd_value[1] === '')
       return
@@ -44,9 +43,12 @@ class Passwords extends Component {
   }
 
   componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.handleError === true) {
+    if (nextProps.errorHandler === true) {
       this.changeClass(ChangeColor.incorrect)
-      this.props.changeData('pwd', ['', ''], () => this.pwd[0].focus())
+      if(this.props['one'])
+        this.props.changeData('password','', () => this.pwd.focus())
+      else
+        this.props.changeData('pwd', ['', ''], () => this.pwd[0].focus())
     }
 
     if (nextProps.value[0] === nextProps.value[1] === '')
@@ -82,6 +84,7 @@ class Passwords extends Component {
           <input type="password" className={`input${this.state.class}`} minLength={PASSWORD_MIN_VALUE} value={pwd}
                  onBlur={this.verification} onChange={e => this.props.changeData('password', e.target.value)} required
                  maxLength={PASSWORD_MAX_VALUE} placeholder="mot de passe" name="pwd" autoComplete="current-password"
+                 ref={pwd => this.passwordInput = pwd}
           />
         }
       </div>

@@ -29,11 +29,11 @@ ReactDOM.render(
         <Header history={history}/>
         <Switch>
           <Route path="/" component={App} exact/>
-          <Route path="/search/:research" render={({match}) => {
-            if (!match.params.research) history.replace('/')
+          <Route path="/search/:research" render={({ match }) => {
+            if (!match.params['research']) history.replace('/')
             return (
               <div className="container">
-                {match.params.research}
+                {match.params['research']}
               </div>
             )
           }} exact/>

@@ -25,7 +25,8 @@ const UserSchema = new mongoose.Schema({
   private: { type: Boolean, default: false },
   username: { type: String, unique: true },
   creation: { type: Date, default: new Date() },
-  token: String
+  token: String,
+  trustedToken: { type: String, default: null }
 })
 
 UserSchema.methods.follow = async (user_id) => {
@@ -35,33 +36,34 @@ UserSchema.methods.follow = async (user_id) => {
   }
 }
 
-UserSchema.methods.addFollower = async function (fs) {
+UserSchema.methods.addFollower = function (fs) {
   this.followers.push(fs)
-  await this.save()
+  return this.save()
 }
 
-UserSchema.methods.data = function (needToken = false) {
-  let res = {
+UserSchema.methods.data = function () {
+  return {
     birth: this.birth,
-    name: this.name,
     familyName: this.familyName,
-    email: this.email,
-    post: this.post,
-    username: this.username,
-    private: this.private,
     followers: this.followers,
-    followings: this.followings
+    followings: this.followings,
+    name: this.name,
+    token: this.token,
+    trustToken: this.trustToken,
+    username: this.username
   }
-  if (needToken)
-    res.token = this.token
+}
 
-  return res
+UserSchema.methods.generateTrustKey = function () {
+  this.trustToken = jwt.sign({ data: Date.now() }, process.env.privateKey)
+  return this.save()
 }
 
 UserSchema.methods.createToken = function () {
   this.token = jwt.sign({ data: this._id }, process.env.privateKey, { expiresIn: '24h' })
-  this.save()
   return this
+    .save()
+    .then(() => this)
 }
 
 UserSchema.methods.authentification = function (token = null) {

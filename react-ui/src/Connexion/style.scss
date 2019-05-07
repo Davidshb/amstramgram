@@ -9,6 +9,8 @@
   grid-gap: 10px;
   margin: 20vh auto 0;
   max-width: 55%;
+  min-width: 200px;
+  width: auto;
 
   header {
     background-color: $inscription-form-background;
@@ -22,11 +24,12 @@
     border-radius: 6px;
     cursor: pointer;
     height: 36px;
-    margin: 0 auto;
+    justify-content: center;
+    margin-right: 5px;
     overflow: hidden;
     position: relative;
     user-select: none;
-    width: 98%;
+    width: calc(100% - 2px);
   }
 
   .inner-switch {
@@ -68,6 +71,10 @@
     }
   }
 
+  .save-browser {
+    margin: 0 auto;
+  }
+
   .btns {
     border-top: 1px solid $black-color;
     margin-top: 15px;
@@ -82,6 +89,7 @@
     color: $white-color;
     display: inline-block;
     margin: 0 auto;
+    min-height: 29px;
     transition: color .15s ease-in-out,
     background-color .15s ease-in-out,
     border-color .15s ease-in-out,
@@ -101,6 +109,30 @@
 
     &:focus {
       box-shadow: none;
+    }
+  }
+
+  @media only screen and (max-width: 930px) {
+    .input-group {
+      grid-template-columns: repeat(1, 1fr);
+
+      .switch {
+        margin: 0;
+      }
+
+      .label,
+      .switch {
+        grid-row: 1;
+        margin: 0;
+      }
+
+      .inputs,
+      .input,
+      .radios {
+        border-radius: .25rem;
+        grid-column: 1;
+        grid-row: 2;
+      }
     }
   }
 }

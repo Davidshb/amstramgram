@@ -11,20 +11,24 @@ export const notificationContext = React.createContext({
 })
 
 class NotificationProvider extends React.Component {
-  notif = React.createRef()
 
-  state = {
-    notif: this.notif,
-    addNotification: this.addNotification
+  constructor(props) {
+    super(props)
+    this.notif = React.createRef()
+
+    this.addNotification = this.addNotification.bind(this)
+
+    this.state = {
+      addNotification: this.addNotification
+    }
   }
 
-  addNotification (params, next = () => null) {
-    const p = getNotification(params)
-    this.notif.current.addNotification(p)
+  addNotification(params, next = () => null) {
+    this.notif.current.addNotification(getNotification(params))
     next()
   }
 
-  render () {
+  render() {
     return (
       <notificationContext.Provider value={this.state}>
         <Notification ref={this.notif}/>
