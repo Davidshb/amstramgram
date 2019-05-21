@@ -3,28 +3,17 @@ import React from 'react'
 class Email extends React.Component {
   #email
 
-  emailChangeHandler () {
-    this.props.changeData('email', this.#email.value)
+  errorHandler() {
+    this.#email.focus()
   }
 
-  componentDidMount () {
-    this.#email = document.getElementById('email')
-  }
-
-  componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.errorHandler) {
-      this.props.changeData('email', '')
-      this.#email.focus()
-    }
-  }
-
-  render () {
+  render() {
     return (
       <div className="input-group">
-          <span className="label">Email</span>
-        <input type="email" className="input" aria-describedby="Tilt" id="email"
-               placeholder="prado-raso@mail.com" value={this.props.value} onChange={this.emailChangeHandler.bind(this)}
-               required autoComplete="email"
+        <span className="label">Email</span>
+        <input type="email" className="input" ref={email => this.#email = email} required
+               placeholder="prado-raso@mail.com" value={this.props.value} autoComplete="email"
+               onChange={() => this.props.changeData('email', this.#email.value)}
         />
       </div>
     )

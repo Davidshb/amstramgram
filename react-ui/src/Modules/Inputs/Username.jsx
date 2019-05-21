@@ -15,6 +15,7 @@ export default class Username extends React.Component {
     this.verifyUsername = this.verifyUsername.bind(this)
     this.usernameBlurHandler = this.usernameBlurHandler.bind(this)
     this.usernameFocusHandler = this.usernameFocusHandler.bind(this)
+    this.errorHandler = this.errorHandler.bind(this)
   }
 
   static usernameClickHandler(e) {
@@ -70,13 +71,11 @@ export default class Username extends React.Component {
       this.verifyUsername()
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.errorHandler) {
-      this.toggleClass(Username.#incorrect)
-      this.props.usernameValid = false
-      this.#username.focus()
-      this.#username.select()
-    }
+  errorHandler() {
+    this.toggleClass(Username.#incorrect)
+    this.props.usernameValid = false
+    this.#username.focus()
+    this.#username.select()
   }
 
   render() {

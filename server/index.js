@@ -1,4 +1,5 @@
 const express = require('express')
+const app = express()
 const path = require('path')
 const cluster = require('cluster')
 const numCPUs = require('os').cpus().length
@@ -9,16 +10,12 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const compression = require('compression')
 const cloudinary = require('cloudinary')
-const app = express()
 const router = express.Router()
-const queryfier = require('querystring')
+const useragent = require('express-useragent')
+const PORT = require('normalize-port')(process.env['PORT'])
 
-const PORT = require('normalize-port')(process.env.PORT)
 const routes = require('./routes')
 const { tasks, verifyEmail, url, isDev } = require('./lib')
-
-//execute differents task on rerun. Not executed on development (need too much ressources)
-if (!isDev) tasks()
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -32,6 +29,8 @@ if (!isDev && cluster.isMaster) {
     console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`)
   )
 
+//execute differents task on rerun. Not executed on development (need too much ressources)
+  tasks()
 } else {
   // Priority serve any static files.
   app.use(cors())
@@ -39,6 +38,7 @@ if (!isDev && cluster.isMaster) {
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(helmet())
   app.use(compression())
+  app.use(useragent.express())
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')))
 
   app.use(morgan(isDev ? 'dev' : 'common'))
@@ -47,26 +47,29 @@ if (!isDev && cluster.isMaster) {
   routes(router)
   app.use('/api', router)
 
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_SECRET
-  })
-
   mongoose
-    .connect(process.env.MONGODB_URI, {
+    .connect(process.env['MONGODB_URI'], {
       useNewUrlParser: true,
       useCreateIndex: true
     })
     .then(() => console.log('mongodb connected'))
     .catch(error => console.error('can\'t connect to mongodb', error))
 
-  //user account email setting
-  app.get('/email-verification/:payload', async (req, res) => {
-    const p = req.params.payload
-    const query = queryfier.stringify({s: !!(await verifyEmail(p))})
-    res.redirect(`${url}?${query}`)
+  cloudinary.config({
+    cloud_name: process.env['CLOUDINARY_NAME'],
+    api_key: process.env['CLOUDINARY_API_KEY'],
+    api_secret: process.env['CLOUDINARY_SECRET']
   })
+
+  //user account email setting
+  app.get('/email-verification', (req, res) =>
+    verifyEmail(req.query.token)
+      .then(i => res.redirect(`${url}/connexion?p=${i}`))
+      .catch(err => {
+        if (err.name === 'TokenExpiredError')
+          res.redirect(`${url}/connexion?p=1`)
+      })
+  )
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', (request, response) => response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html')))

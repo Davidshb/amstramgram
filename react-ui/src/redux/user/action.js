@@ -2,14 +2,14 @@ import { setAuthToken, url } from '../../lib/js'
 import { User } from '../types'
 import axios from 'axios'
 
-export function getUser (_id) {
+export function getUser(_id) {
   return axios
     .get(`${url}/user/${_id}`)
     .then(res => res.data)
     .catch(err => console.error(err))
 }
 
-export function follow (id, user_id) {
+export function follow(id, user_id) {
   return dispatch =>
     axios.post(url + '/user/follow', { id, user_id })
          .then((res, err) => {
@@ -21,15 +21,15 @@ export function follow (id, user_id) {
          .catch(err => console.log(err))
 }
 
-export function setUser (user, saveBrowser = false) {
+export function setUser({ token, ...data }) {
   return dispatch => {
-    setAuthToken(user['token'])
-    dispatch({ type: User.SET_USER, user })
+    setAuthToken(token)
+    dispatch({ type: User.SET_USER, user: data })
+  }
+}
 
-    if (saveBrowser) {
-      axios.get(`${url}/trustBrowser`, {
-        
-      })
-    }
+export function removeUser() {
+  return dispatch => {
+    dispatch({ type: User.SET_USER, user: null })
   }
 }

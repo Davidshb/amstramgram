@@ -6,6 +6,7 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
+    "axios-cache-adapter": "^2.3.1",
     "history": "^4.7.2",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
@@ -15,7 +16,7 @@
     "react-redux": "^5.1.0",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
-    "react-scripts": "^3.0.0",
+    "react-scripts": "^3.0.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "typescript": "^3.4.5",
@@ -25,8 +26,7 @@
     "start": "PORT=3000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "addClass": "node ./bin/addClass.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,6 +39,6 @@
   ],
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "fs-extra": "^7.0.1"
+    "eslint-plugin-react-hooks": "^1.6.0"
   }
 }

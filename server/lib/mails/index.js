@@ -10,7 +10,8 @@ const MailTypes = Object.freeze({
 const newUser = ({ Email, confirmation_link, name }) =>
   ejs.renderFile(path.resolve(__dirname, './templates/newUser.ejs'), {
     name,
-    confirmation_link
+    confirmation_link,
+    time: new Date().setDate(1 + new Date().getDate()).toLocaleString('fr')
   }, (error, data) => {
     if (error) return console.log(error)
 
@@ -19,8 +20,8 @@ const newUser = ({ Email, confirmation_link, name }) =>
         {
           From: { Email: 'no-reply@amstramgram.ml', Name: 'no-reply' },
           To: [{ Email }],
-          Subject: 'Compte créé Amstramgram',
-          TextPart: `Vous venez de créer un compte`,
+          Subject: 'Compte créé - Amstramgram',
+          TextPart: `Amstramgram`,
           HTMLPart: data
         }
       ]
@@ -29,7 +30,7 @@ const newUser = ({ Email, confirmation_link, name }) =>
     return mailjet
       .post('send', { 'version': 'v3.1' })
       .request(mail)
-      .then(res => console.log(`email status ${Email} ${res.response.res.statusMessage}`))
+      .then(res => console.log(`envoie email ${Email} ${res.response.res.statusMessage}`))
       .catch(err => console.error(err))
   })
 

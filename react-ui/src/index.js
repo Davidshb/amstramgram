@@ -7,42 +7,60 @@ import Header from './Components/Header'
 import Inscription from './Inscription'
 import { store, history } from './redux/store'
 import { Provider } from 'react-redux'
+import Profile from './Profile'
 import NotificationProvider from './Provider/NotificationProvider'
+import moment from 'moment'
 
-function PrivateRoute ({ component: Component, ...rest }) {
+moment.updateLocale('fr', require('moment/locale/fr'))
+
+function PrivateRoute({ Component, reverse = false, ...rest }) {
+  if (reverse)
+    return (
+      <Route
+        {...rest}
+        render={props => store.getState().user.user
+          ? <Component {...props} />
+          : <Redirect to={{ pathname: '/', state: { from: props.location } }}/>
+        }
+      />
+    )
   return (
     <Route
       {...rest}
-      render={props => store.getState().user.user ? (
-        <Redirect to={{ pathname: '/', state: { from: props.location } }}/>
-      ) : (
-        <Component {...props}/>
-      )}
+      render={props => store.getState().user.user
+        ? <Redirect to={{ pathname: '/', state: { from: props.location } }}/>
+        : <Component {...props}/>
+      }
     />
   )
 }
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
+  <Provider
+    store={store}>
+    <Router
+      history={history}>
       <NotificationProvider>
         <Header history={history}/>
         <Switch>
           <Route path="/" component={App} exact/>
-          <Route path="/search/:research" render={({ match }) => {
-            if (!match.params['research']) history.replace('/')
+          <Route path="/search" render={({ match }) => {
+            const p = match.params['research']
+            if (!p || p === '') history.replace('/')
             return (
               <div className="container">
                 {match.params['research']}
               </div>
             )
           }} exact/>
-          <PrivateRoute path="/inscription" component={Inscription} exact/>
-          <PrivateRoute path="/connexion" component={Connexion} exact/>
+          <PrivateRoute path="/inscription" Component={Inscription} exact/>
+          <PrivateRoute path="/connexion" Component={Connexion} exact/>
+          <PrivateRoute path="/:id" reverse={true} Component={Profile} exact/>
           <Route render={() => <Redirect to="/"/>}/>
         </Switch>
       </NotificationProvider>
     </Router>
-  </Provider>,
+  </Provider>
+  ,
   document.getElementById('root')
 )

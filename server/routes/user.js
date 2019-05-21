@@ -2,11 +2,6 @@ const userController = require('../controllers/User.ctrl')
 
 module.exports = router => {
 
-  // avoir un user
-  router
-    .route('/user/:id')
-    .get(userController.getUserData)
-
   //récupérer le profil d'un utilisateur
   router
     .route('/profile/:id')
@@ -24,6 +19,7 @@ module.exports = router => {
 
   router
     .route('/connexion')
+    .get(userController.auth)
     .post(userController.login)
 
   router

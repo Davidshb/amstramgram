@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken')
-const PostSchema = require('./Post').prototype.schema
+const Device = require('./Device')
 
 const FollowSchema = new mongoose.Schema({
   _id: false,
@@ -8,32 +7,45 @@ const FollowSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['PENDING', 'OK', 'SENT', 'BLOCK'],
-    default: 'PENDING'
+    default: 'OK'
   }
 })
+
+const Follow = mongoose.model('Follow', FollowSchema)
 
 const UserSchema = new mongoose.Schema({
   birth: Date,
+  creation: { type: Date, default: new Date() },
+  devices: [mongoose.Schema.Types.ObjectId],
   email: { type: String, lowercase: true, unique: true },
   emailVerified: { type: Boolean, default: false },
   familyName: { type: String, trim: true },
-  followers: [FollowSchema],
-  followings: [FollowSchema],
+  followers: [mongoose.Schema.Types.ObjectId],
+  followings: [mongoose.Schema.Types.ObjectId],
   name: { type: String, trim: true },
   password: String,
-  post: [PostSchema],
   private: { type: Boolean, default: false },
-  username: { type: String, unique: true },
-  creation: { type: Date, default: new Date() },
   token: String,
-  trustedToken: { type: String, default: null }
+  username: { type: String, unique: true }
 })
 
-UserSchema.methods.follow = async (user_id) => {
-  if (this.followings.indexOf(user_id) === -1) {
-    this.followings.push(user_id)
-    await this.save()
-  }
+UserSchema.methods.follow = async function (user_id) {
+  if (this.id === user_id)
+    return Promise.reject('tu te follow')
+  let res = new Follow({ user: user_id })
+  this.followings.push(res.id)
+  await res.save()
+  return this
+    .save()
+    .then(() => this
+      .model('User')
+      .findById(user_id))
+    .then(user => {
+      if (!user)
+        return Promise.reject('unknown user')
+      user.followers.push(this.id)
+      return user.save()
+    })
 }
 
 UserSchema.methods.addFollower = function (fs) {
@@ -49,40 +61,33 @@ UserSchema.methods.data = function () {
     followings: this.followings,
     name: this.name,
     token: this.token,
-    trustToken: this.trustToken,
-    username: this.username
+    username: this.username,
   }
 }
 
-UserSchema.methods.generateTrustKey = function () {
-  this.trustToken = jwt.sign({ data: Date.now() }, process.env.privateKey)
-  return this.save()
+UserSchema.methods.trust = function (deviceId, details, trust) {
+  if (!deviceId)
+    return this.createNewDevice(details, trust, this.id)
+
+  return Device
+    .findById(deviceId)
+    .exec()
+    .then(device => {
+      if (!device)
+        return this.createNewDevice(device, trust, this.id)
+      device.count++
+      return device
+        .save()
+        .then(() => device.id)
+    })
 }
 
-UserSchema.methods.createToken = function () {
-  this.token = jwt.sign({ data: this._id }, process.env.privateKey, { expiresIn: '24h' })
-  return this
-    .save()
-    .then(() => this)
-}
-
-UserSchema.methods.authentification = function (token = null) {
-  if (!token)
-    return this.createToken()
-  console.log(this)
-  let res
-  try {
-    res = jwt.verify(token, process.env.privateKey)
-  } catch (e) {
-    if (e.name === 'TokenExpiredError')
-      return this.createToken()
-    else throw e
-  }
-
-  if (res.data !== this._id)
-    throw new Error('Different users')
-
-  return this
+UserSchema.methods.createNewDevice = async function (device, trusted, user) {
+  const res = new Device({ device, trusted, user })
+  this.devices.push(res.id)
+  await this.save()
+  await res.save()
+  return res.id
 }
 
 module.exports = mongoose.model('User', UserSchema)

@@ -12,15 +12,17 @@ import './style.scss'
 class Inscription extends React.Component {
 
   static contextType = notificationContext
+  #email
+  #pwd
+  #username
   loading = false
 
   constructor(props, context) {
     super(props, context)
+    window.history.replaceState(null, null, window.location.pathname)
 
-    this.state = {
+    const state = {
       inscriptionLoading: false,
-      pwdError: false,
-      emailError: false,
       usernameError: false,
       usernameValidation: false,
       usernameValid: true,
@@ -32,25 +34,16 @@ class Inscription extends React.Component {
         sexe: '',
         date: '',
         username: ''
-      },
-      disableButton: true
+      }
     }
 
-    this.toggleButton = this.toggleButton.bind(this)
+    const data = JSON.parse(sessionStorage.getItem('inscription-data'))
+    this.state = data ? { ...state, data } : state
+
     this.verifyUsername = this.verifyUsername.bind(this)
     this.changeData = this.changeData.bind(this)
     this.deleteData = this.deleteData.bind(this)
     this.signUp = this.signUp.bind(this)
-  }
-
-  toggleButton() {
-    const data = this.state.data
-    this.setState({
-      disableButton: !(data.lname.length > 2 && data.fname.length > 2 && isEmail(data.email) > 0 &&
-        data.pwd[0].length >= 8 && data.pwd[1].length >= 8 && data.sexe.length !== 0 &&
-        !this.state.usernameValidation && this.state.usernameValid && data.username !== '' &&
-        data.pwd[0] === data.pwd[1] && checkDateValidity(data.date))
-    })
   }
 
   verifyUsername(next = () => null) {
@@ -58,7 +51,6 @@ class Inscription extends React.Component {
       .post(url + '/verifyUsername', { username: this.state.data.username })
       .then(res => this.setState({ usernameValid: res.data }))
       .catch(err => this.setState({ usernameValid: false }) && this.errorHandler(err.message))
-      .finally(this.toggleButton)
       .finally(() => this.setState({ usernameValidation: false }))
       .finally(next)
     this.setState({ usernameValidation: true }, cb)
@@ -69,14 +61,13 @@ class Inscription extends React.Component {
     data[dataName] = dataValue
     this.setState({ data }, next)
     sessionStorage.setItem('inscription-data', JSON.stringify(data))
-    this.toggleButton()
   }
 
   deleteData(remove = true) {
     let data = {}
     Object.keys(this.state.data).forEach(v => data[v] = '')
     data.pwd = ['', '']
-    this.setState({ data }, this.toggleButton)
+    this.setState({ data })
 
     if (remove)
       sessionStorage.removeItem('inscription-data')
@@ -89,54 +80,47 @@ class Inscription extends React.Component {
 
     const callback = () => axios
       .post(`${url}/inscription`, this.state.data)
-      .then(res => res && this.props.history.replace('/'))
-      //.then(() => this.props.history.replace('/'))
-      .catch(err => err.response && this.errorHandler(err.response.data))
       .finally(() => this.setState({ inscriptionLoading: false }))
+      .then(res => res && this.props.history.replace('/connexion', { username: this.state.data.username }))
+      .catch(err => err.response && this.errorHandler(err.response.data))
 
     this.setState({ inscriptionLoading: true }, callback)
   }
 
   errorHandler(error) {
     let type = NotificationTypes.ERROR
-    let next = () => {}
 
     switch (error) {
       case 'Les mots de passes sont différents':
-        next = () => this.setState({ pwdError: true }, () => this.setState({ pwdError: false }))
+        this.#pwd.errorHandler()
         break
       case 'Le mot de passe est trop court':
-        next = () => this.setState({ pwdError: true }, () => this.setState({ pwdError: false }))
+        this.#pwd.errorHandler()
         break
       case 'Ce nom d\'utilisateur est déjà utilisé':
         type = NotificationTypes.INVALID_USERNAME
-        next = () => this.setState({ usernameError: true }, () => this.setState({ usernameError: false }))
+        this.#username.errorHandler()
         break
       case 'l\'email est utilisé' :
-        next = () => this.setState({ emailError: true }, () => this.setState({ emailError: false }))
+        this.#email.errorHandler()
         break
       case 'l\'email n\'est pas valide':
-        next = () => this.setState({ emailError: true }, () => this.setState({ emailError: false }))
+        this.#email.errorHandler()
         break
       default:
         console.log('cas d\'erreur d\'inscription non géré')
+        error = 'erreur système'
         break
     }
 
     this.context.addNotification({
       type,
       message: error
-    }, next)
+    })
   }
 
   componentDidMount() {
     window.onbeforeunload = () => (this.loading = true) && this.deleteData(false)
-  }
-
-  componentWillMount() {
-    let data = JSON.parse(sessionStorage.getItem('inscription-data'))
-    if (data)
-      this.setState({ data })
   }
 
   componentWillUnmount() {
@@ -145,24 +129,25 @@ class Inscription extends React.Component {
   }
 
   render() {
+    const data = this.state.data
+    const disableButton = !(data.lname.length > 2 && data.fname.length > 2 && isEmail(data.email) > 0 &&
+      data.pwd[0].length >= 8 && data.pwd[1].length >= 8 && data.sexe.length !== 0 &&
+      !this.state.usernameValidation && this.state.usernameValid && data.username !== '' &&
+      data.pwd[0] === data.pwd[1] && checkDateValidity(data.date))
     return (
       <form className="inscription-container" onSubmit={this.signUp}>
         <header>Inscription</header>
-        <InputNames changeData={this.changeData} value={[this.state.data.fname, this.state.data.lname]}/>
-        <InputUsername verifyUsername={this.verifyUsername} value={this.state.data.username}
+        <InputNames changeData={this.changeData} value={[data.fname, data.lname]}/>
+        <InputUsername verifyUsername={this.verifyUsername} value={data.username} ref={_ => this.#username = _}
                        usernameValidation={this.state.usernameValidation} changeData={this.changeData}
-                       handleError={this.state.usernameError} usernameValid={this.state.usernameValid}
+                       usernameValid={this.state.usernameValid}
         />
-        <InputPasswords changeData={this.changeData} value={this.state.data.pwd}
-                        handleError={this.state.pwdError}
-        />
-        <InputSexe changeData={this.changeData} value={this.state.data.sexe}/>
-        <InputEmail changeData={this.changeData} value={this.state.data.email}
-                    handleError={this.state.emailError}
-        />
-        <InputDateDeNaissance changeData={this.changeData} value={this.state.data.date}/>
+        <InputPasswords changeData={this.changeData} value={data.pwd} ref={_ => this.#pwd = _}/>
+        <InputSexe changeData={this.changeData} value={data.sexe}/>
+        <InputEmail changeData={this.changeData} value={data.email} ref={_ => this.#email = _}/>
+        <InputDateDeNaissance changeData={this.changeData} value={data.date}/>
         <div className="btns">
-          <button type="submit" className="btn btn-primary" disabled={this.state.disableButton}>
+          <button type="submit" className="btn btn-primary" disabled={disableButton}>
             {this.state.inscriptionLoading ? 'Chargement' : <><Lock/>Créer un compte</>}
           </button>
           <button type="reset" className="btn" onClick={this.deleteData}>

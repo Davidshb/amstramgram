@@ -6,7 +6,6 @@ import './react-notifications-component.css'
 import { getNotification } from '../lib/js'
 
 export const notificationContext = React.createContext({
-  notif: null,
   addNotification: () => null
 })
 
