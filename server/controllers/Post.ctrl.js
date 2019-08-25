@@ -35,7 +35,7 @@ module.exports = {
         }
     },
 
-    // récupère tous les post avec les auteurs et les auteurs des commentaires
+    // récupère les 10 premiers posts
     getAll: (req, res, next) => {
         Post.find(req.params.id)
             .populate('author')

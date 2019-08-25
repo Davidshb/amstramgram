@@ -1,3 +1,5 @@
+import { setup } from 'axios-cache-adapter'
+
 export const TIME_UNTIL_USERNAME_VERIFICATION = 3000
 
 const LETTERS = '[A-Za-z]'
@@ -12,7 +14,7 @@ export const PASSWORD_MAX_VALUE = '20'
 export const token = () => sessionStorage.getItem('token')
 
 export const device = (all = false) => {
-  let res = JSON.parse(localStorage.getItem('device'))
+  const res = JSON.parse(localStorage.getItem('device'))
   if (!res)
     return null
   if (all)
@@ -112,3 +114,11 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
       return null
   }
 }
+
+export const api = setup({
+  baseURL: '/',
+  cache: {
+    maxAge: 1000 * 60 * 10,
+    exclude: { query: false }
+  }
+})

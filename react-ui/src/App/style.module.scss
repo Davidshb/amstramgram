@@ -1,0 +1,38 @@
+@import '../lib/scss/responsive';
+
+.not-connect {
+  a {
+    color: $link-color;
+    text-decoration: underline;
+    transition: color .1s ease-in;
+  }
+
+  a:hover {
+    color: $black-color;
+  }
+
+  > span {
+    color: $black-color;
+    display: inline-block;
+    font-size: 20px;
+    margin-top: 45px;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  float: left;
+  max-width: 614px;
+  width: 100%;
+}
+
+.side {
+  align-items: stretch;
+  height: 100vh;
+  margin-bottom: 30px;
+  max-width: 293px;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}

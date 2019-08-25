@@ -19,3 +19,10 @@ export const checkDateValidity = date => {
   let res = moment(date, 'DD/MM/YYYY', true)
   return date.length && res.isValid()
 }
+
+export const classNames = param => {
+  if (typeof param === String.prototype)
+    return param
+
+  return param.join(' ')
+}

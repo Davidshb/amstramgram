@@ -25,7 +25,7 @@ class Inscription extends React.Component {
       inscriptionLoading: false,
       usernameError: false,
       usernameValidation: false,
-      usernameValid: true,
+      usernameValid: false,
       data: {
         lname: '',
         fname: '',
@@ -134,6 +134,7 @@ class Inscription extends React.Component {
       data.pwd[0].length >= 8 && data.pwd[1].length >= 8 && data.sexe.length !== 0 &&
       !this.state.usernameValidation && this.state.usernameValid && data.username !== '' &&
       data.pwd[0] === data.pwd[1] && checkDateValidity(data.date))
+
     return (
       <form className="inscription-container" onSubmit={this.signUp}>
         <header>Inscription</header>

@@ -14,7 +14,8 @@ class Profile extends React.Component {
 
   logout() {
     setAuthToken()
-    this.props.removeUser(null)
+    localStorage.setItem('auto-connect', 'false')
+    this.props.removeUser()
     this.props.history.push('/')
   }
 

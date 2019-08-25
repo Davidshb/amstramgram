@@ -86,6 +86,8 @@ class Connexion extends React.Component {
           trusted,
           id: device
         }))
+        if (trusted)
+          localStorage.setItem('auto-connect', 'true')
       })
       .then(() => this.props.history.replace(''))
       .catch(err => {

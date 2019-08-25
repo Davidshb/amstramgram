@@ -9,6 +9,7 @@ import { store, history } from './redux/store'
 import { Provider } from 'react-redux'
 import Profile from './Profile'
 import NotificationProvider from './Provider/NotificationProvider'
+import Authentification from './Authentification'
 import moment from 'moment'
 
 moment.updateLocale('fr', require('moment/locale/fr'))
@@ -18,7 +19,7 @@ function PrivateRoute({ Component, reverse = false, ...rest }) {
     return (
       <Route
         {...rest}
-        render={props => store.getState().user.user
+        render={props => store.getState().user.user //check if the user variable is null or not
           ? <Component {...props} />
           : <Redirect to={{ pathname: '/', state: { from: props.location } }}/>
         }
@@ -41,7 +42,9 @@ ReactDOM.render(
     <Router
       history={history}>
       <NotificationProvider>
-        <Header history={history}/>
+        <Switch>
+          <Route path='/(connexion|inscription|search|user\/*|)' render={props => <Header history={history} {...props}/>}/>
+        </Switch>
         <Switch>
           <Route path="/" component={App} exact/>
           <Route path="/search" render={({ match }) => {
@@ -49,18 +52,20 @@ ReactDOM.render(
             if (!p || p === '') history.replace('/')
             return (
               <div className="container">
-                {match.params['research']}
+                {p}
               </div>
             )
           }} exact/>
           <PrivateRoute path="/inscription" Component={Inscription} exact/>
           <PrivateRoute path="/connexion" Component={Connexion} exact/>
-          <PrivateRoute path="/:id" reverse={true} Component={Profile} exact/>
+          <PrivateRoute path="/user/:id" reverse={true} Component={Profile} exact/>
+          <PrivateRoute path="/auth" Component={Authentification} exact/>
           <Route render={() => <Redirect to="/"/>}/>
         </Switch>
       </NotificationProvider>
     </Router>
-  </Provider>
-  ,
+  </Provider>,
   document.getElementById('root')
 )
+
+module.hot.accept()

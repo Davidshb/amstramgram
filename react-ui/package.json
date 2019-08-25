@@ -5,8 +5,8 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
-    "axios": "^0.18.0",
-    "axios-cache-adapter": "^2.3.1",
+    "axios": "^0.18.1",
+    "axios-cache-adapter": "^2.3.3",
     "history": "^4.7.2",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
@@ -17,9 +17,9 @@
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
     "react-scripts": "^3.0.1",
-    "redux": "^4.0.1",
+    "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "typescript": "^3.4.5",
+    "typescript": "^3.5.3",
     "validator": "^10.11.0"
   },
   "scripts": {
@@ -39,6 +39,6 @@
   ],
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "eslint-plugin-react-hooks": "^1.6.0"
+    "eslint-plugin-react-hooks": "^1.6.1"
   }
 }

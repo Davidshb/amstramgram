@@ -2,26 +2,22 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const cluster = require('cluster')
-const numCPUs = require('os').cpus().length
-const mongoose = require('mongoose')
-const cors = require('cors')
 const bodyParser = require('body-parser')
-const helmet = require('helmet')
 const morgan = require('morgan')
 const compression = require('compression')
 const cloudinary = require('cloudinary')
 const router = express.Router()
-const useragent = require('express-useragent')
 const PORT = require('normalize-port')(process.env['PORT'])
-
 const routes = require('./routes')
-const { tasks, verifyEmail, url, isDev } = require('./lib')
 
+const { tasks, verifyEmail, url, isDev } = require('./lib')
 // Multi-process to utilize all CPU cores.
+
 if (!isDev && cluster.isMaster) {
   console.error(`Node cluster master ${process.pid} is running`)
-
   // Fork workers.
+
+  let numCPUs = require('os').cpus().length
   for (let i = 0; i < numCPUs; i++)
     cluster.fork()
 
@@ -30,15 +26,15 @@ if (!isDev && cluster.isMaster) {
   )
 
 //execute differents task on rerun. Not executed on development (need too much ressources)
-  tasks()
+  //tasks()
 } else {
   // Priority serve any static files.
-  app.use(cors())
+  app.use(require('cors')())
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
-  app.use(helmet())
+  app.use(require('helmet')())
   app.use(compression())
-  app.use(useragent.express())
+  app.use(require('express-useragent').express())
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')))
 
   app.use(morgan(isDev ? 'dev' : 'common'))
@@ -47,7 +43,7 @@ if (!isDev && cluster.isMaster) {
   routes(router)
   app.use('/api', router)
 
-  mongoose
+  require('mongoose')
     .connect(process.env['MONGODB_URI'], {
       useNewUrlParser: true,
       useCreateIndex: true
@@ -71,10 +67,18 @@ if (!isDev && cluster.isMaster) {
       })
   )
 
+  app.get('/apple-touch-icon-precomposed.png',
+    (req, res) => res.sendFile(path.resolve(__dirname, './lib/assets', 'apple-touch-icon-preconposed.png'))
+  )
+
+  app.get('apple-touch-icon.png',
+    (req, res) => res.sendFile(path.resolve(__dirname, './lib/assets', 'apple-touch-icon.png'))
+  )
+
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', (request, response) => response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html')))
 
-  app.listen(PORT, () =>
-    console.error(`Node ${isDev ? 'dev server' : 'cluster worker ' + process.pid}: listening on port ${PORT}`)
+  app.listen(PORT,
+    () => console.error(`Node ${isDev ? 'dev server' : 'cluster worker ' + process.pid}: listening on port ${PORT}`)
   )
 }

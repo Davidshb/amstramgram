@@ -27,11 +27,12 @@ class Header extends React.Component {
 
     const _device = device(true)
     const _token = token()
+    const auto_connect = localStorage.getItem('auto-connect')
 
     if (new URLSearchParams(window.location.href).get('p'))
       return
 
-    if (_token || (_device && _device.trusted)) {
+    if ((_token || (_device && _device.trusted)) && auto_connect && auto_connect !== 'true') {
       setup({
         baseURL: '/',
         cache: {
@@ -98,7 +99,7 @@ class Header extends React.Component {
         this.listener()
       this.setState({
         account_img_text: nextProps.user.username,
-        account_img_link: `/${nextProps.user.username}`
+        account_img_link: `/user/${nextProps.user.username}`
       })
     }
 
