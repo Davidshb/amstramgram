@@ -1,8 +1,11 @@
 $transition-duration: 2s;
 $path-length: 157px;
+$background-color: #b5b5b5;
 
 .loader {
-  margin-top: 60px;
+  background-color: $background-color;
+  height: 100vh;
+  padding-top: 60px;
 
   svg {
     height: 150px;

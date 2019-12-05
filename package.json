@@ -1,14 +1,11 @@
 {
-  "name": "amstragram",
+  "name": "amstramgram",
   "version": "1.0.0",
   "description": "Superbe application pour partager tes photos !",
-  "engines": {
-    "node": "10.x"
-  },
   "scripts": {
-    "start": "node server",
-    "start-dev": "concurrently -n srv,clt -c bgBlue.bold,bgMagenta.bold --handle-input  \"nodemon --ignore react-ui/ server\" \"cd react-ui/ && npm run start\"",
-    "front-end-only": "cd react-ui/ && npm run start",
+    "start": "nodemon --ignore 'react-ui/' server/index.js",
+    "start-dev": "concurrently -n srv,clt -c bgBlue.bold,bgMagenta.bold --handle-input  \"npm run start\" \"npm run front-end\"",
+    "front-end": "cd react-ui/ && npm run start",
     "heroku-postbuild": "cd react-ui/ && npm install --no-shrinkwrap && npm run build && rm build/static/*/*.map"
   },
   "cacheDirectories": [
@@ -18,18 +15,19 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "cloudinary": "^1.14.0",
+    "cloudinary": "^1.15.0",
     "compression": "^1.7.4",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
-    "ejs": "^2.6.2",
+    "ejs": "^2.7.1",
     "express": "^4.17.1",
-    "express-useragent": "^1.0.12",
-    "helmet": "^3.15.1",
+    "express-useragent": "^1.0.13",
+    "helmet": "^3.21.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.6.4",
+    "mongoose": "^5.7.13",
     "morgan": "^1.9.1",
     "node-mailjet": "^3.3.1",
+    "node-schedule": "^1.3.2",
     "normalize-port": "^1.0.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
@@ -46,10 +44,6 @@
     "instagram"
   ],
   "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^4.1.1",
-    "nodemon": "^1.19.1"
-  },
   "main": "server/index.js",
   "eslintConfig": {
     "env": {
@@ -72,5 +66,5 @@
     "url": "https://github.com/Davidshb/amstramgram/issues"
   },
   "homepage": "https://github.com/Davidshb/amstramgram#readme",
-  "author": ""
+  "author": "David Sehoubo"
 }

@@ -27,7 +27,6 @@ module.exports = {
           return Promise.reject('username utilisé')
         }
         console.log('username OK')
-        return Promise.resolve()
       })
       .then(() => User.findOne({ email: data.email }))
       .then(user => {
@@ -83,19 +82,6 @@ module.exports = {
       })
       .then(mailData => !isDev && newMessage(MailTypes.NewUser, mailData))
       .then(() => console.log('--------------------------------\n'))
-      .then(() =>
-        setTimeout(({ username }) => User
-            .findOneAndDelete({ username, emailVerified: false })
-            .exec()
-            .then(user => {
-              if (!user)
-                return
-              console.log('Utilisateur supprimé \n -----------')
-              console.log(user)
-              console.log('------------')
-            })
-          , 1000 * 60 * 60 * 24, { username: data.username })
-      )
       .catch(err => res.status(500).end() && console.error(err))
   },
 

@@ -4,7 +4,7 @@ module.exports = {
   ...require('./mails'),
   isDev: process.env['NODE_ENV'] !== 'production',
   tasks: async () => {
-    await AccountDeleteTimeout()
+    return Promise.resolve(AccountDeleteTimeout())
   },
   ...rest,
   url: this.isDev ? 'localhost:3000/' : '/'

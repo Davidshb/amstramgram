@@ -7,7 +7,7 @@ const morgan = require('morgan')
 const compression = require('compression')
 const cloudinary = require('cloudinary')
 const router = express.Router()
-const PORT = require('normalize-port')(process.env['PORT'])
+const PORT = require('normalize-port')(process.env.PORT)
 const routes = require('./routes')
 
 const { tasks, verifyEmail, url, isDev } = require('./lib')
@@ -25,8 +25,7 @@ if (!isDev && cluster.isMaster) {
     console.error(`Node cluster worker ${worker.process.pid} exited: code ${code}, signal ${signal}`)
   )
 
-//execute differents task on rerun. Not executed on development (need too much ressources)
-  //tasks()
+  //TODO : add scheduled works
 } else {
   // Priority serve any static files.
   app.use(require('cors')())
@@ -46,7 +45,8 @@ if (!isDev && cluster.isMaster) {
   require('mongoose')
     .connect(process.env['MONGODB_URI'], {
       useNewUrlParser: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useUnifiedTopology: true
     })
     .then(() => console.log('mongodb connected'))
     .catch(error => console.error('can\'t connect to mongodb', error))

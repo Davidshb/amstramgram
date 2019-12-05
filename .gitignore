@@ -2,6 +2,7 @@
 node_modules
 npm-debug.log
 
+
 # Local development
 *.env
 *.dev
@@ -16,4 +17,4 @@ docker-compose.yml
 .sass-cache
 *.iml
 *.css.map
-.build
+build/

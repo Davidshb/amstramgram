@@ -22,6 +22,7 @@ class NotificationProvider extends React.Component {
       addNotification: this.addNotification
     }
 
+    return
     if (!store.getState().user.user && (sessionStorage.getItem('token') !== null || localStorage.getItem('auto-connect')))
       window.history.pushState(null, null, '/auth')
   }

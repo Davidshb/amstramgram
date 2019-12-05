@@ -7,12 +7,12 @@ export default class Slider extends React.Component {
 
   state = {
     index: 0,
-    images: [styles.frog, styles.eagle],
+    images: [styles.frog, styles.eagle, styles.china],
     translateValue: 0
   }
 
   goToPrevSlide = e => {
-    if(e) {
+    if (e) { // Si l'action a été déclencher par un click
       clearInterval(this.timer)
       this.timer = setInterval(this.goToNextSlide, 4500)
     }
@@ -28,10 +28,11 @@ export default class Slider extends React.Component {
   }
 
   goToNextSlide = e => {
-    if(e) {
+    if (e) { // Si l'action a été déclencher par un click
       clearInterval(this.timer)
       this.timer = setInterval(this.goToNextSlide, 4500)
     }
+
     if (this.state.index === this.state.images.length - 1)
       return this.setState({
         index: 0,
@@ -60,21 +61,17 @@ export default class Slider extends React.Component {
         <div className={styles['slider-wrapper']} style={{ transform: `translate(${this.state.translateValue}px)` }}>
           {this.state.images.map((image, index) => <Slide key={index} image={image}/>)}
         </div>
-        <LeftArrow goToPrevSlide={this.goToPrevSlide}/>
-        <RightArrow goToNextSlide={this.goToNextSlide}/>
+
+        <div className={classNames([styles.arrow, styles['back-arrow']])} onClick={this.goToPrevSlide}>
+          <ArrowBackIos aria-hidden={true}/>
+        </div>
+
+        <div className={classNames([styles.arrow, styles['next-arrow']])} onClick={this.goToNextSlide}>
+          <ArrowForwardIos aria-hidden={true}/>
+        </div>
       </div>
     )
   }
 }
 
 const Slide = ({ image }) => <div className={[styles.slide, image].join(' ')}/>
-
-const RightArrow = props =>
-  <div className={classNames([styles.arrow, styles['next-arrow']])} onClick={props.goToNextSlide}>
-    <ArrowForwardIos aria-hidden={true}/>
-  </div>
-
-const LeftArrow = props =>
-  <div className={classNames([styles.arrow, styles['back-arrow']])} onClick={props.goToPrevSlide}>
-    <ArrowBackIos aria-hidden={true}/>
-  </div>

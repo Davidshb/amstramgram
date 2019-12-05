@@ -1,39 +1,42 @@
 @import 'color';
+
 @mixin background-img($path, $size: auto) {
-    background-image: url($path);
-    background-repeat: no-repeat;
-    background-size: $size;
-    background-color: transparent;
-    width: $size;
-    height: $size;
+  background-image: url($path);
+  background-repeat: no-repeat;
+  background-size: $size;
+  background-color: transparent;
+  width: $size;
+  height: $size;
 }
 
 @mixin triangle($color: $white-color, $size: 10px) {
-    &::after {
-        border-left: $size solid transparent;
-        border-right: $size solid transparent;
-        border-top: $size solid $color;
-        bottom: $size * -1;
-        content: '';
-        height: 0;
-        left: calc(50% - #{$size});
-        position: absolute;
-        width: 0;
-    }
+  &::after {
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-top: $size solid $color;
+    bottom: $size * -1;
+    content: '';
+    height: 0;
+    left: calc(50% - #{$size});
+    position: absolute;
+    width: 0;
+  }
 }
 
 @mixin generate-input-validation($class) {
-    .#{$class}-correct {
-        border-color: $inscription-input-valid;
-    }
-    .#{$class}-incorrect {
-        border-color: $inscription-input-invalid;
-    }
-    .#{$class}-normal {
-        border-color: $inscription-input-normal;
-    }
+  .#{$class}-correct {
+    border-color: $inscription-input-valid;
+  }
+
+  .#{$class}-incorrect {
+    border-color: $inscription-input-invalid;
+  }
+
+  .#{$class}-normal {
+    border-color: $inscription-input-normal;
+  }
 }
 
 @mixin generate-image-class($name) {
-    background-image: url('./images/#{$name}.jpg');
+  background-image: url('./images/#{$name}.jpg');
 }
