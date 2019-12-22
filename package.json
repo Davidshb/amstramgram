@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Superbe application pour partager tes photos !",
   "scripts": {
-    "start": "nodemon --ignore 'react-ui/' server",
-    "start-dev": "concurrently -n srv,clt -c bgBlue.bold,bgMagenta.bold --handle-input  \"npm run start\" \"npm run front-end\"",
+    "start": "node server",
+    "start-dev": "concurrently -n srv,clt -c bgBlue.bold,bgMagenta.bold --handle-input  \"nodemon --ignore 'react-ui/' server\" \"npm run front-end\"",
     "front-end": "cd react-ui/ && npm run start",
     "heroku-postbuild": "cd react-ui/ && npm install --no-shrinkwrap && npm run build && rm build/static/*/*.map"
   },
