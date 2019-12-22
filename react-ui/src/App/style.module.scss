@@ -1,6 +1,9 @@
 @import '../lib/scss/responsive';
 
 .not-connect {
+
+  text-align: center;
+
   a {
     color: $link-color;
     text-decoration: underline;

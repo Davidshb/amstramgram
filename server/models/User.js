@@ -26,7 +26,8 @@ const UserSchema = new mongoose.Schema({
   password: String,
   private: { type: Boolean, default: false },
   token: String,
-  username: { type: String, unique: true }
+  username: { type: String, unique: true },
+  photo: { type: String, default: "https://res.cloudinary.com/davidshbo/image/upload/v1575582320/default.png" }
 })
 
 UserSchema.methods.follow = async function (user_id) {
@@ -56,12 +57,15 @@ UserSchema.methods.addFollower = function (fs) {
 UserSchema.methods.data = function () {
   return {
     birth: this.birth,
+    email: this.email,
+    emailVerified: this.emailVerified,
     familyName: this.familyName,
     followers: this.followers,
     followings: this.followings,
     name: this.name,
     token: this.token,
     username: this.username,
+    photo: this.photo
   }
 }
 

@@ -9,7 +9,6 @@ import { store, history } from './redux/store'
 import { Provider } from 'react-redux'
 import Profile from './Profile'
 import NotificationProvider from './Provider/NotificationProvider'
-import Authentification from './Authentification'
 import moment from 'moment'
 
 moment.updateLocale('fr', require('moment/locale/fr'))
@@ -59,7 +58,6 @@ ReactDOM.render(
           <PrivateRoute path="/inscription" Component={Inscription} exact/>
           <PrivateRoute path="/connexion" Component={Connexion} exact/>
           <PrivateRoute path="/user/:id" reverse={true} Component={Profile} exact/>
-          <PrivateRoute path="/auth" Component={Authentification} exact/>
           <Route render={() => <Redirect to="/"/>}/>
         </Switch>
       </NotificationProvider>

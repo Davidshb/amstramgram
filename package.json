@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Superbe application pour partager tes photos !",
   "scripts": {
-    "start": "nodemon --ignore 'react-ui/' server/index.js",
+    "start": "nodemon --ignore 'react-ui/' server",
     "start-dev": "concurrently -n srv,clt -c bgBlue.bold,bgMagenta.bold --handle-input  \"npm run start\" \"npm run front-end\"",
     "front-end": "cd react-ui/ && npm run start",
     "heroku-postbuild": "cd react-ui/ && npm install --no-shrinkwrap && npm run build && rm build/static/*/*.map"
@@ -15,16 +15,16 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "cloudinary": "^1.15.0",
+    "cloudinary": "^1.18.1",
     "compression": "^1.7.4",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
-    "ejs": "^2.7.1",
+    "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-useragent": "^1.0.13",
     "helmet": "^3.21.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.7.13",
+    "mongoose": "^5.8.2",
     "morgan": "^1.9.1",
     "node-mailjet": "^3.3.1",
     "node-schedule": "^1.3.2",
@@ -39,7 +39,6 @@
   "keywords": [
     "node",
     "heroku",
-    "create-react-app",
     "react",
     "instagram"
   ],

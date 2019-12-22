@@ -39,7 +39,7 @@ const NotConnect = () =>
     <Slider/>
     <span>
       Publiez vos photos et réagissez à celles de vos amis ! <br/>
-      <Link to="/inscription">Inscrivez vous dès maintenant</Link>
+      <Link to="/inscription">Inscrivez-vous dès maintenant !</Link>
     </span>
   </div>
 

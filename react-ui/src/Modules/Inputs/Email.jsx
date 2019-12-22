@@ -1,23 +1,32 @@
 import React from 'react'
 
 class Email extends React.Component {
-  #email
+	#email
 
-  errorHandler() {
-    this.#email.focus()
-  }
+	errorHandler() {
+		this.#email.focus()
+	}
 
-  render() {
-    return (
-      <div className="input-group">
-        <span className="label">Email</span>
-        <input type="email" className="input" ref={email => this.#email = email} required
-               placeholder="prado-raso@mail.com" value={this.props.value} autoComplete="email"
-               onChange={() => this.props.changeData('email', this.#email.value)}
-        />
-      </div>
-    )
-  }
+	disable() {
+		this.#email.disabled = true
+	}
+
+	enable() {
+		this.#email.disabled = false
+		this.#email.focus()
+	}
+
+	render() {
+		return (
+			<div className="input-group">
+				<span className="label">Email</span>
+				<input type="email" className="input" ref={email => this.#email = email} required
+							 placeholder="prado-raso@mail.com" value={this.props.value} autoComplete="email"
+							 onChange={() => this.props.changeData('email', this.#email.value)}
+				/>
+			</div>
+		)
+	}
 }
 
 export default Email

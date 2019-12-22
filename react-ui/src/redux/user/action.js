@@ -33,3 +33,7 @@ export function removeUser() {
     dispatch({ type: User.SET_USER, user: null })
   }
 }
+
+export function changeData(dataName, dataValue) {
+  return dispatch => dispatch({type: User.CHANGE_DATA, [dataName]: dataValue})
+}

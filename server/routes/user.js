@@ -19,10 +19,13 @@ module.exports = router => {
 
   router
     .route('/connexion')
-    .get(userController.auth)
     .post(userController.login)
 
   router
     .route('/verifyUsername')
     .post(userController.verifyUsername)
+
+  router
+    .route('/changeEmail')
+    .post(userController.changeEmail)
 }

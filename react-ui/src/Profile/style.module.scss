@@ -1,4 +1,42 @@
+@import '../lib/scss/responsive';
+
 .logout {
-  float: right;
-  margin-right: 15px;
+  button {
+    margin-right: 15px;
+  }
+}
+
+.h1 {
+  color: $white-color;
+  font-size: 30px;
+  user-select: none;
+}
+
+.container {
+  display: flex;
+  height: 88vh;
+  margin: 0 25px;
+  text-align: left;
+}
+
+.photo {
+  border-right: 4px solid $profile-edit;
+  display: inline-flex;
+  flex-direction: column;
+  font-size: 20px;
+  font-weight: bold;
+  height: 100%;
+  padding-right: 30px;
+  text-align: center;
+
+  img {
+    border: solid 1px $black-color;
+    margin-bottom: 15px;
+  }
+}
+
+.table {
+  td {
+    width: 250px;
+  }
 }

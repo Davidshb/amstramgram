@@ -1,7 +1,8 @@
 export const User = {
     FOLLOW_USER: 'FOLLOW_USER',
     SET_USER:'SET_USER',
-    SET_PROFILE: "SET_PROFILE"
+    SET_PROFILE: "SET_PROFILE",
+    CHANGE_DATA: "CHANGE_DATA"
 }
 
 export const Post = {
