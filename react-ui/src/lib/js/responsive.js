@@ -32,7 +32,9 @@ export const NotificationTypes = {
 	INVALID_PASSWORD: 'INVALID_PASSWORD',
 	INSCRIPTION_SUCCEED: 'INSCRIPTION_SUCCEED',
 	EMAIL_VERIFICATION_SUCCEED: 'EMAIL_VERIFICATION_SUCCEED',
-	EMAIL_VERIFICATION_FAILED: 'EMAIL_VERIFICATION_FAILED'
+	EMAIL_VERIFICATION_FAILED: 'EMAIL_VERIFICATION_FAILED',
+	NEW_EMAIL_SAVE_SUCCEED: 'NEW_EMAIL_SAVE_SUCCEED',
+	NEW_EMAIL_SAVE_FAILED: 'NEW_EMAIL_SAVE_FAILED'
 }
 
 export const getNotification = ({ type, message = ' ', options = {} }) => {
@@ -110,6 +112,21 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				message: 'Utilisateur introuvable lors de la validation d\'email',
 				dismiss: { duration: 3000 }
 			}
+		case NotificationTypes.NEW_EMAIL_SAVE_FAILED:
+			return {
+				type: 'error',
+				container: 'top-right',
+				insert: 'top',
+				message: "Vérifier l'email fourni et réessayer"
+			}
+		case NotificationTypes.NEW_EMAIL_SAVE_SUCCEED:
+			return {
+				type: 'success',
+				container: 'top-right',
+				insert: 'top',
+				message: 'l\'email a été modifié. Pensez à le vérifier 😌',
+				dismiss: { duration: 3000 }
+			}
 		default:
 			return null
 	}
@@ -118,7 +135,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 export const api = setup({
 	baseURL: '/',
 	cache: {
-		maxAge: 1000 * 60 * 10,
+		maxAge: 1000 * 60 * 10, // cache de 10 minute
 		exclude: { query: false }
 	}
 })

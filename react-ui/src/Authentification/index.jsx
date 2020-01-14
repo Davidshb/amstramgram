@@ -19,10 +19,7 @@ class Authentification extends React.Component {
         device: device(true)
       }
     })
-       .then(({ data }) => {
-         this.props.setUser(data)
-         axios.defaults.headers['common']['Authorization'] = `Bearer ${data.token}`
-       })
+       .then(({ data }) => this.props.setUser(data))
        .then(() => window.history.pushState(null, null, window.history.state.data.url))
        .catch(err => window.history.pushState({ err }, null, '/connexion'))
   }

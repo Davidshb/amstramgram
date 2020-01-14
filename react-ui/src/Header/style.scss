@@ -1,5 +1,5 @@
-@import '../../lib/scss/responsive';
-@import '../../lib/scss/mixins';
+@import '../lib/scss/responsive';
+@import '../lib/scss/mixins';
 
 .my--header {
   align-items: center;
@@ -54,7 +54,7 @@
 }
 
 .img-search {
-  @include background-img('../../Components/Header/baseline_search_white_48dp_X1.png', $header-search-img-size);
+  @include background-img('../../Header/baseline_search_white_48dp_X1.png', $header-search-img-size);
 
   display: none;
   margin: 0 auto;
@@ -114,5 +114,5 @@
 }
 
 .account-img {
-  @include background-img('../../Components/Header/img_account.png', $header-account-img);
+  @include background-img('../../Header/img_account.png', $header-account-img);
 }

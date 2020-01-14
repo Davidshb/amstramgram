@@ -2,17 +2,17 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './style.scss'
 import { connect } from 'react-redux'
-import { device, NotificationTypes, setAuthToken, token, url } from '../../lib/js'
-import { setUser } from '../../redux/user/action'
+import { device, NotificationTypes, setAuthToken, token, url } from '../lib/js'
+import { setUser } from '../redux/user/action'
 import axios from 'axios'
-import { notificationContext } from '../../Provider/NotificationProvider'
+import { notificationContext } from '../Provider/NotificationProvider'
 
 class Header extends React.Component {
 
 	static contextType = notificationContext
 
-	constructor(props) {
-		super(props)
+	constructor(props, context) {
+		super(props, context)
 		this.img_search_blur = this.img_search_blur.bind(this)
 		this.searchHandler = this.searchHandler.bind(this)
 		this.img_search_toggle = this.img_search_toggle.bind(this)
@@ -27,19 +27,15 @@ class Header extends React.Component {
 		const _token = token()
 		const _device = device()
 		if ((_token || (_device && _device.trusted)) && !this.props.user) {
-			axios.get(`${url}/connexion`, { params: { token: _token, device: _device } })
-				.then(({ data }) => {
-					axios.defaults.headers['common']['Authorization'] = `Bearer ${data.token}`
-					props.setUser(data)
-				})
+			axios.get(`${url}/connexion`, {params: {token: _token, device: _device && _device.id}})
+				.then(({data}) => props.setUser(data))
 				.catch(err => this.errorHandler(err))
-			return
 		}
 
 		if (this.props.user) {
 			this.state = {
 				account_img_text: this.props.user.username,
-				account_img_link: `/user/${this.props.user.username}`
+				account_img_link: `/settings`
 			}
 			return
 		}
@@ -61,10 +57,10 @@ class Header extends React.Component {
 			setAuthToken()
 			switch (err.response.data) {
 				case 'token expire':
-					this.props.history.push('/connexion', { message: 'veuillez vous authentifiez' })
+					this.props.history.push('/connexion', {message: 'veuillez vous authentifiez'})
 					break
 				case 'token invalide':
-					this.props.history.push('/connexion', { message: 'veuillez vous authentifiez' })
+					this.props.history.push('/connexion', {message: 'veuillez vous authentifiez'})
 					break
 				case 'device introuvable':
 					this.props.history.push('/connexion')
@@ -88,7 +84,7 @@ class Header extends React.Component {
 				this.listener()
 			this.setState({
 				account_img_text: this.props.user.username,
-				account_img_link: `/user/${this.props.user.username}`
+				account_img_link: `/settings`
 			})
 		}
 
@@ -130,11 +126,11 @@ class Header extends React.Component {
 
 	img_search_blur() {
 		if (this.search.value === '')
-			this.setState({ searching: '' })
+			this.setState({searching: ''})
 	}
 
 	img_search_toggle() {
-		this.setState({ searching: 'searching' })
+		this.setState({searching: 'searching'})
 		setTimeout(() => this.search.focus(), 500)
 	}
 
@@ -145,8 +141,8 @@ class Header extends React.Component {
 				<div className={'div-recherche ' + this.state.searching}>
 					<form onSubmit={this.searchHandler}>
 						<input type="text" name="search" aria-label="search" ref={input => this.search = input}
-									 placeholder="Recherche..." id="search-input"
-									 onBlur={this.img_search_blur} onChange={this.changeSearch}
+						       placeholder="Recherche..." id="search-input"
+						       onBlur={this.img_search_blur} onChange={this.changeSearch}
 						/>
 					</form>
 					<svg className="img-search" onClick={this.img_search_toggle}/>
@@ -168,4 +164,4 @@ function mapStateToProps(state) {
 	}
 }
 
-export default connect(mapStateToProps, { setUser })(Header)
+export default connect(mapStateToProps, {setUser})(Header)

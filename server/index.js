@@ -8,24 +8,10 @@ const compression = require('compression')
 const cloudinary = require('cloudinary')
 const router = express.Router()
 const PORT = require('normalize-port')(process.env.PORT)
-//const PORT = require('normalize-port')(5000)
 const routes = require('./routes')
-const { basicAuth } = require("./Middleware")
 
-const { verifyEmail, url, isDev } = require('./lib')
+const {verifyEmail, isDev} = require('./lib')
 // Multi-process to utilize all CPU cores.
-
-if (isDev) {
-	process.env.MONGODB_URI = 'mongodb://localhost:27017/amstramgram'
-	process.env.privateKey = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCqAm6QkdYC/WETPur2v9NHk/6XvbXQcNJRslvukajBSi8d8B/8m' +
-		'VxJXUGWY7ZEEkFSgB2Ly8VzYvbchESDAer4l5Ac2dPEUr7JRKgFmR+BOcXXJAQsPDpbJvO7rnYLAAHMsvHqNNbhSls7SJ6rSYzP53sWBa3ga27XC' +
-		'mb+fAzy/H/bVcHBonlWPvgVvMjQjqC/E8TpXYoqrNrORfkLgluHj/0cuhTi3Aq6n/AdNFTeflyd/jKLFUaVugEr1Ad438rzRTfK5VCjGrt/UwrLA' +
-		'XkiotWNw1UbFimMU/aHWlwI441UgaVB4h9iYhMgJGdD3wDLjvMKNSLrL0PPuQzCyxrgOM6YjurAYjkSxdrnlaHpnJeHcuHTlFlsnK/B9pKroVCl0' +
-		'B+eNwEsvviHEv6w2VQwY/N2PZIEI8wEqH25LpwlkSHswG1kAdZowKb6qYrBkPOK/U0EQccZlFdmvrfExMX5Y17qpGhKsthz4LQrCRDBuxtsFAbUY' +
-		'KlbgRRF0wFHkDYr5zJVaNz1sfSSUORD/m7z5k1u2l4ajoRc3DyEmEiDW6hhr5ubzZMgAXMvmJOw68B16VtPf6buY1hujgVwTXDUGB/XyriIh884m' +
-		'lSXD53lkyKswl8wGmmqkd15In6xBDVL+JrYuLOL7eBVwdTvUJ7LUg+h2y3++mrd7Jq0pNMoCQ== 34123756+Davidshb@users.noreply.gith' +
-		'ub.com'
-}
 
 if (!isDev && cluster.isMaster) {
 	console.error(`Node cluster master ${process.pid} is running`)
@@ -43,7 +29,7 @@ if (!isDev && cluster.isMaster) {
 	// Priority serve any static files.
 	app.use(require('cors')())
 	app.use(bodyParser.json())
-	app.use(bodyParser.urlencoded({ extended: true }))
+	app.use(bodyParser.urlencoded({extended: true}))
 	app.use(require('helmet')())
 	app.use(compression())
 	app.use(require('express-useragent').express())
@@ -53,7 +39,6 @@ if (!isDev && cluster.isMaster) {
 
 	// Answer client requests.
 	routes(router)
-	router.use(basicAuth)
 	app.use('/api', router)
 
 	require('mongoose')
@@ -65,11 +50,11 @@ if (!isDev && cluster.isMaster) {
 		.then(() => console.log('mongodb connected'))
 		.catch(error => console.error('can\'t connect to mongodb', error))
 
-	/* cloudinary.config({
-		 cloud_name: process.env['CLOUDINARY_NAME'],
-		 api_key: process.env['CLOUDINARY_API_KEY'],
-		 api_secret: process.env['CLOUDINARY_SECRET']
-	 })*/
+	cloudinary.config({
+		cloud_name: process.env['CLOUDINARY_NAME'],
+		api_key: process.env['CLOUDINARY_API_KEY'],
+		api_secret: process.env['CLOUDINARY_SECRET']
+	})
 
 	//user account email setting
 	app.get('/email-verification', (req, res) => verifyEmail(req.query.token)
@@ -89,7 +74,7 @@ if (!isDev && cluster.isMaster) {
 	app.get('*', (request, response) => response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html')))
 
 	app.use((err, req, res, next) => {
-		if(err)
+		if (err)
 			console.error(err.stack)
 
 		next()

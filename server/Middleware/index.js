@@ -20,7 +20,7 @@ exports.basicAuth = async function (req, res, next) {
 	try {
 		let decode = jwt.verify(token, process.env.privateKey)
 		console.log(decode)
-		let user = await User.findById(decode.id).exec().then(user => user).catch(() => res.status(500).end())
+		let user = await User.findById(decode.id).exec().catch(() => res.status(500).end())
 		if (!user)
 			return !authentication ?
 				res.status(401).end('Authorization Header not valid') :

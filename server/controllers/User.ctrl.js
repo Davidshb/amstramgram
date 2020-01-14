@@ -9,8 +9,8 @@ async function checkEmailValidity(email, res) {
 	return request({
 		uri: `https://realemail.expeditedaddons.com/`,
 		qs: {
-			api_key: process.env['REALEMAIL_API_KEY'],
-			//api_key: "7V4JY09C6WZ3LQGF6KT7UR9SX20ON1AMD4552H81E3I8PB",
+			//api_key: process.env['REALEMAIL_API_KEY'],
+			api_key: "7V4JY09C6WZ3LQGF6KT7UR9SX20ON1AMD4552H81E3I8PB",
 			email,
 			fix_typos: false
 		},
@@ -19,15 +19,14 @@ async function checkEmailValidity(email, res) {
 		},
 		json: true
 	})
+		.catch(err => console.log('impossible de vérifier le mail') && console.error(err))
 		.then(body => {
 			if (!body.valid) {
 				res.status(400).end('l\'email n\'est pas valide')
-				return false
+				throw new Error("l'email n'est pas valide")
 			}
 			console.log('email toujours OK')
-			return true
 		})
-		.catch(err => console.log('impossible de vérifier le mail') && console.error(err))
 }
 
 module.exports = {
@@ -158,35 +157,34 @@ module.exports = {
 	},
 
 	changeEmail: (req, res, next) => {
-		let { token, email } = req.body, decode
+		let { email, user } = req.body
 		console.log("-----------------")
 		console.log("changement email")
 
-		try {
-			decode = jwt.verify(token, process.env.privateKey)
-		} catch (e) {
-			console.log(e)
-			return res.status(500).end(e.name === 'TokenExpiredError' ? 'token expire' : 'token invalide')
-		}
+		if (email === user.email)
+			return res.status(400).end("access unauthorized")
 
 		return User
 			.findOne({ email })
-			.then(user => user && res.status(400).end('l\'email est utilisé'))
-			.then(() => checkEmailValidity(email, res))
-			.then(() => User.findById(decode['id']).exec())
+			.exec()
 			.then(user => {
-				if (!user)
-					return res.status(400).end('utilisateur inconnu')
-				console.log(user.name)
+				if (user) {
+					res.status(400).end("email déjà utiliser")
+					throw new Error("email non valide")
+				}
+				console.log("email non utilisé")
+			})
+			.then(() => checkEmailValidity(email, res))
+			.then(() => {
 				user.email = email
 				user.emailVerified = false
-
 				return user.save()
 			})
 			.then(() => res.send("ok"))
 			.then(next)
 			.catch(err => {
-				res.status(500).end()
+				if (!res.finished)
+					res.status(500).end()
 				console.log(err)
 			})
 	},

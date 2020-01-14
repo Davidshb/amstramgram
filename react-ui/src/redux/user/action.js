@@ -1,9 +1,9 @@
-import { setAuthToken, url } from '../../lib/js'
+import { api, setAuthToken, url } from '../../lib/js'
 import { User } from '../types'
 import axios from 'axios'
 
 export function getUser(_id) {
-  return axios
+  return api
     .get(`${url}/user/${_id}`)
     .then(res => res.data)
     .catch(err => console.error(err))
@@ -23,6 +23,7 @@ export function follow(id, user_id) {
 
 export function setUser({ token, ...data }) {
   return dispatch => {
+    axios.defaults.headers['common']['Authorization'] = `Bearer ${token}`
     setAuthToken(token)
     dispatch({ type: User.SET_USER, user: data })
   }

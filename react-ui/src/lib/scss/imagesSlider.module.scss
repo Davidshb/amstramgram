@@ -12,6 +12,10 @@
   @include generate-image-class('china');
 }
 
+.zinzin {
+  @include generate-image-class("gros_zinzin");
+}
+
 .slider {
   height: 500px;
   margin: 0 auto;

@@ -1,5 +1,7 @@
 @import '../lib/scss/responsive';
 
+$min-width: 82px;
+
 .not-connect {
 
   text-align: center;
@@ -25,17 +27,79 @@
 .container {
   display: flex;
   flex-direction: column;
-  float: left;
-  max-width: 614px;
   width: 100%;
 }
 
 .side {
   align-items: stretch;
   height: 100vh;
-  margin-bottom: 30px;
-  max-width: 293px;
+  min-width: 140px;
+  text-align: center;
+  width: 293px;
+}
+
+.add-post {
+  background-color: rgba(0, 0, 0, .2);
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+
+  form {
+    background-color: $body-color;
+    display: flex;
+    flex-direction: column;
+    height: 70%;
+    margin: $min-width 10% 0;
+    position: relative;
+    width: 80%;
+
+    header {
+      font-size: 26px;
+    }
+
+    .file {
+      display: inline;
+      margin: 40px auto;
+      width: auto;
+    }
+
+    .legend {
+      margin: 40px 20px;
+    }
+  }
+}
+
+.close-button {
+  text-align: right;
+
+  svg {
+    position: relative;
+    right: -17.5px;
+    top: -17.5px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.add-post-submit {
+  margin: auto;
+  width: 100px;
+}
+
+.discord-display {
+  bottom: 20px;
+  cursor: pointer;
   position: absolute;
   right: 0;
-  width: 100%;
+}
+
+.discord {
+  bottom: 0;
+  position: fixed;
+  right: 0;
 }
