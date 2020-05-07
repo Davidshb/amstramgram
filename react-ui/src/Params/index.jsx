@@ -31,7 +31,7 @@ class Settings extends React.Component {
 			pwd: ['', ''],
 			email: props.user.email,
 			emailEdition: 0,
-			pwwdEdition: 0
+			pwdEdition: 0
 		}
 	}
 
@@ -78,7 +78,7 @@ class Settings extends React.Component {
 				this.errorHandler(err)
 				this.setState({email: this.props.user.email})
 			})
-			.finally(_ => this.setState({edition: 0}))
+			.finally(() => this.setState({edition: 0}))
 	}
 
 	errorHandler(err) {
@@ -130,33 +130,6 @@ class Settings extends React.Component {
 	}
 
 	render() {
-		let edition = null
-
-		switch (this.state.emailEdition) {
-			case 1: // en cours d'édition utilisateur
-				edition =
-					<>
-						<Button onClick={this.changeEmail}>
-							<Check/>
-						</Button>
-						<Button onClick={this.abortChanging}>
-							<Close/>
-						</Button>
-					</>
-				break
-			case 2: //envoie de la modification
-				edition =
-					<Button disabled={true}>
-						<CircularProgress size={30}/>
-					</Button>
-				break
-			default: //état de départ
-				edition =
-					<Button onClick={this.editEmail}>
-						<Edit/>
-					</Button>
-		}
-
 		return (
 			<>
 				<header className="my--header">
@@ -182,7 +155,8 @@ class Settings extends React.Component {
 								<InputEmail changeData={this.changeData} value={this.state.email} ref={_ => this.#email = _}/>
 							</td>
 							<td>
-								{edition}
+								<Edition edit={this.edit} changeEmail={this.changeEmail} abortChanging={this.abortChanging}
+								         state={this.state.emailEdition} type={0}/>
 							</td>
 						</tr>
 						{!this.props.user.emailVerified && <tr>
@@ -193,7 +167,8 @@ class Settings extends React.Component {
 								<InputPasswords ref={_ => this.#passwords = _} value={this.state.pwd} changeData={this.changeData}/>
 							</td>
 							<td>
-								{edition}
+								<Edition edit={this.edit} changeEmail={this.changeEmail} abortChanging={this.abortChanging}
+								         state={this.state.pwdEdition} type={1}/>
 							</td>
 						</tr>
 						</tbody>
@@ -201,6 +176,38 @@ class Settings extends React.Component {
 				</div>
 			</>
 		)
+	}
+}
+
+class Edition extends React.Component {
+	render() {
+		let result
+		switch (this.props.state) {
+			case 1: // en cours d'édition utilisateur
+				result =
+					<>
+						<Button onClick={this.props.changeEmail}>
+							<Check/>
+						</Button>
+						<Button onClick={() => this.props.abortChanging(this.props.type)}>
+							<Close/>
+						</Button>
+					</>
+				break
+			case 2: //envoie de la modification
+				result =
+					<Button disabled={true}>
+						<CircularProgress size={30}/>
+					</Button>
+				break
+			default: //état de départ
+				result =
+					<Button onClick={() => this.props.edit(this.props.type)}>
+						<Edit/>
+					</Button>
+		}
+
+		return <>{result}</>
 	}
 }
 

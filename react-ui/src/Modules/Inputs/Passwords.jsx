@@ -19,7 +19,7 @@ class Passwords extends Component {
 	}
 
 	disable() {
-		if (this.props.one === undefined)
+		if (this.props.one)
 			this.#passwordInput.disabled = true
 		else {
 			this.#pwd[0].disabled = true
@@ -28,7 +28,7 @@ class Passwords extends Component {
 	}
 
 	enable() {
-		if (this.props.one === undefined) {
+		if (this.props.one) {
 			this.#passwordInput.disabled = false
 			this.#passwordInput.focus()
 		} else {
@@ -105,23 +105,24 @@ class Passwords extends Component {
 		return (
 			<div className="input-group">
 				<span className="label">Mot de passe</span>
-				{this.props['one'] === undefined ?
-					<div className="inputs">
-						<input type="password" className='input pwd-normal' minLength={PASSWORD_MIN_VALUE}
-						       maxLength={PASSWORD_MAX_VALUE} onBlur={() => this.verification(true)} required
-						       placeholder="mot de passe" name="pwd" onChange={this.passwordChangeHandler} value={pwd[0]}
-						       onFocus={() => this.toggleClass(Passwords.#normal)} autoComplete="new-password"
+				{
+					this.props['one'] === undefined ?
+						<div className="inputs">
+							<input type="password" className='input pwd-normal' minLength={PASSWORD_MIN_VALUE}
+							       maxLength={PASSWORD_MAX_VALUE} onBlur={() => this.verification(true)} required
+							       placeholder="mot de passe" name="pwd" onChange={this.passwordChangeHandler} value={pwd[0]}
+							       onFocus={() => this.toggleClass(Passwords.#normal)} autoComplete="new-password"
+							/>
+							<input type="password" className='input pwd-normal' minLength={PASSWORD_MIN_VALUE} required
+							       maxLength={PASSWORD_MAX_VALUE} placeholder="mot de passe" name="pwd" autoComplete="new-password"
+							       onChange={this.passwordChangeHandler} value={pwd[1]} onBlur={this.verification}
+							/>
+						</div> :
+						<input type="password" className='input pwd-normal' minLength={PASSWORD_MIN_VALUE} value={pwd}
+						       onBlur={this.verification} onChange={e => this.props.changeData('password', e.target.value)} required
+						       maxLength={PASSWORD_MAX_VALUE} placeholder="mot de passe" autoComplete="current-password"
+						       ref={pwd => this.#passwordInput = pwd}
 						/>
-						<input type="password" className='input pwd-normal' minLength={PASSWORD_MIN_VALUE} required
-						       maxLength={PASSWORD_MAX_VALUE} placeholder="mot de passe" name="pwd" autoComplete="new-password"
-						       onChange={this.passwordChangeHandler} value={pwd[1]} onBlur={this.verification}
-						/>
-					</div> :
-					<input type="password" className='input pwd-normal' minLength={PASSWORD_MIN_VALUE} value={pwd}
-					       onBlur={this.verification} onChange={e => this.props.changeData('password', e.target.value)} required
-					       maxLength={PASSWORD_MAX_VALUE} placeholder="mot de passe" autoComplete="current-password"
-					       ref={pwd => this.#passwordInput = pwd}
-					/>
 				}
 			</div>
 		)

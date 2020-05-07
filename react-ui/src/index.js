@@ -10,6 +10,7 @@ import { Provider } from 'react-redux'
 import Params from './Params'
 import NotificationProvider from './Provider/NotificationProvider'
 import moment from 'moment'
+import Message from "./Message"
 
 moment.updateLocale('fr', require('moment/locale/fr'))
 
@@ -70,7 +71,8 @@ ReactDOM.render(
 					<PrivateRoute path="/inscription" Component={Inscription} exact/>
 					<PrivateRoute path="/connexion" Component={Connexion} exact/>
 					<PrivateRoute path="/settings" reverse={true} Component={Params} exact/>
-					{/*<PrivateRoute path="/user/:id" reverse={true} Component={null} exact/>*/}
+					<PrivateRoute path="/message" reverse={true} Component={Message} />
+					{/*<PrivateRoute path="/user/:id" reverse={true} Component={null} exact/>TODO : gestion de la page des utilisateurs*/}
 					<Route render={() => <Redirect to="/"/>}/>
 				</Switch>
 			</NotificationProvider>

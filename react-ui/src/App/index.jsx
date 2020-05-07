@@ -46,9 +46,12 @@ class App extends React.Component {
 				{this.state.addPost &&
 				<AddPost close={closeAddPost} dataChanged={(dataName, dataValue) => this.setState({[dataName]: dataValue})}
 				         textArea={this.state.legend} file={this.file} submit={this.addPostSubmit}/>}
+				<div className={styles["left-side"]}>
+					<Button colo type="submit">Messages <b>(2)</b></Button>
+				</div>
 				<div className={styles.container}>
 				</div>
-				<div className={styles.side}>
+				<div className={styles["right-side"]}>
 					{!this.state.addPost &&
 					<Button color="primary" variant="contained" onClick={() => this.setState({addPost: true})}>
 						<Add/> Ajouter un élément
