@@ -63,8 +63,8 @@ ReactDOM.render(
 						if (!p || p === '') history.replace('/')
 						return (
 							<div className="container">
-								{p}
-								en Développement
+								Votre recherche : {p}
+								<h1>en Développement</h1>
 							</div>
 						)
 					}} exact/>
@@ -72,8 +72,8 @@ ReactDOM.render(
 					<PrivateRoute path="/connexion" Component={Connexion} exact/>
 					<PrivateRoute path="/settings" reverse={true} Component={Params} exact/>
 					<PrivateRoute path="/message" reverse={true} Component={Message} />
-					{/*<PrivateRoute path="/user/:id" reverse={true} Component={null} exact/>TODO : gestion de la page des utilisateurs*/}
 					<Route render={() => <Redirect to="/"/>}/>
+					{/*<PrivateRoute path="/user/:id" reverse={true} Component={null} exact/>TODO : gestion de la page des utilisateurs*/}
 				</Switch>
 			</NotificationProvider>
 		</Router>

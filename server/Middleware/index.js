@@ -1,6 +1,15 @@
 const jwt = require("jsonwebtoken")
 const User = require('../models/User')
 
+
+/**
+ * que doit faire cette méthode ?
+ * je vérifie si l'utilisateur n'est pas déjà authentifié
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>}
+ */
 exports.basicAuth = async function (req, res, next) {
 	console.log("authentification")
 	let authentication = false
@@ -16,7 +25,7 @@ exports.basicAuth = async function (req, res, next) {
 		return res.status(401).end('Missing Authorization Header')
 
 	const token = authentication ? req.query.token : req.headers.authorization.split(' ')[1]
-	console.log(token)
+	console.log("token : " + token)
 	try {
 		let decode = jwt.verify(token, process.env.privateKey)
 		console.log(decode)
@@ -30,7 +39,8 @@ exports.basicAuth = async function (req, res, next) {
 		req.body.user = user
 	} catch (e) {
 		return !authentication ?
-			res.status(401).end('Authorization Header not valid') : res.status(500).end(e.name === 'TokenExpiredError' ? 'token expire' : 'token invalide')
+			res.status(401).end('Authorization Header not valid') :
+			res.status(500).end(e.name === 'TokenExpiredError' ? 'token expire' : 'token invalide')
 	}
 
 	next()

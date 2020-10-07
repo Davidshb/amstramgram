@@ -7,6 +7,7 @@ import { notificationContext } from '../Provider/NotificationProvider'
 import axios from 'axios'
 import { device, NotificationTypes, setAutoConnect, url } from '../lib/js'
 import './style.scss'
+import Authentification from "../Authentification"
 
 class Connexion extends React.Component {
 	toggleNumber = false
@@ -27,6 +28,7 @@ class Connexion extends React.Component {
 			if (data)
 				data.id = id
 		}
+
 		window.history.replaceState(null, null, window.location.pathname)
 
 		this.state = {
@@ -37,6 +39,7 @@ class Connexion extends React.Component {
 			inputType: 'text',
 			connexionLoading: false,
 			cb: false,
+			notAuth: true,
 			...data
 		}
 
@@ -55,14 +58,7 @@ class Connexion extends React.Component {
 	}
 
 	changeData(dataName, dataValue, next = () => null) {
-		this.setState({ [dataName]: dataValue }, next)
-		sessionStorage.setItem('connexion-data', JSON.stringify({
-			id: this.state.id,
-			password: this.state.password,
-			isEmail: this.toggleNumber,
-			cb: this.state.cb,
-			[dataName]: dataValue
-		}))
+		this.setState({[dataName]: dataValue}, next)
 	}
 
 	login(e) {
@@ -78,9 +74,9 @@ class Connexion extends React.Component {
 				trusted,
 				device: device(true)
 			})
-			.finally(() => this.setState({ connexionLoading: false }))
-			.then(({ data }) => {
-				const { device, ...res } = data
+			.finally(() => this.setState({connexionLoading: false}))
+			.then(({data}) => {
+				const {device, ...res} = data
 				this.props.setUser(res)
 				localStorage.setItem('device', JSON.stringify({
 					trusted,
@@ -99,7 +95,7 @@ class Connexion extends React.Component {
 					})
 			})
 
-		this.setState({ connexionLoading: true }, callback)
+		this.setState({connexionLoading: true}, callback)
 	}
 
 	errorHandler(error) {
@@ -137,16 +133,16 @@ class Connexion extends React.Component {
 		if (this.toggleNumber) {
 			toggleContainer.style.clipPath = 'inset(0 0 0 50%)'
 			toggleContainer.style.backgroundColor = '#D74046'
-			this.setState({ placeholder: 'prado-raso@mail.com', inputType: 'email' })
+			this.setState({placeholder: 'prado-raso@mail.com', inputType: 'email'})
 		} else {
 			toggleContainer.style.clipPath = 'inset(0 50% 0 0)'
 			toggleContainer.style.backgroundColor = '#1e90ff'
-			this.setState({ placeholder: 'username', inputType: 'text' })
+			this.setState({placeholder: 'username', inputType: 'text'})
 		}
 	}
 
 	componentDidMount() {
-		window.onbeforeunload = () => (this.loading = true) && this.setState({ id: '', password: '' })
+		window.onbeforeunload = () => (this.loading = true) && this.setState({id: '', password: ''})
 
 		if (this.fromInscription) {
 			this.context.addNotification({
@@ -170,19 +166,21 @@ class Connexion extends React.Component {
 
 		let toggle = document.getElementById('switch')
 
-		toggle.addEventListener('click', () => {
-			this.changeData('id', '')
-			this.toggleSwitch()
-		})
+		if (toggle != null) {
+			toggle.addEventListener('click', () => {
+				this.changeData('id', '')
+				this.toggleSwitch()
+			})
 
-		if (localStorage.getItem('firstTime') !== null) {
-			setTimeout(() => toggle.click(), 1000)
-			setTimeout(() => toggle.click(), 2000)
-			localStorage.setItem('firstTime', new Date().toUTCString())
+			if (localStorage.getItem('firstTime') !== null) {
+				setTimeout(() => toggle.click(), 1000)
+				setTimeout(() => toggle.click(), 2000)
+				localStorage.setItem('firstTime', new Date().toUTCString())
+			}
+
+			if (this.state.isEmail)
+				this.toggleSwitch()
 		}
-
-		if (this.state.isEmail)
-			this.toggleSwitch()
 	}
 
 	componentWillUnmount() {
@@ -191,6 +189,13 @@ class Connexion extends React.Component {
 	}
 
 	render() {
+		if (this.state.notAuth)
+			return (
+				<>
+					<Authentification url="/" notAuth={() => this.setState({notAuth: false})}/>
+				</>
+			)
+
 		return (
 			<form className="connexion-container" onSubmit={this.login}>
 				<header>Connexion</header>
@@ -214,15 +219,15 @@ class Connexion extends React.Component {
 						</div>
 					</div>
 					<input value={this.state.id} onChange={e => this.changeData('id', e.target.value)} required
-								 className="input" placeholder={this.state.placeholder} type={this.state.inputType}
-								 autoComplete={this.state.inputType === 'text' ? 'username' : 'email'} ref={id => this.id = id}
+					       className="input" placeholder={this.state.placeholder} type={this.state.inputType}
+					       autoComplete={this.state.inputType === 'text' ? 'username' : 'email'} ref={id => this.id = id}
 					/>
 				</div>
 				<InputPasswords changeData={this.changeData} value={this.state.password} ref={p => this.#password = p}
-												one/>
+				                one/>
 				<div className="save-browser">
 					<input type="checkbox" id="cb" checked={this.state.cb}
-								 onChange={e => this.changeData('cb', e.target.checked)}
+					       onChange={e => this.changeData('cb', e.target.checked)}
 					/>
 					<label htmlFor="cb">Enregistrer cet appareil</label>
 				</div>
@@ -240,4 +245,4 @@ function mapStateToProps() {
 	return {}
 }
 
-export default connect(mapStateToProps, { setUser })(Connexion)
+export default connect(mapStateToProps, {setUser})(Connexion)

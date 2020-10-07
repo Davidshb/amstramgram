@@ -13,11 +13,11 @@ export const PASSWORD_MAX_VALUE = '20'
 
 export const token = () => sessionStorage.getItem('token')
 
-export const device = (id = false) => {
+export const device = (idOnly = false) => {
 	const res = JSON.parse(localStorage.getItem('device'))
 	if (!res)
 		return null
-	if (id)
+	if (idOnly)
 		return res.id
 	return res
 }
@@ -37,7 +37,7 @@ export const NotificationTypes = {
 	NEW_EMAIL_SAVE_FAILED: 'NEW_EMAIL_SAVE_FAILED'
 }
 
-export const getNotification = ({ type, message = ' ', options = {} }) => {
+export const getNotification = ({type, message = ' ', options = {}}) => {
 	switch (type) {
 		case NotificationTypes.ERROR:
 			return {
@@ -45,7 +45,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				type: 'danger',
 				insert: 'top',
 				container: 'top-right',
-				dismiss: { duration: 3000 },
+				dismiss: {duration: 3000},
 				message,
 				...options
 			}
@@ -54,7 +54,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				type: 'info',
 				animationIn: ['animated', 'jackInTheBox'],
 				animatedOut: ['animated', 'bounceOut'],
-				dismiss: { duration: 5000 },
+				dismiss: {duration: 5000},
 				message,
 				...options
 			}
@@ -67,14 +67,14 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				animationOut: ['animated', 'fadeOut'],
 				insert: 'top',
 				container: 'top-center',
-				dismiss: { duration: 2000 }
+				dismiss: {duration: 2000}
 			}
 		case NotificationTypes.UNKNOWN_ID:
 			return {
 				type: 'warning',
 				container: 'top-center',
 				insert: 'top',
-				dismiss: { duration: 2000 },
+				dismiss: {duration: 2000},
 				message,
 				...options
 			}
@@ -83,7 +83,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				type: 'warning',
 				container: 'top-center',
 				insert: 'top',
-				dismiss: { duration: 2000 },
+				dismiss: {duration: 2000},
 				message: 'Mot de passe incorrecte',
 				...options
 			}
@@ -92,7 +92,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				type: 'success',
 				container: 'top-center',
 				insert: 'top',
-				dismiss: { duration: 3000 },
+				dismiss: {duration: 3000},
 				message: 'Inscription réussi !',
 				...options
 			}
@@ -101,7 +101,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				type: 'success',
 				container: 'top-right',
 				insert: 'top',
-				dismiss: { duration: 2000 },
+				dismiss: {duration: 2000},
 				message: 'Email vérifié vous pouvez vous connecter'
 			}
 		case NotificationTypes.EMAIL_VERIFICATION_FAILED:
@@ -110,7 +110,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				container: 'top-right',
 				insert: 'top',
 				message: 'Utilisateur introuvable lors de la validation d\'email',
-				dismiss: { duration: 3000 }
+				dismiss: {duration: 3000}
 			}
 		case NotificationTypes.NEW_EMAIL_SAVE_FAILED:
 			return {
@@ -125,7 +125,7 @@ export const getNotification = ({ type, message = ' ', options = {} }) => {
 				container: 'top-right',
 				insert: 'top',
 				message: 'l\'email a été modifié. Pensez à le vérifier 😌',
-				dismiss: { duration: 3000 }
+				dismiss: {duration: 3000}
 			}
 		default:
 			return null
@@ -136,6 +136,6 @@ export const api = setup({
 	baseURL: '/',
 	cache: {
 		maxAge: 1000 * 60 * 10, // cache de 10 minute
-		exclude: { query: false }
+		exclude: {query: false}
 	}
 })

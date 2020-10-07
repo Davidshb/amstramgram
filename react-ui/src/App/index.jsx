@@ -47,7 +47,7 @@ class App extends React.Component {
 				<AddPost close={closeAddPost} dataChanged={(dataName, dataValue) => this.setState({[dataName]: dataValue})}
 				         textArea={this.state.legend} file={this.file} submit={this.addPostSubmit}/>}
 				<div className={styles["left-side"]}>
-					<Button colo type="submit">Messages <b>(2)</b></Button>
+					<Link to="/message"><Button type="submit">Messages <b>(2)</b></Button></Link>
 				</div>
 				<div className={styles.container}>
 				</div>
